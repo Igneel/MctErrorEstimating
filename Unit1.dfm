@@ -93,6 +93,13 @@
         Height = 13
         Caption = 'sxy:'
       end
+      object Label11: TLabel
+        Left = 752
+        Top = 632
+        Width = 109
+        Height = 13
+        Caption = #1064#1072#1075' '#1087#1086' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088#1077':'
+      end
       object LabeledEdit7: TLabeledEdit
         Left = 456
         Top = 635
@@ -204,6 +211,7 @@
         Width = 169
         Height = 25
         Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1085#1086#1088#1084#1072#1083#1100#1085#1086#1075#1086' '#1096#1091#1084#1072
+        Enabled = False
         TabOrder = 9
         OnClick = Button3Click
       end
@@ -239,6 +247,7 @@
         Width = 75
         Height = 25
         Caption = #1043#1088#1072#1092#1080#1082#1080
+        Enabled = False
         TabOrder = 13
         OnClick = Button7Click
       end
@@ -444,8 +453,26 @@
         Width = 97
         Height = 25
         Caption = #1054#1073#1088#1072#1090#1085#1099#1081' '#1088#1072#1089#1095#1077#1090
+        Enabled = False
         TabOrder = 28
         OnClick = Button8Click
+      end
+      object Button9: TButton
+        Left = 752
+        Top = 600
+        Width = 75
+        Height = 25
+        Caption = #1056#1072#1089#1095#1077#1090
+        TabOrder = 29
+        OnClick = Button9Click
+      end
+      object Edit7: TEdit
+        Left = 752
+        Top = 648
+        Width = 121
+        Height = 21
+        TabOrder = 30
+        Text = '10'
       end
     end
     object Графики: TTabSheet

@@ -84,6 +84,9 @@ __published:	// IDE-managed Components
 	TLineSeries *LineSeries10;
 	TSaveDialog *sg1;
 	TButton *Button8;
+	TButton *Button9;
+	TEdit *Edit7;
+	TLabel *Label11;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
@@ -94,6 +97,7 @@ __published:	// IDE-managed Components
 	void __fastcall Button6Click(TObject *Sender);
 	void __fastcall Button7Click(TObject *Sender);
 	void __fastcall Button8Click(TObject *Sender);
+	void __fastcall Button9Click(TObject *Sender);
 
 private:	// User declarations
 public:		// User declarations

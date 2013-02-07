@@ -95,7 +95,7 @@ sxx[i]=sxy[i]=0;
 	Series5->AddXY(B[i],sxx[i],"",clRed);
 	LineSeries5->AddXY(B[i],sxy[i],"",clRed);
 
-
+Button3->Enabled=1;
 }
 //-------------------------------------------------
 //- рассчитываем эффективные значения
@@ -260,7 +260,7 @@ for(int i=0;i<l;i++)
  Series4->AddXY(B[i],y1[i],"",clRed);
  Uy_n[i]=y1[i];
 }
-
+Button8->Enabled=1;
 }
 //---------------------------------------------------------------------------
 // сохранение зашумленных результатов
@@ -379,6 +379,7 @@ g_Nz_par->Cells[2][2]=FloatToStr(ul);
 g_Nz_par->Cells[1][3]=FloatToStr(ph);
 g_Nz_par->Cells[2][3]=FloatToStr(uh);
 Button1->Enabled=true;
+Button7->Enabled=1;
 }
 //---------------------------------------------------------------------------
 
@@ -450,6 +451,67 @@ Edit2->Text=FloatToStr(sko2);
 Edit3->Text=FloatToStr(mx/Mo(sxx,l)*100);
 Edit4->Text=FloatToStr(my/Mo(sxy,l)*100);
 ;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button9Click(TObject *Sender)
+{
+int h=Edit7->Text.ToInt(); // шаг по температуре
+int T1=80;//LabeledEdit5->Text.ToInt(); // начальная температура
+int Tmax=300; // конечная температура
+int koef=50;// Edit5->Text.ToInt(); // начальный коэффициент шума
+int endkoef=150;  // конечный коэффициент
+int h_koef=50; // шаг по уровню шума
+UnicodeString oldName;
+UnicodeString fName;
+if (sg1->Execute()) {
+	Memo1->Lines->Add( sg1->FileName);
+}
+oldName = sg1->FileName;
+
+for (int T=T1; T <= Tmax; T+=h)
+{
+     LabeledEdit5->Text=IntToStr(T);
+	 Button6->Click(); // заполнить
+	 Button1->Click(); // рассчитать
+	 for (int i=koef; i <= endkoef; i+=h_koef)
+	 {
+		  Edit5->Text=IntToStr(i);
+		  Edit6->Text=IntToStr(i);
+		  Button3->Click(); // генератор
+		  Button8->Click(); // обратный расчет
+		  fName="T"+IntToStr(T)+" k"+IntToStr(i)+" sko_p_xx"+Edit3->Text+" sko_p_xy"+Edit3->Text+".txt";
+		  sg1->FileName=oldName+fName;
+		  //Memo1->Lines->Add(sg1->FileName);
+		  //-----------------------------------
+		  //-----------------------------------
+			TStringList * tsl=new TStringList();
+			wchar_t *s;
+			for(int i=0;i<l;i++)
+			{
+				tsl->Add(FloatToStr(Form1->Series3->XValues->Value[i])+"\t"+Form1->Series3->YValues->Value[i]+"\t"+Form1->Series4->YValues->Value[i]);
+				s=tsl->Strings[i].w_str() ;
+				for(int j=0;j<tsl->Strings[i].Length();j++)
+					if(s[j]==',')
+						s[j]='.';
+				tsl->Delete(i);
+				tsl->Add(s);
+
+			}
+			tsl->SaveToFile(sg1->FileName);
+
+ //---------------------------------------------
+ //---------------------------------------------
+	 }
+}
+// в идеале она должна:
+// изменять температуру с заданным шагом
+// 1. запонять параметры пленки
+// считать тензоры
+// добавлять шум к Us и Uy
+// выполнять обратный расчет
+// сохранять это всё с заданным именем
+// делать это для нескольких уровней шума
 }
 //---------------------------------------------------------------------------
 
