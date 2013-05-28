@@ -19,9 +19,9 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
 {
 }
-const int l=11;  // количество точек
+const int l=201;//11;  // количество точек
 long double q=1.60217646E-19; // заряд электрона
-long double h=0.1; // величина шага
+long double h; // величина шага
 long double B[l]={0};
 long double sxx[l]={0};  // тензор проводимости
 long double sxy[l]={0};
@@ -51,9 +51,16 @@ g_Nz_par->Cells[2][0]="подвижность";
 
 }
 //---------------------------------------------------------------------------
+
+void ParamsKRT(void);
+double Filter (const double in[], double out[], int sizeIn, int length, double Fdisk, double Fpropysk,double Fzatyh);
+double Tr_Filter(TLineSeries *inS,TLineSeries *outS,int length,double Fdisk, double Fpropysk,double Fzatyh);
+void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
+
 // расчет тензоров проводимости
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
+ParamsKRT();
 Series1->Clear();     // чистим все графики
 Series2->Clear();
 Series5->Clear();
@@ -87,16 +94,16 @@ sxx[i]=sxy[i]=0;
 	for(int j=0;j<3;j++)
 	{
 		sxx[i]+=q*n[j]*u[j]/(1.0+u[j]*u[j]*B[i]*B[i]);
-		sxy[i]+=q*n[j]*u[j]*u[j]*B[i]/(1.0+u[j]*u[j]*B[i]*B[i]);
-		if(j==0) sxy[i]*=-1;
+		sxy[i]+=(j==0?-1:1)*q*n[j]*u[j]*u[j]*B[i]/(1.0+u[j]*u[j]*B[i]*B[i]);
 	}
 	Series1->AddXY(B[i],sxx[i],"",clRed);  // рисуем их на графиках
 	Series2->AddXY(B[i],sxy[i],"",clRed);
 	Series5->AddXY(B[i],sxx[i],"",clRed);
 	LineSeries5->AddXY(B[i],sxy[i],"",clRed);
 
-Button3->Enabled=1;
+
 }
+Button3->Enabled=1;
 //-------------------------------------------------
 //- рассчитываем эффективные значения
 for(int i=0;i<l;i++)
@@ -181,7 +188,7 @@ for(i=0;i<l-1;i+=2)
 double s=3;
 while (s>1 || s<=0)
 {
-int a=rand();
+//int a=rand();
 x=(-1000+rand()%2000)/1000.0;
 y=(-1000+rand()%2000)/1000.0;
 s=x*x+y*y;
@@ -266,22 +273,15 @@ Button8->Enabled=1;
 // сохранение зашумленных результатов
 void __fastcall TForm1::Button4Click(TObject *Sender)
 {
-TStringList * tsl=new TStringList();
-wchar_t *s;
-for(int i=0;i<l;i++)
+if (RadioButton2->Checked)
 {
-tsl->Add(FloatToStr(Form1->Series3->XValues->Value[i])+"\t"+Form1->Series3->YValues->Value[i]+"\t"+Form1->Series4->YValues->Value[i]);
-s=tsl->Strings[i].w_str() ;
-for(int j=0;j<tsl->Strings[i].Length();j++)
-if(s[j]==',')
-	s[j]='.';
-tsl->Delete(i);
-tsl->Add(s);
+	 SavingAllPoints(Series3,Series4);
+}
+if (RadioButton3->Checked)
+{
+     SavingAllPoints(Series7,Series8);
+}
 
-}
-if (sg1->Execute()) {
-tsl->SaveToFile(sg1->FileName);
-}
 }
 //---------------------------------------------------------------------------
 
@@ -351,35 +351,40 @@ return  (5.585-3.82*x+0.001753*T-0.001364*x*T)*1E20*pow(Eg,1.5)*pow(T,1.5)*exp(-
 
 }
 
-// вычисление параметров
-void __fastcall TForm1::Button6Click(TObject *Sender)
+void ParamsKRT(void)
 {
-long double x=LabeledEdit4->Text.ToDouble();//0.22; // мольный состав кадмия
-long double T=LabeledEdit5->Text.ToDouble();//77; // температура
+long double x=Form1->LabeledEdit4->Text.ToDouble();//0.22; // мольный состав кадмия
+long double T=Form1->LabeledEdit5->Text.ToDouble();//77; // температура
 long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
 long double mh=0.443*m0; // масса тяжелых дырок
 long double ml=0.001*m0; // масса легких дырок
 
-long double ph=LabeledEdit8->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
+long double ph=Form1->LabeledEdit8->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
 long double pl=pow(ml/mh,1.5)*ph*100; // концентрация легких дырок домножена на 100
 
 long double n=-pow(niSob(T,x),2)/ph;
-long double A=LabeledEdit6->Text.ToDouble();//5; // 5-8
-long double k=LabeledEdit7->Text.ToDouble();//1.3; //1.3-1.5
+long double A=Form1->LabeledEdit6->Text.ToDouble();//5; // 5-8
+long double k=Form1->LabeledEdit7->Text.ToDouble();//1.3; //1.3-1.5
 long double ue=A*pow(T/77.0,-k); // подвижность электронов в области 77-300К
 
 long double uh=0.005*ue;   // подвижности тяжелых и
 long double ul=0.1*ue;     // легких дырок в первом приближении
 ue*=-1;
 
-g_Nz_par->Cells[1][1]=FloatToStr(n);
-g_Nz_par->Cells[2][1]=FloatToStr(ue);
-g_Nz_par->Cells[1][2]=FloatToStr(pl);
-g_Nz_par->Cells[2][2]=FloatToStr(ul);
-g_Nz_par->Cells[1][3]=FloatToStr(ph);
-g_Nz_par->Cells[2][3]=FloatToStr(uh);
-Button1->Enabled=true;
-Button7->Enabled=1;
+Form1->g_Nz_par->Cells[1][1]=FloatToStr(n);
+Form1->g_Nz_par->Cells[2][1]=FloatToStr(ue);
+Form1->g_Nz_par->Cells[1][2]=FloatToStr(pl);
+Form1->g_Nz_par->Cells[2][2]=FloatToStr(ul);
+Form1->g_Nz_par->Cells[1][3]=FloatToStr(ph);
+Form1->g_Nz_par->Cells[2][3]=FloatToStr(uh);
+Form1->Button1->Enabled=true;
+Form1->Button7->Enabled=1;
+}
+
+// вычисление параметров
+void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+ParamsKRT();
 }
 //---------------------------------------------------------------------------
 
@@ -457,9 +462,9 @@ Edit4->Text=FloatToStr(my/Mo(sxy,l)*100);
 void __fastcall TForm1::Button9Click(TObject *Sender)
 {
 int h=Edit7->Text.ToInt(); // шаг по температуре
-int T1=80;//LabeledEdit5->Text.ToInt(); // начальная температура
+int T1=80; // начальная температура
 int Tmax=300; // конечная температура
-int koef=50;// Edit5->Text.ToInt(); // начальный коэффициент шума
+int koef=50;// начальный коэффициент шума
 int endkoef=150;  // конечный коэффициент
 int h_koef=50; // шаг по уровню шума
 UnicodeString oldName;
@@ -472,13 +477,26 @@ oldName = sg1->FileName;
 for (int T=T1; T <= Tmax; T+=h)
 {
      LabeledEdit5->Text=IntToStr(T);
-	 Button6->Click(); // заполнить
 	 Button1->Click(); // рассчитать
 	 for (int i=koef; i <= endkoef; i+=h_koef)
 	 {
 		  Edit5->Text=IntToStr(i);
 		  Edit6->Text=IntToStr(i);
 		  Button3->Click(); // генератор
+
+		  // а также надо сохранять идеальные результаты.
+
+		  // надо сохранять результаты генератора
+		  RadioButton2->Checked=1;
+		  Button4->Click();// теперь сохранить
+
+
+		  Button10->Click();// фильтровать их
+		  RadioButton3->Checked=1;// сохранять результаты фильтрации
+		  Button4->Click();
+		  // в двух форматах: все точки и 11 точек.
+          Button11->Click();
+
 		  Button8->Click(); // обратный расчет
 		  fName="T"+IntToStr(T)+" k"+IntToStr(i)+" sko_p_xx"+Edit3->Text+" sko_p_xy"+Edit3->Text+".txt";
 		  sg1->FileName=oldName+fName;
@@ -515,3 +533,308 @@ for (int T=T1; T <= Tmax; T+=h)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::Button10Click(TObject *Sender)
+{
+int length=Edit8->Text.ToInt();
+
+double *x=new double[l+length];
+double *y=new double[l+length];
+
+for (int i = 0; i < length; i++) {
+	y[i]=Series3->YValues->Value[0];
+	x[i]=-(length-i)*h;
+}
+for (int i = length; i < l+length; i++) {
+	y[i]=Series3->YValues->Value[i-length];
+	x[i]=Series3->XValues->Value[i-length];
+}
+Series3->Clear();
+for (int i = 0; i < l+length; i++) {
+	Series3->AddXY(x[i],y[i],"",clRed);
+}
+
+for (int i = 0; i < length; i++) {
+	y[i]=Series4->YValues->Value[0];
+	x[i]=-(length-i)*h;
+}
+for (int i = length; i < l+length; i++) {
+	y[i]=Series4->YValues->Value[i-length];
+	x[i]=Series4->XValues->Value[i-length];
+}
+Series4->Clear();
+for (int i = 0; i < l+length; i++) {
+	Series4->AddXY(x[i],y[i],"",clRed);
+}
+
+delete [] x;
+delete [] y;
+            // ну как-то не очень такой метод, надо экстраполяцию всё-таки.
+Tr_Filter(Series3,Series7,Edit8->Text.ToInt(),5000,15,25);
+Tr_Filter(Series4,Series8,Edit8->Text.ToInt(),5000,15,25);
+}
+//---------------------------------------------------------------------------
+// ВНИМАНИЕ!!! Напрямую не вызывать!!! Пользоваться трамплином!!!---------------
+double Filter (const double in[], double out[], int sizeIn, int length, double Fdisk, double Fpropysk,double Fzatyh)
+{
+int N = length; //Длина фильтра 20
+long double Fd = Fdisk; //Частота дискретизации входных данных 2000
+long double Fs = Fpropysk; //Частота конца полосы пропускания  10
+long double Fx = Fzatyh; //Частота начала полосы затухания    20
+
+long double *H= new long double [N] ; //Импульсная характеристика фильтра
+long double *H_id= new long double [N]; //Идеальная импульсная характеристика
+long double *W= new long double [N]; //Весовая функция
+
+/*long double H [N] = {0}; //Импульсная характеристика фильтра
+long double H_id [N] = {0}; //Идеальная импульсная характеристика
+long double W [N] = {0}; //Весовая функция  */
+
+//Расчет импульсной характеристики фильтра
+long double Fc = (Fs + Fx) / (2 * Fd);
+
+for (int i=0;i<N;i++)
+{
+if (i==0) H_id[i] = 2*M_PI*Fc;
+else H_id[i] = sinl(2*M_PI*Fc*i )/(M_PI*i);
+// весовая функция Блекмена
+W [i] = 0.42 - 0.5 * cosl((2*M_PI*i) /( N-1)) + 0.08 * cosl((4*M_PI*i) /( N-1));
+H [i] = H_id[i] * W[i];
+}
+
+//Нормировка импульсной характеристики
+long double SUM=0;
+for (int i=0; i<N; i++) SUM +=H[i];
+for (int i=0; i<N; i++) H[i]/=SUM; //сумма коэффициентов равна 1
+
+//----------------------------------------------------------------
+// печать коэффициентов фильтра
+//for(int i=0;i<N;i++)
+//Form1->Memo2->Lines->Add(FloatToStr(H[i]));
+//----------------------------------------------------------------
+
+//Фильтрация входных данных
+for (int i=0; i<sizeIn; i++)
+{
+out[i]=0.;
+for (int j=0; j<(i>N-1?N-1:i); j++)// та самая формула фильтра
+out[i]+= H[j]*in[i-j];
+}
+delete [] H;
+delete [] H_id;
+delete [] W;
+return (N-1)/2.0;
+}
+// функция трамплин для фильтра.  ----------------------------------------------
+double Tr_Filter(TLineSeries *inS,TLineSeries *outS,int length,double Fdisk, double Fpropysk,double Fzatyh)
+{
+if(!inS->YValues->Count)   // если пустой - ошибка, убегаем.
+{
+ShowMessage("Пустой массив!");
+return 0;
+}
+int size=inS->YValues->Count;  // получаем размер
+//size=inS->XValues->Count;  // получаем размер
+double *in=new double[size];  // выделяем память
+for(int i=0;i<size;i++)       // копируем
+in[i]=inS->YValues->Value[i];
+double *out=new double[size]; // выделяем память для выходных значений
+double k=Filter(in,out,size,length,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
+ k*=(inS->XValues->MaxValue-inS->XValues->MinValue)/(double)inS->XValues->Count;// вычисляем сдвиг фаз
+//----------------------------------------------
+//---------добавление для фильтрации магнитного поля
+// внимание - она пока работает не корректно ибо фильтр наполняется только за
+// его длину.
+/*double *in2=new double[size];  // выделяем память
+for(int i=0;i<size;i++)       // копируем
+in2[i]=inS->XValues->Value[i];
+double *out2=new double[size]; // выделяем память для выходных значений
+double k2=Filter(in2,out2,size,length,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
+k2*=(inS->XValues->MaxValue-inS->XValues->MinValue)/(double)inS->XValues->Count;// вычисляем сдвиг фаз
+*/
+
+//----------------------------------------------
+ outS->Clear(); // чистим график, перед выводом
+for(int i=0;i<size;i++) // выводим
+{
+outS->AddXY(inS->XValues->Value[i]-k,out[i],"",clBlue);
+//Form1->Series2->AddY(out2[i]-k+k2,"",clBlue);
+//Form1->Series3->AddY(inS->XValues->Value[i]-k,"",clRed);
+//Form1->Series4->AddY(out[i],"",clBlack);
+//Form1->Series5->AddY(out2[i],"",clYellow);
+
+ }
+delete[] in;  // прибираемся
+//delete[] in2;  // прибираемся
+delete[] out;
+//delete[] out2;
+return k;
+}
+//----------------------------------------------
+//----------------------------------------------
+//----------------------------------------------
+//----------------------------------------------
+
+
+void __fastcall TForm1::Button11Click(TObject *Sender)
+{
+TLineSeries* Saving1=0;
+TLineSeries* Saving2=0;
+if(RadioButton1->Checked)
+{
+ Saving1=Series1;
+  Saving2=Series2;
+}
+if(RadioButton2->Checked)
+{
+ Saving1=Series3;
+  Saving2=Series4;
+}
+if(RadioButton3->Checked)
+{
+ Saving1=Series7;
+  Saving2=Series8;
+}
+
+if(!Saving1)
+return;
+
+double points[11]={0};
+double shag=0.2;
+for (int i=1; i < 11; i++) {
+    points[i]=points[i-1]+shag;
+}
+
+TStringList * tsl=new TStringList();
+wchar_t *s;
+ //int counting=0;
+for (int i = 0; i < 11; i++) {
+int index=0;
+double r=4;
+	for(int k=0;k<l;k++)
+	{
+	
+	if(fabs(Saving1->XValues->Value[k]-points[i])<=r)
+	{
+		r=fabs(Saving1->XValues->Value[k]-points[i]);
+		index=k;
+		}
+	else
+		break;
+	}
+		
+	tsl->Add(FloatToStr(Saving1->XValues->Value[index])+"\t"+Saving1->YValues->Value[index]+"\t"+Saving2->YValues->Value[index]);
+	s=tsl->Strings[i].w_str() ;
+	for(int j=0;j<tsl->Strings[i].Length();j++)
+	if(s[j]==',')
+		s[j]='.';
+	tsl->Delete(i);
+	tsl->Add(s);
+
+	
+}
+
+if (sg1->Execute()) {
+tsl->SaveToFile(sg1->FileName);
+}
+delete tsl;
+}
+//---------------------------------------------------------------------------
+
+void LoadingDataFromFile(TLineSeries * Series1,TLineSeries * Series2)
+{
+TStringList * tls=new TStringList();
+if (Form1->sg1->Execute()) {
+tls->LoadFromFile(Form1->sg1->FileName);
+Series1->Clear();
+	  Series2->Clear();
+
+for(int i=0;i<tls->Count;i++) // по количеству строк
+	  {
+
+	  if(tls->Strings[i].IsEmpty()) // пустые строки пропускаем
+	  continue;
+	  String s = tls->Strings[i];
+
+	  for (int k = 1; k <= s.Length(); k++) {
+		  if(s[k]==L'.')
+		  s[k]=L',';
+	  }
+
+	  String s1=wcstok(s.c_str(),L" \t");
+	  String s2=wcstok(NULL,L" \t");
+	  String s3=wcstok(NULL,L" \t");
+
+
+
+	  Series1->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
+	  s2.ToDouble(),"",clRed);
+	  Series2->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
+	  s3.ToDouble(),"",clRed);
+
+	  }
+
+}
+delete tls;
+}
+
+void __fastcall TForm1::Button12Click(TObject *Sender)
+{
+
+if (RadioButton1->Checked)
+{
+	LoadingDataFromFile(Series1,Series2);
+}
+if (RadioButton2->Checked)
+{
+	LoadingDataFromFile(Series3,Series4);
+	for (int i=0; i < l; i++)
+	{
+		Us_n[i]=Series3->YValues->Value[i];
+		Uy_n[i]=Series4->YValues->Value[i];
+	}
+}
+if (RadioButton3->Checked)
+{
+	LoadingDataFromFile(Series7,Series8);
+}
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button13Click(TObject *Sender)
+{
+SavingAllPoints(Series7,Series8);
+}
+//---------------------------------------------------------------------------
+// функция сохраняет все точки двух графиков
+// т.е. предназначена в первую очередь для тензоров проводимости.
+void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8)
+{
+if(!(Series7->YValues->Count || Series8->YValues->Count))
+{
+ ShowMessage("График пуст!");
+ return;
+}
+if(Series7->YValues->Count!=Series8->YValues->Count)
+{
+ ShowMessage("Разное количество точек на графиках!");
+ return;
+}
+TStringList * tsl=new TStringList();
+wchar_t *s;
+for(int i=0;i<Series7->YValues->Count;i++)
+{
+tsl->Add(FloatToStr(Series7->XValues->Value[i])+"\t"+Series7->YValues->Value[i]+"\t"+Series8->YValues->Value[i]);
+s=tsl->Strings[i].w_str() ;
+for(int j=0;j<tsl->Strings[i].Length();j++)
+if(s[j]==',')
+	s[j]='.';
+tsl->Delete(i);
+tsl->Add(s);
+
+}
+if (Form1->sg1->Execute()) {
+tsl->SaveToFile(Form1->sg1->FileName);
+}
+delete tsl;
+}

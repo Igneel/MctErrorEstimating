@@ -34,7 +34,6 @@ __published:	// IDE-managed Components
 	TButton *Button3;
 	TButton *Button1;
 	TMemo *Memo1;
-	TButton *Button6;
 	TButton *Button7;
 	TStringGrid *g_Nz_par;
 	TEdit *g_hsize;
@@ -87,6 +86,16 @@ __published:	// IDE-managed Components
 	TButton *Button9;
 	TEdit *Edit7;
 	TLabel *Label11;
+	TButton *Button10;
+	TLineSeries *Series7;
+	TLineSeries *Series8;
+	TButton *Button11;
+	TGroupBox *GroupBox1;
+	TRadioButton *RadioButton1;
+	TRadioButton *RadioButton2;
+	TRadioButton *RadioButton3;
+	TButton *Button12;
+	TEdit *Edit8;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
@@ -98,6 +107,10 @@ __published:	// IDE-managed Components
 	void __fastcall Button7Click(TObject *Sender);
 	void __fastcall Button8Click(TObject *Sender);
 	void __fastcall Button9Click(TObject *Sender);
+	void __fastcall Button10Click(TObject *Sender);
+	void __fastcall Button11Click(TObject *Sender);
+	void __fastcall Button12Click(TObject *Sender);
+	void __fastcall Button13Click(TObject *Sender);
 
 private:	// User declarations
 public:		// User declarations
