@@ -52,7 +52,6 @@ __published:	// IDE-managed Components
 	TLabel *Label9;
 	TLabel *Label10;
 	TEdit *Edit6;
-	TButton *Button2;
 	TEdit *Edit1;
 	TLabel *Label2;
 	TLabel *Label4;
@@ -98,7 +97,6 @@ __published:	// IDE-managed Components
 	TEdit *Edit8;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
-	void __fastcall Button2Click(TObject *Sender);
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall Button4Click(TObject *Sender);
 	void __fastcall g_Nz_parKeyPress(TObject *Sender, wchar_t &Key);

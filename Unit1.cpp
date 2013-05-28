@@ -37,6 +37,9 @@ long double Uy_n[l]={0};  // измеряемый сигнал
 
 long double sxx_n[l]={0};  // тензор проводимости
 long double sxy_n[l]={0};
+
+bool silentMode=false; // если флаг равен тру - то функции сохранения не спрашивают имя файла
+// флаг используется для крупных расчетов))
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
@@ -94,7 +97,7 @@ sxx[i]=sxy[i]=0;
 	for(int j=0;j<3;j++)
 	{
 		sxx[i]+=q*n[j]*u[j]/(1.0+u[j]*u[j]*B[i]*B[i]);
-		sxy[i]+=(j==0?-1:1)*q*n[j]*u[j]*u[j]*B[i]/(1.0+u[j]*u[j]*B[i]*B[i]);
+		sxy[i]+=q*n[j]*u[j]*u[j]*B[i]/(1.0+u[j]*u[j]*B[i]*B[i]);
 	}
 	Series1->AddXY(B[i],sxx[i],"",clRed);  // рисуем их на графиках
 	Series2->AddXY(B[i],sxy[i],"",clRed);
@@ -152,31 +155,6 @@ x[i]=ceil(x[i]*S)/S;
 
 //---------------------------------------------------------------------------
 // сохранение результатов без шума
-void __fastcall TForm1::Button2Click(TObject *Sender)
-{
-TStringList * tsl=new TStringList();
-wchar_t *s;
-
-RoundM(sxx,l);
-RoundM(sxy,l);
-
-for(int i=0;i<l;i++)
-{
-
-tsl->Add(FloatToStr(B[i])+"\t"+FloatToStr(sxx[i])+"\t"+FloatToStr(sxy[i]));
-s=tsl->Strings[i].w_str() ;
-for(int j=0;j<tsl->Strings[i].Length();j++)
-if(s[j]==',')
-	s[j]='.';
-tsl->Delete(i);
-tsl->Add(s);
-
-}
-if (sg1->Execute()) {
-tsl->SaveToFile(sg1->FileName);
-}
-}
-//---------------------------------------------------------------------------
 // преобразование Бокса-Мюллера
 void BoxMull(long double *z,int l)
 {
@@ -273,6 +251,10 @@ Button8->Enabled=1;
 // сохранение зашумленных результатов
 void __fastcall TForm1::Button4Click(TObject *Sender)
 {
+if (RadioButton1->Checked)
+{
+	 SavingAllPoints(Series1,Series2);
+}
 if (RadioButton2->Checked)
 {
 	 SavingAllPoints(Series3,Series4);
@@ -461,65 +443,67 @@ Edit4->Text=FloatToStr(my/Mo(sxy,l)*100);
 
 void __fastcall TForm1::Button9Click(TObject *Sender)
 {
+silentMode=true;
 int h=Edit7->Text.ToInt(); // шаг по температуре
 int T1=80; // начальная температура
 int Tmax=300; // конечная температура
 int koef=50;// начальный коэффициент шума
-int endkoef=150;  // конечный коэффициент
+int endkoef=200;  // конечный коэффициент
 int h_koef=50; // шаг по уровню шума
-UnicodeString oldName;
-UnicodeString fName;
+UnicodeString oldName; // старое имя файла
+UnicodeString fName;   // новое имя файла
+
+// если в диалоге имя было выбрано
 if (sg1->Execute()) {
-	Memo1->Lines->Add( sg1->FileName);
+	Memo1->Lines->Add( sg1->FileName); // выводим его в мемо
 }
-oldName = sg1->FileName;
+oldName = sg1->FileName;     // и запоминаем
 
-for (int T=T1; T <= Tmax; T+=h)
+for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 {
-     LabeledEdit5->Text=IntToStr(T);
-	 Button1->Click(); // рассчитать
-	 for (int i=koef; i <= endkoef; i+=h_koef)
-	 {
-		  Edit5->Text=IntToStr(i);
-		  Edit6->Text=IntToStr(i);
-		  Button3->Click(); // генератор
+     LabeledEdit5->Text=IntToStr(T);  // для красоты обновляем значение температуры
+	 Button1->Click(); // нажимаем кнопку рассчитать
 
-		  // а также надо сохранять идеальные результаты.
+	 RadioButton1->Checked=true; // выбираем идеальный график
+	 // задаём имя файла
+	 fName="T_"+IntToStr(T)+"_ideal_vseZnachenia_"+Edit3->Text+".txt";
+	 sg1->FileName=oldName+fName;
+	 Button4->Click();     	 // сохраняем все точки идеального графика
+	 fName="T_"+IntToStr(T)+"_ideal_11Znacheniy_"+Edit3->Text+".txt";
+	 sg1->FileName=oldName+fName;
+	 // сохраняем 11 точек идеального графика
+	 Button11->Click();
+
+	 for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
+	 {
+		  Edit5->Text=IntToStr(i); // задаем коэффициенты
+		  Edit6->Text=IntToStr(i);
+		  Button3->Click(); // генератор шума
+
+		  Button8->Click(); // обратный расчет
 
 		  // надо сохранять результаты генератора
 		  RadioButton2->Checked=1;
+		  fName="T"+IntToStr(T)+"_vseZnachenia_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  sg1->FileName=oldName+fName;
 		  Button4->Click();// теперь сохранить
-
+		  fName="T"+IntToStr(T)+"_11Znacheniy_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  sg1->FileName=oldName+fName;
+		  // сохраняем 11 точек графика
+	      Button11->Click();
 
 		  Button10->Click();// фильтровать их
+
+
+
 		  RadioButton3->Checked=1;// сохранять результаты фильтрации
+		  fName="T"+IntToStr(T)+"_filt_vseZnachenia_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  sg1->FileName=oldName+fName;
 		  Button4->Click();
 		  // в двух форматах: все точки и 11 точек.
-          Button11->Click();
-
-		  Button8->Click(); // обратный расчет
-		  fName="T"+IntToStr(T)+" k"+IntToStr(i)+" sko_p_xx"+Edit3->Text+" sko_p_xy"+Edit3->Text+".txt";
+		  fName="T"+IntToStr(T)+"_filt_11Znacheniy_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
 		  sg1->FileName=oldName+fName;
-		  //Memo1->Lines->Add(sg1->FileName);
-		  //-----------------------------------
-		  //-----------------------------------
-			TStringList * tsl=new TStringList();
-			wchar_t *s;
-			for(int i=0;i<l;i++)
-			{
-				tsl->Add(FloatToStr(Form1->Series3->XValues->Value[i])+"\t"+Form1->Series3->YValues->Value[i]+"\t"+Form1->Series4->YValues->Value[i]);
-				s=tsl->Strings[i].w_str() ;
-				for(int j=0;j<tsl->Strings[i].Length();j++)
-					if(s[j]==',')
-						s[j]='.';
-				tsl->Delete(i);
-				tsl->Add(s);
-
-			}
-			tsl->SaveToFile(sg1->FileName);
-
- //---------------------------------------------
- //---------------------------------------------
+          Button11->Click();
 	 }
 }
 // в идеале она должна:
@@ -530,6 +514,8 @@ for (int T=T1; T <= Tmax; T+=h)
 // выполнять обратный расчет
 // сохранять это всё с заданным именем
 // делать это для нескольких уровней шума
+
+silentMode=false;
 }
 //---------------------------------------------------------------------------
 
@@ -733,7 +719,7 @@ double r=4;
 	
 }
 
-if (sg1->Execute()) {
+if (silentMode || sg1->Execute()) {
 tsl->SaveToFile(sg1->FileName);
 }
 delete tsl;
@@ -820,6 +806,25 @@ if(Series7->YValues->Count!=Series8->YValues->Count)
  ShowMessage("Разное количество точек на графиках!");
  return;
 }
+long double * x = new long double[Series7->YValues->Count];
+// производим округление результатов
+for(int i=0;i<Series7->YValues->Count;i++)
+{
+	for(int j=0;j<Series7->YValues->Count;j++)
+		x[j]=Series7->YValues->Value[j];
+	RoundM(x,Series7->YValues->Count);
+    for(int j=0;j<Series7->YValues->Count;j++)
+		Series7->YValues->Value[j]=x[j];
+	for(int j=0;j<Series8->YValues->Count;j++)
+		x[j]=Series8->YValues->Value[j];
+	RoundM(x,Series8->YValues->Count);
+	for(int j=0;j<Series8->YValues->Count;j++)
+		Series8->YValues->Value[j]=x[j];
+
+
+}
+
+
 TStringList * tsl=new TStringList();
 wchar_t *s;
 for(int i=0;i<Series7->YValues->Count;i++)
@@ -833,7 +838,7 @@ tsl->Delete(i);
 tsl->Add(s);
 
 }
-if (Form1->sg1->Execute()) {
+if (silentMode || Form1->sg1->Execute()) {
 tsl->SaveToFile(Form1->sg1->FileName);
 }
 delete tsl;

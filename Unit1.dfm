@@ -405,11 +405,11 @@
         end
       end
       object Button4: TButton
-        Left = 645
+        Left = 205
         Top = 523
-        Width = 75
+        Width = 133
         Height = 25
-        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1074#1089#1077' '#1090#1086#1095#1082#1080
         TabOrder = 19
         OnClick = Button4Click
       end
@@ -431,42 +431,33 @@
         Text = '50'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object Button2: TButton
-        Left = 239
-        Top = 523
-        Width = 75
-        Height = 25
-        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
-        TabOrder = 22
-        OnClick = Button2Click
-      end
       object Edit1: TEdit
         Left = 752
         Top = 531
         Width = 121
         Height = 21
-        TabOrder = 23
+        TabOrder = 22
       end
       object Edit2: TEdit
         Left = 752
         Top = 558
         Width = 121
         Height = 21
-        TabOrder = 24
+        TabOrder = 23
       end
       object Edit4: TEdit
         Left = 924
         Top = 561
         Width = 121
         Height = 21
-        TabOrder = 25
+        TabOrder = 24
       end
       object Edit3: TEdit
         Left = 924
         Top = 534
         Width = 121
         Height = 21
-        TabOrder = 26
+        TabOrder = 25
       end
       object Button8: TButton
         Left = 88
@@ -475,7 +466,7 @@
         Height = 25
         Caption = #1054#1073#1088#1072#1090#1085#1099#1081' '#1088#1072#1089#1095#1077#1090
         Enabled = False
-        TabOrder = 27
+        TabOrder = 26
         OnClick = Button8Click
       end
       object Button9: TButton
@@ -484,7 +475,7 @@
         Width = 75
         Height = 25
         Caption = #1056#1072#1089#1095#1077#1090
-        TabOrder = 28
+        TabOrder = 27
         OnClick = Button9Click
       end
       object Edit7: TEdit
@@ -492,7 +483,7 @@
         Top = 648
         Width = 121
         Height = 21
-        TabOrder = 29
+        TabOrder = 28
         Text = '10'
       end
       object Button10: TButton
@@ -501,16 +492,16 @@
         Width = 75
         Height = 25
         Caption = #1060#1080#1083#1100#1090#1088
-        TabOrder = 30
+        TabOrder = 29
         OnClick = Button10Click
       end
       object Button11: TButton
-        Left = 879
-        Top = 639
-        Width = 166
-        Height = 25
-        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1092#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1086#1077
-        TabOrder = 31
+        Left = 205
+        Top = 554
+        Width = 133
+        Height = 24
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' 11 '#1090#1086#1095#1077#1082
+        TabOrder = 30
         OnClick = Button11Click
       end
       object GroupBox1: TGroupBox
@@ -519,7 +510,7 @@
         Width = 185
         Height = 105
         Caption = #1057#1086#1093#1088#1072#1085#1103#1077#1084#1099#1081' '#1075#1088#1072#1092#1080#1082':'
-        TabOrder = 32
+        TabOrder = 31
         object RadioButton1: TRadioButton
           Left = 24
           Top = 33
@@ -551,15 +542,15 @@
         Width = 75
         Height = 25
         Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
-        TabOrder = 33
+        TabOrder = 32
         OnClick = Button12Click
       end
       object Edit8: TEdit
-        Left = 784
-        Top = 688
+        Left = 924
+        Top = 648
         Width = 121
         Height = 21
-        TabOrder = 34
+        TabOrder = 33
         Text = '25'
       end
     end
@@ -809,7 +800,7 @@
     end
   end
   object sg1: TSaveDialog
-    Left = 696
-    Top = 632
+    Left = 8
+    Top = 728
   end
 end
