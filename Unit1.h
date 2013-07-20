@@ -95,13 +95,17 @@ __published:	// IDE-managed Components
 	TRadioButton *RadioButton3;
 	TButton *Button12;
 	TEdit *Edit8;
+	TRadioButton *RadioButton4;
+	TButton *Button2;
+	TLabel *Label12;
+	TButton *Button6;
+	TLineSeries *Series9;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button3Click(TObject *Sender);
 	void __fastcall Button4Click(TObject *Sender);
 	void __fastcall g_Nz_parKeyPress(TObject *Sender, wchar_t &Key);
 	void __fastcall Button5Click(TObject *Sender);
-	void __fastcall Button6Click(TObject *Sender);
 	void __fastcall Button7Click(TObject *Sender);
 	void __fastcall Button8Click(TObject *Sender);
 	void __fastcall Button9Click(TObject *Sender);
@@ -109,6 +113,11 @@ __published:	// IDE-managed Components
 	void __fastcall Button11Click(TObject *Sender);
 	void __fastcall Button12Click(TObject *Sender);
 	void __fastcall Button13Click(TObject *Sender);
+	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall Button6Click(TObject *Sender);
+
+
+
 
 private:	// User declarations
 public:		// User declarations

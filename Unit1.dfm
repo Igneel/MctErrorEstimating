@@ -94,15 +94,22 @@
         Caption = 'sxy:'
       end
       object Label11: TLabel
-        Left = 752
-        Top = 632
+        Left = 155
+        Top = 453
         Width = 109
         Height = 13
         Caption = #1064#1072#1075' '#1087#1086' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088#1077':'
       end
+      object Label12: TLabel
+        Left = 155
+        Top = 377
+        Width = 83
+        Height = 13
+        Caption = #1044#1083#1080#1085#1072' '#1092#1080#1083#1100#1090#1088#1072':'
+      end
       object LabeledEdit7: TLabeledEdit
-        Left = 456
-        Top = 635
+        Left = 288
+        Top = 561
         Width = 121
         Height = 21
         EditLabel.Width = 52
@@ -113,8 +120,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit8: TLabeledEdit
-        Left = 457
-        Top = 675
+        Left = 289
+        Top = 601
         Width = 121
         Height = 21
         EditLabel.Width = 162
@@ -125,8 +132,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit6: TLabeledEdit
-        Left = 320
-        Top = 675
+        Left = 152
+        Top = 641
         Width = 121
         Height = 21
         EditLabel.Width = 35
@@ -137,8 +144,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit1: TLabeledEdit
-        Left = 32
-        Top = 635
+        Left = 16
+        Top = 561
         Width = 121
         Height = 21
         EditLabel.Width = 93
@@ -149,8 +156,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit3: TLabeledEdit
-        Left = 176
-        Top = 635
+        Left = 16
+        Top = 641
         Width = 121
         Height = 21
         EditLabel.Width = 74
@@ -161,8 +168,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit5: TLabeledEdit
-        Left = 320
-        Top = 635
+        Left = 152
+        Top = 597
         Width = 121
         Height = 21
         EditLabel.Width = 88
@@ -173,8 +180,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit4: TLabeledEdit
-        Left = 176
-        Top = 675
+        Left = 152
+        Top = 561
         Width = 121
         Height = 21
         EditLabel.Width = 127
@@ -185,8 +192,8 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object LabeledEdit2: TLabeledEdit
-        Left = 32
-        Top = 675
+        Left = 16
+        Top = 601
         Width = 121
         Height = 21
         EditLabel.Width = 15
@@ -198,7 +205,7 @@
       end
       object Button5: TButton
         Left = 16
-        Top = 587
+        Top = 275
         Width = 169
         Height = 25
         Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1073#1077#1083#1086#1075#1086' '#1096#1091#1084#1072
@@ -207,7 +214,7 @@
       end
       object Button3: TButton
         Left = 16
-        Top = 554
+        Top = 242
         Width = 169
         Height = 25
         Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1085#1086#1088#1084#1072#1083#1100#1085#1086#1075#1086' '#1096#1091#1084#1072
@@ -217,7 +224,7 @@
       end
       object Button1: TButton
         Left = 16
-        Top = 523
+        Top = 211
         Width = 75
         Height = 25
         Caption = #1056#1072#1089#1089#1095#1080#1090#1072#1090#1100
@@ -225,15 +232,15 @@
         OnClick = Button1Click
       end
       object Memo1: TMemo
-        Left = 16
-        Top = 259
+        Left = 836
+        Top = 597
         Width = 209
-        Height = 209
+        Height = 139
         TabOrder = 11
       end
       object Button7: TButton
-        Left = 150
-        Top = 211
+        Left = 154
+        Top = 17
         Width = 75
         Height = 25
         Caption = #1043#1088#1072#1092#1080#1082#1080
@@ -363,6 +370,21 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
+        object Series9: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          SeriesColor = 10708548
+          LinePen.Color = 10708548
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
       end
       object Chart3: TChart
         Left = 645
@@ -405,8 +427,8 @@
         end
       end
       object Button4: TButton
-        Left = 205
-        Top = 523
+        Left = 16
+        Top = 315
         Width = 133
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1074#1089#1077' '#1090#1086#1095#1082#1080
@@ -461,7 +483,7 @@
       end
       object Button8: TButton
         Left = 88
-        Top = 523
+        Top = 211
         Width = 97
         Height = 25
         Caption = #1054#1073#1088#1072#1090#1085#1099#1081' '#1088#1072#1089#1095#1077#1090
@@ -470,8 +492,8 @@
         OnClick = Button8Click
       end
       object Button9: TButton
-        Left = 752
-        Top = 600
+        Left = 154
+        Top = 422
         Width = 75
         Height = 25
         Caption = #1056#1072#1089#1095#1077#1090
@@ -479,16 +501,16 @@
         OnClick = Button9Click
       end
       object Edit7: TEdit
-        Left = 752
-        Top = 648
+        Left = 154
+        Top = 472
         Width = 121
         Height = 21
         TabOrder = 28
         Text = '10'
       end
       object Button10: TButton
-        Left = 924
-        Top = 608
+        Left = 155
+        Top = 346
         Width = 75
         Height = 25
         Caption = #1060#1080#1083#1100#1090#1088
@@ -496,8 +518,8 @@
         OnClick = Button10Click
       end
       object Button11: TButton
-        Left = 205
-        Top = 554
+        Left = 16
+        Top = 346
         Width = 133
         Height = 24
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' 11 '#1090#1086#1095#1077#1082
@@ -506,39 +528,47 @@
       end
       object GroupBox1: TGroupBox
         Left = 16
-        Top = 319
-        Width = 185
-        Height = 105
+        Top = 416
+        Width = 132
+        Height = 130
         Caption = #1057#1086#1093#1088#1072#1085#1103#1077#1084#1099#1081' '#1075#1088#1072#1092#1080#1082':'
         TabOrder = 31
         object RadioButton1: TRadioButton
-          Left = 24
-          Top = 33
+          Left = 16
+          Top = 25
           Width = 113
           Height = 17
           Caption = #1051#1077#1074#1099#1081
           TabOrder = 0
         end
         object RadioButton2: TRadioButton
-          Left = 24
-          Top = 56
+          Left = 16
+          Top = 48
           Width = 113
           Height = 17
           Caption = #1055#1088#1072#1074#1099#1081
           TabOrder = 1
         end
         object RadioButton3: TRadioButton
-          Left = 24
-          Top = 79
+          Left = 16
+          Top = 71
           Width = 113
           Height = 17
           Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081
           TabOrder = 2
         end
+        object RadioButton4: TRadioButton
+          Left = 16
+          Top = 94
+          Width = 113
+          Height = 17
+          Caption = #1063#1080#1089#1090#1099#1081' '#1089#1080#1075#1085#1072#1083
+          TabOrder = 3
+        end
       end
       object Button12: TButton
-        Left = 344
-        Top = 523
+        Left = 155
+        Top = 315
         Width = 75
         Height = 25
         Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
@@ -546,12 +576,30 @@
         OnClick = Button12Click
       end
       object Edit8: TEdit
-        Left = 924
-        Top = 648
+        Left = 155
+        Top = 395
         Width = 121
         Height = 21
         TabOrder = 33
         Text = '25'
+      end
+      object Button2: TButton
+        Left = 16
+        Top = 376
+        Width = 133
+        Height = 25
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088#1099
+        TabOrder = 34
+        OnClick = Button2Click
+      end
+      object Button6: TButton
+        Left = 424
+        Top = 664
+        Width = 75
+        Height = 25
+        Caption = 'Test'
+        TabOrder = 35
+        OnClick = Button6Click
       end
     end
     object Графики: TTabSheet

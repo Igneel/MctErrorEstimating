@@ -15,11 +15,28 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 //---------------------------------------------------------------------------
+
+/*
+
+TO DO:
+
+1. Адекватное сохранение чистого измеряемого сигнала
+2. Автоматическую фильтрацию измеряемого сигнала, а не компонент тензора
+3. Автоматическое сохранение измеряемого сигнала, с шумом и без
+4. Доработка конвейра согласно п 1-3.
+5. Видимо сгенерить опять кучу данных и посчитать.
+6. Возможно сделать расфасовку данных для разных температур по разным папкам.
+7. Было бы неплохо сделать построение спектров графиков прямо в этой проге, хотя это пожалуй избыточно.
+
+*/
+
+
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
 {
 }
 const int l=201;//11;  // количество точек
+const int NumberOfNumbersAfterPoint=4;
 long double q=1.60217646E-19; // заряд электрона
 long double h; // величина шага
 long double B[l]={0};
@@ -51,7 +68,6 @@ g_Nz_par->Cells[2][0]="подвижность";
 
 
 
-
 }
 //---------------------------------------------------------------------------
 
@@ -59,6 +75,8 @@ void ParamsKRT(void);
 double Filter (const double in[], double out[], int sizeIn, int length, double Fdisk, double Fpropysk,double Fzatyh);
 double Tr_Filter(TLineSeries *inS,TLineSeries *outS,int length,double Fdisk, double Fpropysk,double Fzatyh);
 void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
+
+long double determinant (long double ** Arr,int size);
 
 // расчет тензоров проводимости
 void __fastcall TForm1::Button1Click(TObject *Sender)
@@ -112,7 +130,7 @@ Button3->Enabled=1;
 for(int i=0;i<l;i++)
 {
 	s_eff[i]=(sxx[i]*sxx[i]+sxy[i]*sxy[i])/sxx[i];
-	Rh_eff[i]=sxy[i]/(sxx[i]*sxx[i]+sxy[i]*sxy[i]);
+	Rh_eff[i]=sxy[i]/(sxx[i]*sxx[i]+sxy[i]*sxy[i]); // 1/B
 	LineSeries1->AddXY(B[i],s_eff[i],"",clRed);
 	LineSeries7->AddXY(B[i],Rh_eff[i],"",clRed);
 }
@@ -130,7 +148,7 @@ for(int i=0;i<l;i++)
 
    // вот к этим значениям будет добавляться шум.
 Us[i]=cb/d*I/s_eff[i];
-Uy[i]=Rh_eff[i]*I*B[i]/d;
+Uy[i]=Rh_eff[i]*I/d;   // Rh_eff[i]*I*B[i]/d;
 
 	LineSeries3->AddXY(B[i],Us[i],"",clRed);
 	LineSeries9->AddXY(B[i],Uy[i],"",clRed);
@@ -142,7 +160,7 @@ Uy[i]=Rh_eff[i]*I*B[i]/d;
 // метод будет считать что мы с этой точностью измеряли - и мало что найдет
 void RoundM(long double * x,int length)
 {
-int S=1000;
+int S=pow(10,NumberOfNumbersAfterPoint);
 for(int i=0;i<length;i++)
 {
 int n= (int)(x[i]*S)%10;
@@ -169,6 +187,7 @@ while (s>1 || s<=0)
 //int a=rand();
 x=(-1000+rand()%2000)/1000.0;
 y=(-1000+rand()%2000)/1000.0;
+// шум в пределах от -1 до 1
 s=x*x+y*y;
 }
 z[i]=x*sqrt(-2*log(s)/s);
@@ -207,13 +226,11 @@ return sqrt(z);
 // возвращает величину математического ожидания шума.
 void ShumAdding(long double *x,long double *out,long double *ret, long double koeff)
 {
-
-
 long double y[l]={0}; // шум для нашего графика
 BoxMull(y,l);
-
 for(int i=0;i<l;i++)
 	out[i]=x[i]+y[i]/koeff;
+	// амплитуда шума определяется как 1/koef
   ret[0]=Mo(y,l); // математическое ожидание
   ret[1]=Sko(x,out,l);  // СКО
   ret[2]=ret[0]/Mo(x,l)*100; // СКО в %  от математического ожидания исходного графика
@@ -262,6 +279,10 @@ if (RadioButton2->Checked)
 if (RadioButton3->Checked)
 {
      SavingAllPoints(Series7,Series8);
+}
+if (RadioButton4->Checked)
+{
+     SavingAllPoints(LineSeries3,LineSeries9);
 }
 
 }
@@ -327,10 +348,9 @@ Series4->AddXY(B[i],y1[i],"",clRed);
 long double niSob(long double T, long double x)
 
 {
-long double k=1.380648813E-23/1.60217646E-19; // постоянная большмана в электрон-Вольтах
-long double Eg=fabs(-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2*x)*T);  // должна быть положительной же?
-return  (5.585-3.82*x+0.001753*T-0.001364*x*T)*1E20*pow(Eg,1.5)*pow(T,1.5)*exp(-Eg/2/k/T); // собственная концентрация
-
+long double k=1.380648813E-23/1.60217646E-19; // постоянная больцмана в электрон-Вольтах
+long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2*x)*T;
+return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2/k/T); // собственная концентрация
 }
 
 void ParamsKRT(void)
@@ -342,8 +362,7 @@ long double mh=0.443*m0; // масса тяжелых дырок
 long double ml=0.001*m0; // масса легких дырок
 
 long double ph=Form1->LabeledEdit8->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
-long double pl=pow(ml/mh,1.5)*ph*100; // концентрация легких дырок домножена на 100
-
+long double pl=pow(ml/mh,1.5)*ph*50; // концентрация легких дырок домножена на 50
 long double n=-pow(niSob(T,x),2)/ph;
 long double A=Form1->LabeledEdit6->Text.ToDouble();//5; // 5-8
 long double k=Form1->LabeledEdit7->Text.ToDouble();//1.3; //1.3-1.5
@@ -363,12 +382,7 @@ Form1->Button1->Enabled=true;
 Form1->Button7->Enabled=1;
 }
 
-// вычисление параметров
-void __fastcall TForm1::Button6Click(TObject *Sender)
-{
-ParamsKRT();
-}
-//---------------------------------------------------------------------------
+
 
 void __fastcall TForm1::Button7Click(TObject *Sender)
 {
@@ -391,10 +405,11 @@ for(int i=0;i<l;i++)
 {
   // теперь считаем в обратном направлении
 s_eff_n[i]=cb/d*I/Us_n[i];
-if(B[i])
-Rh_eff_n[i]=d*Uy_n[i]/I/B[i];
-else
-Rh_eff_n[i]=0;//d*Uy_n[i]/I;
+Rh_eff_n[i]=d*Uy_n[i]/I;
+//if(B[i])
+
+//else
+//Rh_eff_n[i]=0;//d*Uy_n[i]/I;
 
 
 
@@ -443,13 +458,41 @@ Edit4->Text=FloatToStr(my/Mo(sxy,l)*100);
 
 void __fastcall TForm1::Button9Click(TObject *Sender)
 {
+/*
++1. Просим задать имя.
++2. Идем по температуре с шагом.
++3. Рассчитываем параметры пленки и тензоры проводимости
++4. Сохраняем параметры плёнки.
++4. Сохраняем идеальный график тензора все точки и 11 точек.
++5. Сохраняем идеальный график измеряемых сигналов Us и Uy все точки и 11 точек
++6. Сохраняем рассчитанные параметры плёнки (концентрации и подвижности НЗ).
++7. Задаем длину фильтра.
+
+// для каждого значения шума.
+Генерируем зашумленный сигнал.
++8. Сохраняем все точки и 11 точек зашумленного измеряемого сигнала.
++9. Запускаем фильтрацию.
++10. Сохраняем все точки фильтрованного сигнала.
++11. Выполняем обратный расчет для зашумленного сигнала (перед этим наверное стоит привести его в вид "как было"?).
+Обратно можно не приводить, т.к. во время фильтрации мы издеваемся над графиком, а рассчитываем по массивам.
+
++12. Сохраняем все точки и 11 точек зашумленных компонент тензора.
+13. Обрабатываем фильтрованный измеренный сигнал, так чтобы он стал пригоден для расчетов.
++14. Выполняем обратный расчет для фильтрованного зашумленного сигнала.
++15. Сохраняем все точки и 11 точек фильтрованных компонент тензора.
+
+*/
 silentMode=true;
 int h=Edit7->Text.ToInt(); // шаг по температуре
 int T1=80; // начальная температура
 int Tmax=300; // конечная температура
-int koef=50;// начальный коэффициент шума
-int endkoef=200;  // конечный коэффициент
-int h_koef=50; // шаг по уровню шума
+
+int koef=1;// начальный коэффициент шума
+int endkoef=5;  // конечный коэффициент
+
+int h_koef=1; // шаг по уровню шума
+Edit8->Text=IntToStr(80); // задаём длину фильтра, внимание - это для симметричного и удлиненного графика!
+g_hsize->Text=FloatToStr(0.0125);
 UnicodeString oldName; // старое имя файла
 UnicodeString fName;   // новое имя файла
 
@@ -463,67 +506,141 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 {
      LabeledEdit5->Text=IntToStr(T);  // для красоты обновляем значение температуры
 	 Button1->Click(); // нажимаем кнопку рассчитать
+     // задаём имя файла
+	 fName="T_"+IntToStr(T)+"_params_"+Edit3->Text+".txt";
+	 sg1->FileName=oldName+fName;
+	 Button2->Click(); // сохраняем параметры плёнки
 
-	 RadioButton1->Checked=true; // выбираем идеальный график
+
+	 RadioButton1->Checked=true; // выбираем идеальный график тензоров
 	 // задаём имя файла
-	 fName="T_"+IntToStr(T)+"_ideal_vseZnachenia_"+Edit3->Text+".txt";
+	 fName="T_"+IntToStr(T)+"_tenzor_ideal_vseZnachenia_"+Edit3->Text+".txt";
 	 sg1->FileName=oldName+fName;
-	 Button4->Click();     	 // сохраняем все точки идеального графика
-	 fName="T_"+IntToStr(T)+"_ideal_11Znacheniy_"+Edit3->Text+".txt";
+	 Button4->Click();     	 // сохраняем все точки идеального графика тензора
+	 fName="T_"+IntToStr(T)+"_tenzor_ideal_11Znacheniy_"+Edit3->Text+".txt";
 	 sg1->FileName=oldName+fName;
-	 // сохраняем 11 точек идеального графика
+	 // сохраняем 11 точек идеального графика тензора
 	 Button11->Click();
+
+
+	 RadioButton4->Checked=true; // выбираем идеальный график измеряемых сигналов
+     // задаём имя файла
+	 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_vseZnachenia_"+Edit3->Text+".txt";
+	 sg1->FileName=oldName+fName;
+	 Button4->Click();     	 // сохраняем все точки идеального графика сигналов
+	 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_11Znacheniy_"+Edit3->Text+".txt";
+	 sg1->FileName=oldName+fName;
+	 // сохраняем 11 точек идеального графика сигналов
+	 Button11->Click();
+
+
+
 
 	 for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
 	 {
-		  Edit5->Text=IntToStr(i); // задаем коэффициенты
-		  Edit6->Text=IntToStr(i);
+		  Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(Uy[l-1]))); // задаем коэффициенты
+		  Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(Uy[l-1])));
 		  Button3->Click(); // генератор шума
 
-		  Button8->Click(); // обратный расчет
+		  RadioButton2->Checked=true; // выбираем зашумленный график измеряемого сигнала
+		  fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		 sg1->FileName=oldName+fName;
+		 Button4->Click();     	 // сохраняем все точки идеального графика тензора
+		 fName="T_"+IntToStr(T)+"_Us_Uy_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		 sg1->FileName=oldName+fName;
+		 // сохраняем 11 точек идеального графика тензора
+		 Button11->Click();
 
+		 // запускаем фильтрацию
+		 Button10->Click();
+
+		 // сохраняем результаты фильтрации (все точки)-------------------------
+		 RadioButton3->Checked=true; // выбираем фильтрованный график
+		 fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
+		 sg1->FileName=oldName+fName;
+		 Button4->Click();
+         //---------------------------------------------------------------------
+
+		  Button8->Click(); // обратный расчет
+		  //--------------------------------------------------------------------
 		  // надо сохранять результаты генератора
 		  RadioButton2->Checked=1;
-		  fName="T"+IntToStr(T)+"_vseZnachenia_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  fName="T_"+IntToStr(T)+"_tenzor_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
 		  sg1->FileName=oldName+fName;
 		  Button4->Click();// теперь сохранить
-		  fName="T"+IntToStr(T)+"_11Znacheniy_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  fName="T_"+IntToStr(T)+"_tenzor_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
 		  sg1->FileName=oldName+fName;
 		  // сохраняем 11 точек графика
 	      Button11->Click();
+		  //--------------------------------------------------------------------
+		  //-------обработка результатов фильтрации-----------------------------
 
-		  Button10->Click();// фильтровать их
+		  //1T_80_Us_Uy_vseZnachenia_filtr_k_50.txt
+		  fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
+		  sg1->FileName=oldName+fName;
+		  RadioButton4->Checked=1;
+		  Button12->Click();
 
-
-
-		  RadioButton3->Checked=1;// сохранять результаты фильтрации
-		  fName="T"+IntToStr(T)+"_filt_vseZnachenia_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  //-------обратный расчет для фильтрованных сигналов
+		  Button8->Click();
+		  //--------------------------------------------------------------------
+          //--------------------------------------------------------------------
+		  RadioButton2->Checked=1;// сохранять результаты фильтрованных тензоров
+		  fName="T_"+IntToStr(T)+"_tenzor_filt_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
 		  sg1->FileName=oldName+fName;
 		  Button4->Click();
 		  // в двух форматах: все точки и 11 точек.
-		  fName="T"+IntToStr(T)+"_filt_11Znacheniy_k"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
+		  fName="T_"+IntToStr(T)+"_tenzor_filt_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
 		  sg1->FileName=oldName+fName;
-          Button11->Click();
+		  Button11->Click();
+		  //--------------------------------------------------------------------
 	 }
 }
-// в идеале она должна:
-// изменять температуру с заданным шагом
-// 1. запонять параметры пленки
-// считать тензоры
-// добавлять шум к Us и Uy
-// выполнять обратный расчет
-// сохранять это всё с заданным именем
-// делать это для нескольких уровней шума
-
 silentMode=false;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::Button10Click(TObject *Sender)
 {
+// Надо прикруть экстраполяцию графиков измеряемых зависимостей!
+
 int length=Edit8->Text.ToInt();
 
-double *x=new double[l+length];
+/*if (l!=Series3->YValues->Count) {
+	ShowMessage("Длина массива не та!");
+	return;
+}     */
+ double *x=new double[2*l];
+ double *y=new double[2*l];
+
+ for (int i = 0; i < l; i++) {
+	y[i]=Series3->YValues->Value[l-i-1];
+	x[i]=-Series3->XValues->Value[l-i-1];
+	y[i+l]=Series3->YValues->Value[i];
+	x[i+l]=Series3->XValues->Value[i];
+ }
+ Series3->Clear();
+
+ for (int i = 0; i < 2*l; i++) {
+	Series3->AddXY(x[i],y[i],"",clRed);
+ }
+
+ for (int i = 0; i < l; i++) {
+	y[i]=-Series4->YValues->Value[l-i-1];
+	x[i]=-Series4->XValues->Value[l-i-1];
+	y[i+l]=Series4->YValues->Value[i];
+	x[i+l]=Series4->XValues->Value[i];
+ }
+ Series4->Clear();
+
+ for (int i = 0; i < 2*l; i++) {
+	Series4->AddXY(x[i],y[i],"",clRed);
+ }
+
+ delete [] x;
+ delete [] y;
+
+/*double *x=new double[l+length];   // выделяем память под l+length значений
 double *y=new double[l+length];
 
 for (int i = 0; i < length; i++) {
@@ -550,13 +667,35 @@ for (int i = length; i < l+length; i++) {
 Series4->Clear();
 for (int i = 0; i < l+length; i++) {
 	Series4->AddXY(x[i],y[i],"",clRed);
-}
+}  */
 
-delete [] x;
-delete [] y;
-            // ну как-то не очень такой метод, надо экстраполяцию всё-таки.
+
+			// ну как-то не очень такой метод, надо экстраполяцию всё-таки.
 Tr_Filter(Series3,Series7,Edit8->Text.ToInt(),5000,15,25);
 Tr_Filter(Series4,Series8,Edit8->Text.ToInt(),5000,15,25);
+
+
+/*
+for(int i=0;i< l+length; i++) {
+	   y[i]=Series3->YValues->Value[i];
+		x[i]=Series3->XValues->Value[i];
+	}
+	Series3->Clear();
+	for(int i=length;i< l+length; i++) {
+	  Series3->AddXY(x[i],y[i],"",clRed);
+	}
+
+	for(int i=0;i< l+length; i++) {
+	   y[i]=Series4->YValues->Value[i];
+		x[i]=Series4->XValues->Value[i];
+	}
+	Series4->Clear();
+	for(int i=length;i< l+length; i++) {
+	  Series4->AddXY(x[i],y[i],"",clRed);
+	}
+
+delete [] x;
+delete [] y;  */
 }
 //---------------------------------------------------------------------------
 // ВНИМАНИЕ!!! Напрямую не вызывать!!! Пользоваться трамплином!!!---------------
@@ -681,6 +820,12 @@ if(RadioButton3->Checked)
   Saving2=Series8;
 }
 
+if(RadioButton4->Checked)
+{
+ Saving1=LineSeries3;
+  Saving2=LineSeries9;
+}
+
 if(!Saving1)
 return;
 
@@ -692,20 +837,21 @@ for (int i=1; i < 11; i++) {
 
 TStringList * tsl=new TStringList();
 wchar_t *s;
+
+int length=Saving1->XValues->Count;
+
  //int counting=0;
 for (int i = 0; i < 11; i++) {
 int index=0;
 double r=4;
-	for(int k=0;k<l;k++)
+	for(int k=0;k<length;k++)
 	{
 	
-	if(fabs(Saving1->XValues->Value[k]-points[i])<=r)
+	if(fabs(fabs(Saving1->XValues->Value[k])-points[i])<=r)
 	{
 		r=fabs(Saving1->XValues->Value[k]-points[i]);
 		index=k;
-		}
-	else
-		break;
+    }
 	}
 		
 	tsl->Add(FloatToStr(Saving1->XValues->Value[index])+"\t"+Saving1->YValues->Value[index]+"\t"+Saving2->YValues->Value[index]);
@@ -729,7 +875,7 @@ delete tsl;
 void LoadingDataFromFile(TLineSeries * Series1,TLineSeries * Series2)
 {
 TStringList * tls=new TStringList();
-if (Form1->sg1->Execute()) {
+if (silentMode || Form1->sg1->Execute()) {
 tls->LoadFromFile(Form1->sg1->FileName);
 Series1->Clear();
 	  Series2->Clear();
@@ -784,7 +930,54 @@ if (RadioButton3->Checked)
 	LoadingDataFromFile(Series7,Series8);
 }
 
+if (RadioButton4->Checked)
+{
+	LoadingDataFromFile(LineSeries3,LineSeries9);    //------------------------------!
+	int length=LineSeries3->YValues->Count;
+	long double *x=new long double[length];
+	long double *y=new long double[length];
+
+	 for (int i=0; i < length; i++) {
+		 x[i]=LineSeries3->XValues->Value[i];
+		 y[i]=LineSeries3->YValues->Value[i];
+	 }
+	 LineSeries3->Clear();
+	 for (int i=0; i < length; i++) {
+	 if (x[i]>=0) {
+		 LineSeries3->AddXY(x[i],y[i],"",clRed);
+
+     }
+	 }
+	  for (int i=0; i < length; i++) {
+		 x[i]=LineSeries9->XValues->Value[i];
+		 y[i]=LineSeries9->YValues->Value[i];
+	 }
+	 LineSeries9->Clear();
+	 for (int i=0; i < length; i++) {
+	 if (x[i]>=0) {
+		 LineSeries9->AddXY(x[i],y[i],"",clRed);
+
+     }
+	 }
+     //ShowMessage(LineSeries3->YValues->Count);
+
+ for (int i=0; i < LineSeries3->YValues->Count; i++) {
+	Us_n[i]=LineSeries3->YValues->Value[i];
+	Uy_n[i]=LineSeries9->YValues->Value[i];
+ }
+
+
+ delete[] x;
+ delete[] y;
 }
+
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::Button13Click(TObject *Sender)
@@ -820,10 +1013,7 @@ for(int i=0;i<Series7->YValues->Count;i++)
 	RoundM(x,Series8->YValues->Count);
 	for(int j=0;j<Series8->YValues->Count;j++)
 		Series8->YValues->Value[j]=x[j];
-
-
 }
-
 
 TStringList * tsl=new TStringList();
 wchar_t *s;
@@ -832,14 +1022,213 @@ for(int i=0;i<Series7->YValues->Count;i++)
 tsl->Add(FloatToStr(Series7->XValues->Value[i])+"\t"+Series7->YValues->Value[i]+"\t"+Series8->YValues->Value[i]);
 s=tsl->Strings[i].w_str() ;
 for(int j=0;j<tsl->Strings[i].Length();j++)
-if(s[j]==',')
+if(s[j]==',')     // заменить все запятые на точки
 	s[j]='.';
 tsl->Delete(i);
 tsl->Add(s);
 
+}
+// если включен тихий режим - имя уже должно быть известно
+if (silentMode || Form1->sg1->Execute()) {
+tsl->SaveToFile(Form1->sg1->FileName);
+}
+delete[] x;
+delete tsl;
+}
+
+// сохранение параметров КРТ
+// поддерживает тихий режим
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+TStringList * tsl=new TStringList();
+wchar_t *s;
+for (int i = 0; i < 3; i++) {
+tsl->Add(g_Nz_par->Cells[1][i+1] +"\t"+g_Nz_par->Cells[2][i+1]);
+s=tsl->Strings[i].w_str() ;
+for(int j=0;j<tsl->Strings[i].Length();j++)
+if(s[j]==',')
+	s[j]='.';
+tsl->Delete(i);
+tsl->Add(s);
 }
 if (silentMode || Form1->sg1->Execute()) {
 tsl->SaveToFile(Form1->sg1->FileName);
 }
 delete tsl;
 }
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//-----------curveFitting----------------------------------------------------
+void curveFitting(long double * inX, long double *inY, long double * out, int length)
+{
+// выражение f(x)=x^5*p1+x^4*p2+x^3*p3+x^2*p4+x*p5+p6
+const int a=6;
+//long double * fullMatrix[a+1];
+long double ** fullMatrix=new long double*[length];
+
+for (int i = 0; i < length; i++) {
+	fullMatrix[i]=new long double[a+1];
+
+}
+//for (int i = 0; i < length; i++) {
+ //	fullMatrix[i]=new long double[length];
+//}
+/*
+формируем матрицу вида
+
+-y x^0 x^1 x^2 x^3 x^4 x^5  7 столбцов и length строк
+
+x^5 x^4 x^3 x^2 x^1 x^0 -y
+*/
+for (int i = 0; i < length; i++) {
+	for (int j = 0; j < a; j++) {
+		fullMatrix[i][j]=((a-j-1)==0?1:pow(inX[i],a-j-1));
+
+	}
+	fullMatrix[i][a]=-inY[i];
+}
+long double K[a+1][a+1]={0}; // сюда сохраним результат перемножения x'*x
+	for (int i = 0; i <= a; i++) {
+		for (int j = 0; j <= a; j++) {
+			for (int k=0; k < length; k++) {
+				K[i][j]+=fullMatrix[k][i]*fullMatrix[k][j];
+	}}}
+	// перемножение работает, проверено матлабом
+
+    // после перемножения мило делим всё на постоянный коэффициент
+   /* for (int i = 0; i <= a; i++) {
+		for (int j = 0; j <= a; j++) {
+		  // K[i][j]*=1000;
+
+		}
+        }*/
+
+	// K5 - содержит 6 строк и 6 столбцов, т.е. без свободных членов.
+	long double *K5[a];
+	for (int i = 0; i < a; i++)
+		K5[i]= new long double[a];
+	// Ks - столблец из 6 строк, свободные члены.
+	long double Ks[a]={0};
+
+	for (int i = 0; i < a-1; i++) {
+		for (int j = 0; j < a; j++) {
+		K5[i][j]=K[i][j]; // копируем первые 5 строк
+		//blabla=K5[i][j];
+		}
+	}
+
+	// а 6ая строка - среднее арифметическое 6 и 7 строк
+	for (int i = 0; i < a; i++) {
+		K5[5][i]=(K[5][i]+K[6][i])/2;
+	}
+
+	for (int i = 0; i < a; i++) {
+		Ks[i]=K[i][a];
+	}
+
+	long double d0=determinant(K5,a); // детерминант правилен
+
+	long double **delta[a];
+	for (int i = 0; i < a; i++) {
+		 delta[i]=new long double*[a];
+		for (int j = 0; j < a; j++) {
+			delta[i][j]=new long double[a];
+
+	}}
+
+	for (int i = 0; i < a; i++) {
+		for (int j = 0; j < a; j++) {
+		for (int k = 0; k < a; k++) {
+		if (k!=i) {
+		 delta[i][j][k]=K5[j][k];
+		}
+		else
+		{
+		delta[i][j][k]=Ks[j];
+		}
+		//blabla=delta[i][j][k];
+	}}}
+
+	long double p[a]={0};
+
+	for (int i = 0; i < a; i++) {
+		p[i]=determinant(delta[i],a)/d0;
+	}
+	for (int i = 0; i <length; i++) {
+        out[i]=pow(inX[i],5)*p[0]+pow(inX[i],4)*p[1]+pow(inX[i],3)*p[2]+pow(inX[i],2)*p[3]+pow(inX[i],1)*p[4]+p[5];
+	}
+for (int i = 0; i < a; i++) {
+	delete[] K5[i];
+}
+
+for (int i = 0; i < length; i++) {
+	delete[] fullMatrix[i];
+}
+delete[] fullMatrix;
+for (int i = 0; i < a; i++) {
+		for (int j = 0; j < a; j++) {
+			delete[] delta[i][j];
+	}
+			 delete[] delta[i];
+	}
+
+}
+//---------------------------------------------------------------------------
+
+
+long double determinant (long double ** Arr,int size)
+{
+int i,j;
+long double det=0;
+long double** matr;
+switch (size) {
+case 1: return Arr[0][0];
+case 2: return Arr[0][0]*Arr[1][1]-Arr[0][1]*Arr[1][0];
+default:
+  matr=new long double*[size-1];
+				for(i=0;i<size;++i)
+				{
+						for(j=0;j<size-1;++j)
+						{
+								if(j<i)
+										matr[j]=Arr[j];
+								else
+										matr[j]=Arr[j+1];
+						}
+						det+=pow((long double)-1, (i+j))*determinant(matr, size-1)*Arr[i][size-1];
+				}
+				delete[] matr;
+
+  return det;
+}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+
+
+int length=Series1->XValues->Count;
+long double *inX= new long double [length];
+long double *inY= new long double [length];
+long double *out= new long double [length];
+
+for (int i = 0; i < length; i++) {
+	inX[i]=Series2->XValues->Value[i];
+	inY[i]=Series2->YValues->Value[i];
+}
+Series4->Clear();
+curveFitting(inX,inY,out,length);
+for (int i = 0; i < length; i++) {
+	Series4->AddXY(inX[i],out[i],"",clRed);
+}
+
+delete[] inX;
+delete[] inY;
+delete[] out;
+
+
+}
+//---------------------------------------------------------------------------
+
