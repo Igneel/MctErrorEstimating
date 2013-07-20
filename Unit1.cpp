@@ -5,6 +5,9 @@
 
 #include "Unit1.h"
 #include "Unit2.h"
+#include "ExtrapolateUnit.h"
+#include "FilteringUnit.h"
+#include "NoiseUnit.h"
 #include <math.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -65,18 +68,14 @@ g_Nz_par->Cells[0][2]="легкие дырки";
 g_Nz_par->Cells[0][3]="тяжелые дырки";
 g_Nz_par->Cells[1][0]="концентрация";
 g_Nz_par->Cells[2][0]="подвижность";
-
-
-
 }
 //---------------------------------------------------------------------------
 
 void ParamsKRT(void);
-double Filter (const double in[], double out[], int sizeIn, int length, double Fdisk, double Fpropysk,double Fzatyh);
-double Tr_Filter(TLineSeries *inS,TLineSeries *outS,int length,double Fdisk, double Fpropysk,double Fzatyh);
+
 void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
 
-long double determinant (long double ** Arr,int size);
+
 
 // расчет тензоров проводимости
 void __fastcall TForm1::Button1Click(TObject *Sender)
@@ -171,70 +170,6 @@ x[i]=ceil(x[i]*S)/S;
 }
 }
 
-//---------------------------------------------------------------------------
-// сохранение результатов без шума
-// преобразование Бокса-Мюллера
-void BoxMull(long double *z,int l)
-{
-long double x,y;
-
-int i;
-for(i=0;i<l-1;i+=2)
-{
-double s=3;
-while (s>1 || s<=0)
-{
-//int a=rand();
-x=(-1000+rand()%2000)/1000.0;
-y=(-1000+rand()%2000)/1000.0;
-// шум в пределах от -1 до 1
-s=x*x+y*y;
-}
-z[i]=x*sqrt(-2*log(s)/s);
-z[i+1]=y*sqrt(-2*log(s)/s);
-i=i;
-}
-}
-
-
-//--------------------------------------------------------------------------
-// расчет среднего квадратичного отклонения
-//--------------------------------------------------------------------------
-
-long double Sko (long double *x0,long double *x,int l)
-{
-long double z=0;
-for(int i=0;i<l;i++)
-z+= pow((x[i]-x0[i]),2);
-z/=(long double)l;
-return sqrt(z);
-}
-
-//---------------------------------------------------
-// расчет математического ожидания
-//-------------------------------------------------
-
- long double Mo (long double *x,int l)
- {
- long double M=0;
- for(int i=0;i<l;i++)
- M+=x[i];
- return M/l;
- }
-
-//---------------------------------------------------------------------------
-// возвращает величину математического ожидания шума.
-void ShumAdding(long double *x,long double *out,long double *ret, long double koeff)
-{
-long double y[l]={0}; // шум для нашего графика
-BoxMull(y,l);
-for(int i=0;i<l;i++)
-	out[i]=x[i]+y[i]/koeff;
-	// амплитуда шума определяется как 1/koef
-  ret[0]=Mo(y,l); // математическое ожидание
-  ret[1]=Sko(x,out,l);  // СКО
-  ret[2]=ret[0]/Mo(x,l)*100; // СКО в %  от математического ожидания исходного графика
-}
 
 // генератор шума
 void __fastcall TForm1::Button3Click(TObject *Sender)
@@ -243,12 +178,12 @@ srand(time(NULL));
 long double y[l]={0}; // шум для sxx
 long double y1[l]={0};  // шум для sxy
 long double vz[3]={0};  // М СКО и СКО в %
-ShumAdding(Us,y,vz,Edit5->Text.ToDouble());
+ShumAdding(Us,y,vz,Edit5->Text.ToDouble(),l);
 Form1->Memo1->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit1->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit3->Text=FloatToStr(vz[2]);
 
-ShumAdding(Uy,y1,vz,Edit5->Text.ToDouble());
+ShumAdding(Uy,y1,vz,Edit5->Text.ToDouble(),l);
 Form1->Memo1->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit2->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit4->Text=FloatToStr(vz[2]);
@@ -303,7 +238,7 @@ Key=0;
 // генератор белого шума, не знаю нужен ли он нам вообще)
 void __fastcall TForm1::Button5Click(TObject *Sender)
 {
-long double x[l];
+/*long double x[l];
 long double y[l];
 long double y1[l];
 srand(time(NULL));
@@ -341,7 +276,7 @@ Series4->AddXY(B[i],y1[i],"",clRed);
  // СКО %  от математического ожидания
  Edit3->Text=FloatToStr(Edit1->Text.ToDouble()/Mo(sxx,l)*100);
  Edit4->Text=FloatToStr(Edit2->Text.ToDouble()/Mo(sxy,l)*100);
-
+ */
 }
 //---------------------------------------------------------------------------
 // вычисление собственной концентрации электронов
@@ -410,9 +345,6 @@ Rh_eff_n[i]=d*Uy_n[i]/I;
 
 //else
 //Rh_eff_n[i]=0;//d*Uy_n[i]/I;
-
-
-
 
 	LineSeries3->AddXY(B[i],Us_n[i],"",clRed);
 	LineSeries9->AddXY(B[i],Uy_n[i],"",clRed);
@@ -533,10 +465,7 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 	 // сохраняем 11 точек идеального графика сигналов
 	 Button11->Click();
 
-
-
-
-	 for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
+     for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
 	 {
 		  Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(Uy[l-1]))); // задаем коэффициенты
 		  Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(Uy[l-1])));
@@ -610,8 +539,10 @@ int length=Edit8->Text.ToInt();
 	ShowMessage("Длина массива не та!");
 	return;
 }     */
- double *x=new double[2*l];
+ /*double *x=new double[2*l];
  double *y=new double[2*l];
+
+
 
  for (int i = 0; i < l; i++) {
 	y[i]=Series3->YValues->Value[l-i-1];
@@ -638,166 +569,18 @@ int length=Edit8->Text.ToInt();
  }
 
  delete [] x;
- delete [] y;
+ delete [] y;    */
 
-/*double *x=new double[l+length];   // выделяем память под l+length значений
-double *y=new double[l+length];
-
-for (int i = 0; i < length; i++) {
-	y[i]=Series3->YValues->Value[0];
-	x[i]=-(length-i)*h;
-}
-for (int i = length; i < l+length; i++) {
-	y[i]=Series3->YValues->Value[i-length];
-	x[i]=Series3->XValues->Value[i-length];
-}
-Series3->Clear();
-for (int i = 0; i < l+length; i++) {
-	Series3->AddXY(x[i],y[i],"",clRed);
-}
-
-for (int i = 0; i < length; i++) {
-	y[i]=Series4->YValues->Value[0];
-	x[i]=-(length-i)*h;
-}
-for (int i = length; i < l+length; i++) {
-	y[i]=Series4->YValues->Value[i-length];
-	x[i]=Series4->XValues->Value[i-length];
-}
-Series4->Clear();
-for (int i = 0; i < l+length; i++) {
-	Series4->AddXY(x[i],y[i],"",clRed);
-}  */
+  extrapolate2Degree(Series3, 0, 2.75, 0.01,Series3);
+  extrapolate2Degree(Series4, 0, 2.75, 0.01,Series4);
 
 
-			// ну как-то не очень такой метод, надо экстраполяцию всё-таки.
+
 Tr_Filter(Series3,Series7,Edit8->Text.ToInt(),5000,15,25);
 Tr_Filter(Series4,Series8,Edit8->Text.ToInt(),5000,15,25);
 
-
-/*
-for(int i=0;i< l+length; i++) {
-	   y[i]=Series3->YValues->Value[i];
-		x[i]=Series3->XValues->Value[i];
-	}
-	Series3->Clear();
-	for(int i=length;i< l+length; i++) {
-	  Series3->AddXY(x[i],y[i],"",clRed);
-	}
-
-	for(int i=0;i< l+length; i++) {
-	   y[i]=Series4->YValues->Value[i];
-		x[i]=Series4->XValues->Value[i];
-	}
-	Series4->Clear();
-	for(int i=length;i< l+length; i++) {
-	  Series4->AddXY(x[i],y[i],"",clRed);
-	}
-
-delete [] x;
-delete [] y;  */
-}
-//---------------------------------------------------------------------------
-// ВНИМАНИЕ!!! Напрямую не вызывать!!! Пользоваться трамплином!!!---------------
-double Filter (const double in[], double out[], int sizeIn, int length, double Fdisk, double Fpropysk,double Fzatyh)
-{
-int N = length; //Длина фильтра 20
-long double Fd = Fdisk; //Частота дискретизации входных данных 2000
-long double Fs = Fpropysk; //Частота конца полосы пропускания  10
-long double Fx = Fzatyh; //Частота начала полосы затухания    20
-
-long double *H= new long double [N] ; //Импульсная характеристика фильтра
-long double *H_id= new long double [N]; //Идеальная импульсная характеристика
-long double *W= new long double [N]; //Весовая функция
-
-/*long double H [N] = {0}; //Импульсная характеристика фильтра
-long double H_id [N] = {0}; //Идеальная импульсная характеристика
-long double W [N] = {0}; //Весовая функция  */
-
-//Расчет импульсной характеристики фильтра
-long double Fc = (Fs + Fx) / (2 * Fd);
-
-for (int i=0;i<N;i++)
-{
-if (i==0) H_id[i] = 2*M_PI*Fc;
-else H_id[i] = sinl(2*M_PI*Fc*i )/(M_PI*i);
-// весовая функция Блекмена
-W [i] = 0.42 - 0.5 * cosl((2*M_PI*i) /( N-1)) + 0.08 * cosl((4*M_PI*i) /( N-1));
-H [i] = H_id[i] * W[i];
 }
 
-//Нормировка импульсной характеристики
-long double SUM=0;
-for (int i=0; i<N; i++) SUM +=H[i];
-for (int i=0; i<N; i++) H[i]/=SUM; //сумма коэффициентов равна 1
-
-//----------------------------------------------------------------
-// печать коэффициентов фильтра
-//for(int i=0;i<N;i++)
-//Form1->Memo2->Lines->Add(FloatToStr(H[i]));
-//----------------------------------------------------------------
-
-//Фильтрация входных данных
-for (int i=0; i<sizeIn; i++)
-{
-out[i]=0.;
-for (int j=0; j<(i>N-1?N-1:i); j++)// та самая формула фильтра
-out[i]+= H[j]*in[i-j];
-}
-delete [] H;
-delete [] H_id;
-delete [] W;
-return (N-1)/2.0;
-}
-// функция трамплин для фильтра.  ----------------------------------------------
-double Tr_Filter(TLineSeries *inS,TLineSeries *outS,int length,double Fdisk, double Fpropysk,double Fzatyh)
-{
-if(!inS->YValues->Count)   // если пустой - ошибка, убегаем.
-{
-ShowMessage("Пустой массив!");
-return 0;
-}
-int size=inS->YValues->Count;  // получаем размер
-//size=inS->XValues->Count;  // получаем размер
-double *in=new double[size];  // выделяем память
-for(int i=0;i<size;i++)       // копируем
-in[i]=inS->YValues->Value[i];
-double *out=new double[size]; // выделяем память для выходных значений
-double k=Filter(in,out,size,length,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
- k*=(inS->XValues->MaxValue-inS->XValues->MinValue)/(double)inS->XValues->Count;// вычисляем сдвиг фаз
-//----------------------------------------------
-//---------добавление для фильтрации магнитного поля
-// внимание - она пока работает не корректно ибо фильтр наполняется только за
-// его длину.
-/*double *in2=new double[size];  // выделяем память
-for(int i=0;i<size;i++)       // копируем
-in2[i]=inS->XValues->Value[i];
-double *out2=new double[size]; // выделяем память для выходных значений
-double k2=Filter(in2,out2,size,length,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
-k2*=(inS->XValues->MaxValue-inS->XValues->MinValue)/(double)inS->XValues->Count;// вычисляем сдвиг фаз
-*/
-
-//----------------------------------------------
- outS->Clear(); // чистим график, перед выводом
-for(int i=0;i<size;i++) // выводим
-{
-outS->AddXY(inS->XValues->Value[i]-k,out[i],"",clBlue);
-//Form1->Series2->AddY(out2[i]-k+k2,"",clBlue);
-//Form1->Series3->AddY(inS->XValues->Value[i]-k,"",clRed);
-//Form1->Series4->AddY(out[i],"",clBlack);
-//Form1->Series5->AddY(out2[i],"",clYellow);
-
- }
-delete[] in;  // прибираемся
-//delete[] in2;  // прибираемся
-delete[] out;
-//delete[] out2;
-return k;
-}
-//----------------------------------------------
-//----------------------------------------------
-//----------------------------------------------
-//----------------------------------------------
 
 
 void __fastcall TForm1::Button11Click(TObject *Sender)
@@ -1056,179 +839,19 @@ tsl->SaveToFile(Form1->sg1->FileName);
 }
 delete tsl;
 }
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//-----------curveFitting----------------------------------------------------
-void curveFitting(long double * inX, long double *inY, long double * out, int length)
-{
-// выражение f(x)=x^5*p1+x^4*p2+x^3*p3+x^2*p4+x*p5+p6
-const int a=6;
-//long double * fullMatrix[a+1];
-long double ** fullMatrix=new long double*[length];
 
-for (int i = 0; i < length; i++) {
-	fullMatrix[i]=new long double[a+1];
-
-}
-//for (int i = 0; i < length; i++) {
- //	fullMatrix[i]=new long double[length];
-//}
-/*
-формируем матрицу вида
-
--y x^0 x^1 x^2 x^3 x^4 x^5  7 столбцов и length строк
-
-x^5 x^4 x^3 x^2 x^1 x^0 -y
-*/
-for (int i = 0; i < length; i++) {
-	for (int j = 0; j < a; j++) {
-		fullMatrix[i][j]=((a-j-1)==0?1:pow(inX[i],a-j-1));
-
-	}
-	fullMatrix[i][a]=-inY[i];
-}
-long double K[a+1][a+1]={0}; // сюда сохраним результат перемножения x'*x
-	for (int i = 0; i <= a; i++) {
-		for (int j = 0; j <= a; j++) {
-			for (int k=0; k < length; k++) {
-				K[i][j]+=fullMatrix[k][i]*fullMatrix[k][j];
-	}}}
-	// перемножение работает, проверено матлабом
-
-    // после перемножения мило делим всё на постоянный коэффициент
-   /* for (int i = 0; i <= a; i++) {
-		for (int j = 0; j <= a; j++) {
-		  // K[i][j]*=1000;
-
-		}
-        }*/
-
-	// K5 - содержит 6 строк и 6 столбцов, т.е. без свободных членов.
-	long double *K5[a];
-	for (int i = 0; i < a; i++)
-		K5[i]= new long double[a];
-	// Ks - столблец из 6 строк, свободные члены.
-	long double Ks[a]={0};
-
-	for (int i = 0; i < a-1; i++) {
-		for (int j = 0; j < a; j++) {
-		K5[i][j]=K[i][j]; // копируем первые 5 строк
-		//blabla=K5[i][j];
-		}
-	}
-
-	// а 6ая строка - среднее арифметическое 6 и 7 строк
-	for (int i = 0; i < a; i++) {
-		K5[5][i]=(K[5][i]+K[6][i])/2;
-	}
-
-	for (int i = 0; i < a; i++) {
-		Ks[i]=K[i][a];
-	}
-
-	long double d0=determinant(K5,a); // детерминант правилен
-
-	long double **delta[a];
-	for (int i = 0; i < a; i++) {
-		 delta[i]=new long double*[a];
-		for (int j = 0; j < a; j++) {
-			delta[i][j]=new long double[a];
-
-	}}
-
-	for (int i = 0; i < a; i++) {
-		for (int j = 0; j < a; j++) {
-		for (int k = 0; k < a; k++) {
-		if (k!=i) {
-		 delta[i][j][k]=K5[j][k];
-		}
-		else
-		{
-		delta[i][j][k]=Ks[j];
-		}
-		//blabla=delta[i][j][k];
-	}}}
-
-	long double p[a]={0};
-
-	for (int i = 0; i < a; i++) {
-		p[i]=determinant(delta[i],a)/d0;
-	}
-	for (int i = 0; i <length; i++) {
-        out[i]=pow(inX[i],5)*p[0]+pow(inX[i],4)*p[1]+pow(inX[i],3)*p[2]+pow(inX[i],2)*p[3]+pow(inX[i],1)*p[4]+p[5];
-	}
-for (int i = 0; i < a; i++) {
-	delete[] K5[i];
-}
-
-for (int i = 0; i < length; i++) {
-	delete[] fullMatrix[i];
-}
-delete[] fullMatrix;
-for (int i = 0; i < a; i++) {
-		for (int j = 0; j < a; j++) {
-			delete[] delta[i][j];
-	}
-			 delete[] delta[i];
-	}
-
-}
-//---------------------------------------------------------------------------
-
-
-long double determinant (long double ** Arr,int size)
-{
-int i,j;
-long double det=0;
-long double** matr;
-switch (size) {
-case 1: return Arr[0][0];
-case 2: return Arr[0][0]*Arr[1][1]-Arr[0][1]*Arr[1][0];
-default:
-  matr=new long double*[size-1];
-				for(i=0;i<size;++i)
-				{
-						for(j=0;j<size-1;++j)
-						{
-								if(j<i)
-										matr[j]=Arr[j];
-								else
-										matr[j]=Arr[j+1];
-						}
-						det+=pow((long double)-1, (i+j))*determinant(matr, size-1)*Arr[i][size-1];
-				}
-				delete[] matr;
-
-  return det;
-}
-}
-//---------------------------------------------------------------------------
 
 
 void __fastcall TForm1::Button6Click(TObject *Sender)
 {
 
 
-int length=Series1->XValues->Count;
-long double *inX= new long double [length];
-long double *inY= new long double [length];
-long double *out= new long double [length];
 
-for (int i = 0; i < length; i++) {
-	inX[i]=Series2->XValues->Value[i];
-	inY[i]=Series2->YValues->Value[i];
-}
-Series4->Clear();
-curveFitting(inX,inY,out,length);
-for (int i = 0; i < length; i++) {
-	Series4->AddXY(inX[i],out[i],"",clRed);
-}
+extrapolate5Degree(Series2, 0, 2.5, 0.2,Series4);
 
-delete[] inX;
-delete[] inY;
-delete[] out;
 
 
 }
 //---------------------------------------------------------------------------
+
 
