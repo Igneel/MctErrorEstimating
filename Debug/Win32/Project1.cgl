@@ -1,78 +1,1518 @@
-Functions called:
- delete (21 times)
- sinl (960 times)
- cosl (2000 times)
- delete[] (11390 times)
- sqrt (2012 times)
- log (2000 times)
- new[] (11390 times)
- time (5 times)
- exp (1 times)
- pow (45417 times)
- realloc (1 times)
- memcpy (1 times)
- free (29 times)
- new (30 times)
- calloc (10 times)
- malloc (19 times)
-Resource types used:
- object array (11390 allocs, 295 max)
- object (30 allocs, 30 max)
- memory block (30 allocs, 19 max)
-Modules used:
- 00400000 07/20/2013 11:23:08 K:\Дела\Институт физики
- полупроводников\La-7\MctErrorEstimating\.\Debug\Win32\Project1.exe
- 0CD00000 08/28/2010 04:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\8.0\bin\CG32.DLL
- 21510000 08/28/2010 04:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\8.0\bin\BORLNDMM.DLL
- 32B00000 08/28/2010 04:55:00 C:\Windows\system32\CC32110MT.DLL
- 40830000 08/28/2010 04:55:00 C:\Windows\system32\vclimg150.bpl
- 42200000 08/28/2010 04:55:00 C:\Windows\system32\Tee9150.bpl
- 50030000 08/28/2010 04:55:00 C:\Windows\system32\rtl150.bpl
- 50250000 08/28/2010 04:55:00 C:\Windows\system32\vcl150.bpl
- 62D40000 11/21/2010 10:24:02 C:\Windows\AppPatch\AcLayers.DLL
- 62F70000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
- 6DCF0000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
- 6DD10000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
- 6DDA0000 07/14/2009 08:15:46 C:\Windows\system32\msimg32.dll
- 6EE60000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
- 6EEA0000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
- 6EF40000 11/21/2010 10:24:18 C:\Windows\system32\USERENV.dll
- 6F770000 07/14/2009 08:16:14 C:\Windows\system32\profapi.dll
- 6FB00000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
- 6FD10000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
- 6FD30000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
- 6FDC0000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
- 700F0000 11/21/2010 10:24:16 C:\Windows\system32\apphelp.dll
- 70480000 11/21/2010 10:23:56
- C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.
-7601.17514_none_41e6975e2bd6f2b2\comctl32.dll
- 72610000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
- Switcher\pshook.dll
- 748A0000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
- 74970000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
- 74980000 11/24/2012 21:05:50 C:\Windows\syswow64\SspiCli.dll
- 749E0000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
- 74A70000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
- 74B10000 10/04/2012 23:47:42 C:\Windows\syswow64\kernel32.dll
- 74C80000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
- 74CE0000 11/21/2010 10:24:30 C:\Windows\syswow64\ADVAPI32.dll
- 74F40000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
- 75000000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
- 750D0000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
- 75240000 07/14/2009 08:11:24 C:\Windows\syswow64\LPK.dll
- 75250000 11/24/2012 20:54:48 C:\Windows\syswow64\IMAGEHLP.DLL
- 75280000 11/24/2012 20:58:20 C:\Windows\syswow64\SHELL32.dll
- 75F00000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
- 76000000 11/21/2010 10:24:16 C:\Windows\syswow64\GDI32.dll
- 76230000 10/04/2012 23:47:42 C:\Windows\syswow64\KERNELBASE.dll
- 76430000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
- 76440000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
- 765F0000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
- 766A0000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
- 76750000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
- 76890000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
- 768D0000 11/21/2010 10:24:12 C:\Windows\syswow64\RPCRT4.dll
- 772A0000 11/24/2012 20:54:24 C:\Windows\SysWOW64\ntdll.dll
-==========================================
+Error 00253. 0x130600 (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2010, that is at
+ offset 0+2010 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00254. 0x130600 (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2010, that is at
+ offset 0+2010 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00255. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2020, that is at
+ offset 0+2020 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00261. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2020, that is at
+ offset 0+2020 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00262. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2030, that is at
+ offset 0+2030 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00264. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2030, that is at
+ offset 0+2030 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00266. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2040, that is at
+ offset 0+2040 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00267. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2040, that is at
+ offset 0+2040 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00268. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2050, that is at
+ offset 0+2050 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00269. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2050, that is at
+ offset 0+2050 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00270. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2060, that is at
+ offset 0+2060 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00271. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2060, that is at
+ offset 0+2060 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00272. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2070, that is at
+ offset 0+2070 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00273. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2070, that is at
+ offset 0+2070 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00274. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2080, that is at
+ offset 0+2080 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00275. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2080, that is at
+ offset 0+2080 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00276. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2090, that is at
+ offset 0+2090 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00277. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2090, that is at
+ offset 0+2090 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00278. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2100, that is at
+ offset 0+2100 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00279. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2100, that is at
+ offset 0+2100 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00280. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2110, that is at
+ offset 0+2110 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00281. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2110, that is at
+ offset 0+2110 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00282. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2120, that is at
+ offset 0+2120 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00283. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2120, that is at
+ offset 0+2120 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00284. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2130, that is at
+ offset 0+2130 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00285. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2130, that is at
+ offset 0+2130 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00286. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2140, that is at
+ offset 0+2140 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00287. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2140, that is at
+ offset 0+2140 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00288. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2150, that is at
+ offset 0+2150 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00289. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2150, that is at
+ offset 0+2150 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00290. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2160, that is at
+ offset 0+2160 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00291. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2160, that is at
+ offset 0+2160 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00292. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2170, that is at
+ offset 0+2170 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00293. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2170, that is at
+ offset 0+2170 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00294. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2180, that is at
+ offset 0+2180 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00295. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2180, that is at
+ offset 0+2180 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00296. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2190, that is at
+ offset 0+2190 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00297. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2190, that is at
+ offset 0+2190 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00298. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2200, that is at
+ offset 0+2200 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00299. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2200, that is at
+ offset 0+2200 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00300. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2210, that is at
+ offset 0+2210 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00301. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2210, that is at
+ offset 0+2210 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00302. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2220, that is at
+ offset 0+2220 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00303. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2220, that is at
+ offset 0+2220 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00304. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2230, that is at
+ offset 0+2230 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00305. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2230, that is at
+ offset 0+2230 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00306. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2240, that is at
+ offset 0+2240 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00307. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2240, that is at
+ offset 0+2240 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00308. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2250, that is at
+ offset 0+2250 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00309. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2250, that is at
+ offset 0+2250 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00310. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2260, that is at
+ offset 0+2260 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00311. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2260, that is at
+ offset 0+2260 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00312. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2270, that is at
+ offset 0+2270 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00313. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2270, that is at
+ offset 0+2270 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00314. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2280, that is at
+ offset 0+2280 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00315. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2280, that is at
+ offset 0+2280 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00316. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2290, that is at
+ offset 0+2290 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00317. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2290, that is at
+ offset 0+2290 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00318. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2300, that is at
+ offset 0+2300 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00319. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2300, that is at
+ offset 0+2300 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00320. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2310, that is at
+ offset 0+2310 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00321. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2310, that is at
+ offset 0+2310 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00322. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2320, that is at
+ offset 0+2320 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00323. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2320, that is at
+ offset 0+2320 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00324. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2330, that is at
+ offset 0+2330 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00325. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2330, that is at
+ offset 0+2330 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00326. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x00417E08+2340, that is at
+ offset 0+2340 in block 0x00417E08(=Project1.exe:0x02:004E08) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DEB2(=Project1.exe:0x01:00CEB2) Unit1.cpp#852
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00327. 0x130600 (r) (Thread 0x0D78):
+Access overrun: Attempt to access 10 byte(s) at 0x004185E4+2340, that is at
+ offset 0+2340 in block 0x004185E4(=Project1.exe:0x02:0055E4) which is only
+ 2010 bytes long.
+Call Tree:
+   0x0040DF32(=Project1.exe:0x01:00CF32) Unit1.cpp#853
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+   0x70C84663(=comctl32.dll:0x01:0A3663)
+
+------------------------------------------
+Error 00328. 0x820000 (Thread 0x0D78):
+Function failure:
+pow(-NAN, 2.000000)=+INF, 
+
+Call Tree:
+   0x00404BAA(=Project1.exe:0x01:003BAA) NoiseUnit.cpp#43
+   0x00408817(=Project1.exe:0x01:007817) Unit1.cpp#476
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5027E4E5(=vcl150.bpl:0x01:02D4E5)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x502B56C9(=vcl150.bpl:0x01:0646C9)
+   0x50282990(=vcl150.bpl:0x01:031990)
+   0x5028283D(=vcl150.bpl:0x01:03183D)
+   0x50281EDB(=vcl150.bpl:0x01:030EDB)
+   0x500B067E(=rtl150.bpl:0x01:07F67E)
+   0x765862FA(=USER32.dll:0x01:0062FA)
+   0x76586D3A(=USER32.dll:0x01:006D3A)
+   0x7658965E(=USER32.dll:0x01:00965E)
+   0x765896C5(=USER32.dll:0x01:0096C5)
+   0x70C84601(=comctl32.dll:0x01:0A3601)
+
+------------------------------------------

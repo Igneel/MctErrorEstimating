@@ -107,7 +107,7 @@
         Height = 13
         Caption = #1044#1083#1080#1085#1072' '#1092#1080#1083#1100#1090#1088#1072':'
       end
-      object LabeledEdit7: TLabeledEdit
+      object eKFactor: TLabeledEdit
         Left = 288
         Top = 561
         Width = 121
@@ -119,7 +119,7 @@
         Text = '1,3'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit8: TLabeledEdit
+      object eHeavyHoleConcentration: TLabeledEdit
         Left = 289
         Top = 601
         Width = 121
@@ -131,7 +131,7 @@
         Text = '1e22'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit6: TLabeledEdit
+      object eAFactor: TLabeledEdit
         Left = 152
         Top = 641
         Width = 121
@@ -143,7 +143,7 @@
         Text = '5'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit1: TLabeledEdit
+      object eSampleThickness: TLabeledEdit
         Left = 16
         Top = 561
         Width = 121
@@ -155,7 +155,7 @@
         Text = '1e-5'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit3: TLabeledEdit
+      object eCurrentIntensity: TLabeledEdit
         Left = 16
         Top = 641
         Width = 121
@@ -167,7 +167,7 @@
         Text = '1e-3'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit5: TLabeledEdit
+      object eTemperature: TLabeledEdit
         Left = 152
         Top = 597
         Width = 121
@@ -179,7 +179,7 @@
         Text = '77'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit4: TLabeledEdit
+      object eMolarCompositionCadmium: TLabeledEdit
         Left = 152
         Top = 561
         Width = 121
@@ -191,7 +191,7 @@
         Text = '0,22'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object LabeledEdit2: TLabeledEdit
+      object eCBRatio: TLabeledEdit
         Left = 16
         Top = 601
         Width = 121
@@ -203,16 +203,16 @@
         Text = '3'
         OnKeyPress = g_Nz_parKeyPress
       end
-      object Button5: TButton
+      object bWhiteNoiseGenerator: TButton
         Left = 16
         Top = 275
         Width = 169
         Height = 25
         Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1073#1077#1083#1086#1075#1086' '#1096#1091#1084#1072
         TabOrder = 8
-        OnClick = Button5Click
+        OnClick = bWhiteNoiseGeneratorClick
       end
-      object Button3: TButton
+      object bGaussianNoiseGenerator: TButton
         Left = 16
         Top = 242
         Width = 169
@@ -220,18 +220,18 @@
         Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1085#1086#1088#1084#1072#1083#1100#1085#1086#1075#1086' '#1096#1091#1084#1072
         Enabled = False
         TabOrder = 9
-        OnClick = Button3Click
+        OnClick = bGaussianNoiseGeneratorClick
       end
-      object Button1: TButton
+      object bCalculateCarrierParams: TButton
         Left = 16
         Top = 211
         Width = 75
         Height = 25
         Caption = #1056#1072#1089#1089#1095#1080#1090#1072#1090#1100
         TabOrder = 10
-        OnClick = Button1Click
+        OnClick = bCalculateCarrierParamsClick
       end
-      object Memo1: TMemo
+      object mDebug: TMemo
         Left = 836
         Top = 597
         Width = 209
@@ -426,14 +426,14 @@
           YValues.Order = loNone
         end
       end
-      object Button4: TButton
+      object bSaveAllPoints: TButton
         Left = 16
         Top = 315
         Width = 133
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1074#1089#1077' '#1090#1086#1095#1082#1080
         TabOrder = 19
-        OnClick = Button4Click
+        OnClick = bSaveAllPointsClick
       end
       object Edit5: TEdit
         Left = 496
@@ -491,16 +491,16 @@
         TabOrder = 26
         OnClick = Button8Click
       end
-      object Button9: TButton
+      object bAutomaticCalculation: TButton
         Left = 154
         Top = 422
         Width = 75
         Height = 25
         Caption = #1056#1072#1089#1095#1077#1090
         TabOrder = 27
-        OnClick = Button9Click
+        OnClick = bAutomaticCalculationClick
       end
-      object Edit7: TEdit
+      object eStepByTemperature: TEdit
         Left = 154
         Top = 472
         Width = 121
@@ -508,32 +508,32 @@
         TabOrder = 28
         Text = '10'
       end
-      object Button10: TButton
+      object bFilteringPlots: TButton
         Left = 155
         Top = 346
         Width = 75
         Height = 25
         Caption = #1060#1080#1083#1100#1090#1088
         TabOrder = 29
-        OnClick = Button10Click
+        OnClick = bFilteringPlotsClick
       end
-      object Button11: TButton
+      object bSaveElevenPoints: TButton
         Left = 16
         Top = 346
         Width = 133
         Height = 24
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' 11 '#1090#1086#1095#1077#1082
         TabOrder = 30
-        OnClick = Button11Click
+        OnClick = bSaveElevenPointsClick
       end
-      object GroupBox1: TGroupBox
+      object gbSavingPlot: TGroupBox
         Left = 16
         Top = 416
         Width = 132
         Height = 130
         Caption = #1057#1086#1093#1088#1072#1085#1103#1077#1084#1099#1081' '#1075#1088#1072#1092#1080#1082':'
         TabOrder = 31
-        object RadioButton1: TRadioButton
+        object rbLeftPlot: TRadioButton
           Left = 16
           Top = 25
           Width = 113
@@ -541,7 +541,7 @@
           Caption = #1051#1077#1074#1099#1081
           TabOrder = 0
         end
-        object RadioButton2: TRadioButton
+        object rbRightPlot: TRadioButton
           Left = 16
           Top = 48
           Width = 113
@@ -549,7 +549,7 @@
           Caption = #1055#1088#1072#1074#1099#1081
           TabOrder = 1
         end
-        object RadioButton3: TRadioButton
+        object rbFilteredPlot: TRadioButton
           Left = 16
           Top = 71
           Width = 113
@@ -557,7 +557,7 @@
           Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081
           TabOrder = 2
         end
-        object RadioButton4: TRadioButton
+        object rbIdealPlot: TRadioButton
           Left = 16
           Top = 94
           Width = 113
@@ -566,16 +566,16 @@
           TabOrder = 3
         end
       end
-      object Button12: TButton
+      object bLoadingPlots: TButton
         Left = 155
         Top = 315
         Width = 75
         Height = 25
         Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
         TabOrder = 32
-        OnClick = Button12Click
+        OnClick = bLoadingPlotsClick
       end
-      object Edit8: TEdit
+      object eFilterLength: TEdit
         Left = 155
         Top = 395
         Width = 121
@@ -583,23 +583,23 @@
         TabOrder = 33
         Text = '25'
       end
-      object Button2: TButton
+      object bSaveFilmParams: TButton
         Left = 16
         Top = 376
         Width = 133
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088#1099
         TabOrder = 34
-        OnClick = Button2Click
+        OnClick = bSaveFilmParamsClick
       end
-      object Button6: TButton
+      object bTestingSomething: TButton
         Left = 424
         Top = 664
         Width = 75
         Height = 25
         Caption = 'Test'
         TabOrder = 35
-        OnClick = Button6Click
+        OnClick = bTestingSomethingClick
       end
     end
     object Графики: TTabSheet
