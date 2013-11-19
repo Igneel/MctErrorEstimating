@@ -138,29 +138,78 @@ long double Rh_eff;
 
 
 
+
+
+
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
 {
 }
-const int l=201;//11;  // количество точек
-const int NumberOfNumbersAfterPoint=4;
+const int NumberOfPoints=201;//11;  // количество точек
+const int NumberOfNumbersAfterPoint=4; // параметр округления.
+
+const int NumberOfCarrierTypes=3;
+
 long double q=1.60217646E-19; // заряд электрона
 long double h; // величина шага
-long double B[l]={0};
-long double sxx[l]={0};  // тензор проводимости
-long double sxy[l]={0};
-long double s_eff[l]={0};  // подвижность
-long double Rh_eff[l]={0};  // эффект Холла
-long double Us[l]={0};     // измеряемый сигнал
-long double Uy[l]={0};     // измеряемый сигнал
 
-long double s_eff_n[l]={0};  // подвижность
-long double Rh_eff_n[l]={0};  // эффект Холла
-long double Us_n[l]={0};  // измеряемый сигнал
-long double Uy_n[l]={0};  // измеряемый сигнал
+//------------------------------------------------------------------------------
 
-long double sxx_n[l]={0};  // тензор проводимости
-long double sxy_n[l]={0};
+struct MagneticFieldDependences {
+	//const int Length;
+	long double sxx[NumberOfPoints];
+	long double sxy[NumberOfPoints];
+	long double B[NumberOfPoints];
+	long double Us[NumberOfPoints]; // продольный сигнал
+	long double Uy[NumberOfPoints]; // поперечный сигнал
+	long double s_eff[NumberOfPoints];
+	long double Rh_eff[NumberOfPoints];
+};
+
+struct CarrierParams
+{
+	long double Thickness;
+	long double CBRatio;
+	long double MolarCompositionCadmium;
+	long double CurrentTemperature;
+	long double CurrentIntensity;
+	long double AFactor;
+	long double KFactor;
+	long double Concentration[NumberOfCarrierTypes];
+	long double Mobility[NumberOfCarrierTypes];
+} carrierParams;
+
+MagneticFieldDependences IdealParams;
+MagneticFieldDependences ParamsWithNoise;
+MagneticFieldDependences FilteredParams;
+
+
+//------------------------------------------------------------------------------
+
+
+
+long double B_ideal[NumberOfPoints]={0};
+
+long double sxx_ideal[NumberOfPoints]={0};  // тензор проводимости
+long double sxy_ideal[NumberOfPoints]={0};
+long double s_eff_ideal[NumberOfPoints]={0};  // подвижность
+long double Rh_eff_ideal[NumberOfPoints]={0};  // эффект Холла
+long double Us_ideal[NumberOfPoints]={0};     // измеряемый сигнал
+long double Uy_ideal[NumberOfPoints]={0};     // измеряемый сигнал
+
+long double s_eff_withNoise[NumberOfPoints]={0};  // подвижность
+long double Rh_eff_withNoise[NumberOfPoints]={0};  // эффект Холла
+long double Us_withNoise[NumberOfPoints]={0};  // измеряемый сигнал
+long double Uy_withNoise[NumberOfPoints]={0};  // измеряемый сигнал
+long double sxx_withNoise[NumberOfPoints]={0};  // тензор проводимости
+long double sxy_withNoise[NumberOfPoints]={0};
+
+long double s_eff_filtered[NumberOfPoints]={0};  // подвижность
+long double Rh_eff_filtered[NumberOfPoints]={0};  // эффект Холла
+long double Us_filtered[NumberOfPoints]={0};  // измеряемый сигнал
+long double Uy_filtered[NumberOfPoints]={0};  // измеряемый сигнал
+long double sxx_filtered[NumberOfPoints]={0};  // тензор проводимости
+long double sxy_filtered[NumberOfPoints]={0};
 
 bool silentMode=false; // если флаг равен тру - то функции сохранения не спрашивают имя файла
 // флаг используется для крупных расчетов))
@@ -177,6 +226,12 @@ g_Nz_par->Cells[2][0]="подвижность";
 
 void ParamsKRT(void);
 
+/*void calculateMagneticFieldDependences(MagneticFieldDependences mfd,carrierParams cp)
+{
+;
+}     */
+
+
 void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
 
 
@@ -185,6 +240,19 @@ void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
 void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 {
 ParamsKRT();
+/*
+
+Читаем концентрации и подвижности с формы.
+Читаем шаг.
+Заполняем магнитное поле.
+Рассчитываем компоненты тензора по значениям параметров плёнки.
+Выводим их на экран
+Рассчитываем эффективные значения.
+Получаем измеряемые сигналы.
+
+
+*/
+
 Series1->Clear();     // чистим все графики
 Series2->Clear();
 Series5->Clear();
@@ -195,47 +263,50 @@ LineSeries7->Clear();
 
 LineSeries3->Clear();
 LineSeries9->Clear();
-long double u[3]={0}; // подвижности НЗ
-long double n[3]={0}; // концентрации НЗ
-for(int i=0;i<3;i++) // читаем эти значения с формы
+
+long double u[NumberOfCarrierTypes]={0}; // подвижности НЗ
+long double n[NumberOfCarrierTypes]={0}; // концентрации НЗ
+
+for(int i=0;i<NumberOfCarrierTypes;i++) // читаем эти значения с формы
 {
 	u[i]=g_Nz_par->Cells[2][i+1].ToDouble();
 	n[i]=g_Nz_par->Cells[1][i+1].ToDouble();
 }
 h=g_hsize->Text.ToDouble(); // сохраняем значение шага
 
-B[0]=0;
-for(int i=1;i<l;i++)
+B_ideal[0]=0;
+for(int i=1;i<NumberOfPoints;i++)
 {
-	B[i]=B[i-1]+h;  // это наше магнитное поле от 0 до 2 Тл
+	B_ideal[i]=B_ideal[i-1]+h;  // это наше магнитное поле
 }
 // рассчитываем компоненты тензона проводимости
 
 
-for(int i=0;i<l;i++)
+for(int i=0;i<NumberOfPoints;i++)
 {
-sxx[i]=sxy[i]=0;
+sxx_ideal[i]=sxy_ideal[i]=0;
+
 	for(int j=0;j<3;j++)
 	{
-		sxx[i]+=q*n[j]*u[j]/(1.0+u[j]*u[j]*B[i]*B[i]);
-		sxy[i]+=q*n[j]*u[j]*u[j]*B[i]/(1.0+u[j]*u[j]*B[i]*B[i]);
+		sxx_ideal[i]+=q*n[j]*u[j]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
+		sxy_ideal[i]+=q*n[j]*u[j]*u[j]*B_ideal[i]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
 	}
-	Series1->AddXY(B[i],sxx[i],"",clRed);  // рисуем их на графиках
-	Series2->AddXY(B[i],sxy[i],"",clRed);
-	Series5->AddXY(B[i],sxx[i],"",clRed);
-	LineSeries5->AddXY(B[i],sxy[i],"",clRed);
+	Series1->AddXY(B_ideal[i],sxx_ideal[i],"",clRed);  // рисуем их на графиках
+	Series2->AddXY(B_ideal[i],sxy_ideal[i],"",clRed);
+	Series5->AddXY(B_ideal[i],sxx_ideal[i],"",clRed);
+	LineSeries5->AddXY(B_ideal[i],sxy_ideal[i],"",clRed);
 
 
 }
 bGaussianNoiseGenerator->Enabled=1;
 //-------------------------------------------------
 //- рассчитываем эффективные значения
-for(int i=0;i<l;i++)
+for(int i=0;i<NumberOfPoints;i++)
 {
-	s_eff[i]=(sxx[i]*sxx[i]+sxy[i]*sxy[i])/sxx[i];
-	Rh_eff[i]=sxy[i]/(sxx[i]*sxx[i]+sxy[i]*sxy[i]); // 1/B
-	LineSeries1->AddXY(B[i],s_eff[i],"",clRed);
-	LineSeries7->AddXY(B[i],Rh_eff[i],"",clRed);
+	s_eff_ideal[i]=(sxx_ideal[i]*sxx_ideal[i]+sxy_ideal[i]*sxy_ideal[i])/sxx_ideal[i];
+	Rh_eff_ideal[i]=sxy_ideal[i]/(sxx_ideal[i]*sxx_ideal[i]+sxy_ideal[i]*sxy_ideal[i]); // 1/B
+	LineSeries1->AddXY(B_ideal[i],s_eff_ideal[i],"",clRed);
+	LineSeries7->AddXY(B_ideal[i],Rh_eff_ideal[i],"",clRed);
 }
 //-------------------------------------------------
 long double d=eSampleThickness->Text.ToDouble(); // 1e-5; // толщина образца
@@ -244,17 +315,17 @@ long double I=eCurrentIntensity->Text.ToDouble(); //1e-3; // ток от 1e-3 до 1e-4
 
 
 //-------------------------------------------------------------------------------------
-for(int i=0;i<l;i++)
+for(int i=0;i<NumberOfPoints;i++)
 {
    //Us(B)=cb/d*I/s(B)
    //Uy(B)=Rh(B)*I*B/d
 
    // вот к этим значениям будет добавляться шум.
-Us[i]=cb/d*I/s_eff[i];
-Uy[i]=Rh_eff[i]*I/d;   // Rh_eff[i]*I*B[i]/d;
+Us_ideal[i]=cb/d*I/s_eff_ideal[i];
+Uy_ideal[i]=Rh_eff_ideal[i]*I/d;   // Rh_eff[i]*I*B[i]/d;
 
-	LineSeries3->AddY(Us[i],"",clRed);
-	LineSeries9->AddY(Uy[i],"",clRed);
+	LineSeries3->AddY(Us_ideal[i],"",clRed);
+	LineSeries9->AddY(Uy_ideal[i],"",clRed);
 }
 
 }
@@ -278,30 +349,37 @@ x[i]=ceil(x[i]*S)/S;
 // генератор шума
 void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 {
+/*
+
+К идеальным значениям сигнала добавляется шум.
+Выводится на экран.
+
+*/
+
 srand(time(NULL));
-long double y[l]={0}; // шум для sxx
-long double y1[l]={0};  // шум для sxy
+long double noiseForSxx[NumberOfPoints]={0}; // шум для sxx
+long double noiseForSxy[NumberOfPoints]={0};  // шум для sxy
 long double vz[3]={0};  // М СКО и СКО в %
-ShumAdding(Us,y,vz,Edit5->Text.ToDouble(),l);
+ShumAdding(Us_ideal,noiseForSxx,vz,Edit5->Text.ToDouble(),NumberOfPoints);
 Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit1->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit3->Text=FloatToStr(vz[2]);
 
-ShumAdding(Uy,y1,vz,Edit5->Text.ToDouble(),l);
+ShumAdding(Uy_ideal,noiseForSxy,vz,Edit5->Text.ToDouble(),NumberOfPoints);
 Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit2->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit4->Text=FloatToStr(vz[2]);
 
 Series3->Clear();
 Series4->Clear();
-for(int i=0;i<l;i++)
+for(int i=0;i<NumberOfPoints;i++)
 {
- Series3->AddXY(B[i],y[i],"",clRed);  // выводим графики с шумом
- Us_n[i]=y[i];                        // и сохраняем их для обратного расчета
- Series4->AddXY(B[i],y1[i],"",clRed);
- Uy_n[i]=y1[i];
+ Series3->AddXY(B_ideal[i],noiseForSxx[i],"",clRed);  // выводим графики с шумом
+ Us_withNoise[i]=noiseForSxx[i];                        // и сохраняем их для обратного расчета
+ Series4->AddXY(B_ideal[i],noiseForSxy[i],"",clRed);
+ Uy_withNoise[i]=noiseForSxy[i];
 }
-Button8->Enabled=1;
+tenzorCalculating->Enabled=1;
 }
 //---------------------------------------------------------------------------
 // сохранение зашумленных результатов
@@ -392,33 +470,79 @@ long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2*x)*T;
 return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2/k/T); // собственная концентрация
 }
 
+void calcutatingCarrierParams(long double molarCompositionCadmium,long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor)
+{
+	carrierParams.MolarCompositionCadmium=molarCompositionCadmium;
+	carrierParams.CurrentTemperature=Temperature;
+	carrierParams.Concentration[0]=heavyHoleConcentrerion;
+	carrierParams.AFactor=AFactor;
+	carrierParams.KFactor=KFactor;
+
+	long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
+	long double mh=0.443*m0; // масса тяжелых дырок
+	long double ml=0.001*m0; // масса легких дырок
+
+	carrierParams.Concentration[1]=pow(ml/mh,1.5)*carrierParams.Concentration[0]*50; // концентрация легких дырок домножена на 50
+	carrierParams.Concentration[2]=-pow(niSob(carrierParams.CurrentTemperature,carrierParams.MolarCompositionCadmium),2)/carrierParams.Concentration[0];
+
+	carrierParams.Mobility[2]=-carrierParams.AFactor*pow(carrierParams.CurrentTemperature/77.0,-carrierParams.KFactor);
+	carrierParams.Mobility[1]=-0.1*carrierParams.Mobility[2];
+	carrierParams.Mobility[0]=-0.005*carrierParams.Mobility[2];
+}
+
 void ParamsKRT(void)
 {
-long double x=Form1->eMolarCompositionCadmium->Text.ToDouble();//0.22; // мольный состав кадмия
-long double T=Form1->eTemperature->Text.ToDouble();//77; // температура
-long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
-long double mh=0.443*m0; // масса тяжелых дырок
-long double ml=0.001*m0; // масса легких дырок
+	/*long double x=Form1->eMolarCompositionCadmium->Text.ToDouble();//0.22; // мольный состав кадмия
+	long double T=Form1->eTemperature->Text.ToDouble();//77; // температура
+	long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
+	long double mh=0.443*m0; // масса тяжелых дырок
+	long double ml=0.001*m0; // масса легких дырок
 
-long double ph=Form1->eHeavyHoleConcentration->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
-long double pl=pow(ml/mh,1.5)*ph*50; // концентрация легких дырок домножена на 50
-long double n=-pow(niSob(T,x),2)/ph;
-long double A=Form1->eAFactor->Text.ToDouble();//5; // 5-8
-long double k=Form1->eKFactor->Text.ToDouble();//1.3; //1.3-1.5
-long double ue=A*pow(T/77.0,-k); // подвижность электронов в области 77-300К
+	long double ph=Form1->eHeavyHoleConcentration->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
+	long double pl=pow(ml/mh,1.5)*ph*50; // концентрация легких дырок домножена на 50
+	long double n=-pow(niSob(T,x),2)/ph;
+	long double A=Form1->eAFactor->Text.ToDouble();//5; // 5-8
+	long double k=Form1->eKFactor->Text.ToDouble();//1.3; //1.3-1.5
+	long double ue=A*pow(T/77.0,-k); // подвижность электронов в области 77-300К
 
-long double uh=0.005*ue;   // подвижности тяжелых и
-long double ul=0.1*ue;     // легких дырок в первом приближении
-ue*=-1;
+	long double uh=0.005*ue;   // подвижности тяжелых и
+	long double ul=0.1*ue;     // легких дырок в первом приближении
+	ue*=-1;
 
-Form1->g_Nz_par->Cells[1][1]=FloatToStr(n);
-Form1->g_Nz_par->Cells[2][1]=FloatToStr(ue);
-Form1->g_Nz_par->Cells[1][2]=FloatToStr(pl);
-Form1->g_Nz_par->Cells[2][2]=FloatToStr(ul);
-Form1->g_Nz_par->Cells[1][3]=FloatToStr(ph);
-Form1->g_Nz_par->Cells[2][3]=FloatToStr(uh);
-Form1->bCalculateCarrierParams->Enabled=true;
-Form1->Button7->Enabled=1;
+	Form1->g_Nz_par->Cells[1][1]=FloatToStr(n);
+	Form1->g_Nz_par->Cells[2][1]=FloatToStr(ue);
+	Form1->g_Nz_par->Cells[1][2]=FloatToStr(pl);
+	Form1->g_Nz_par->Cells[2][2]=FloatToStr(ul);
+	Form1->g_Nz_par->Cells[1][3]=FloatToStr(ph);
+	Form1->g_Nz_par->Cells[2][3]=FloatToStr(uh);
+
+
+	Form1->bCalculateCarrierParams->Enabled=true;
+	Form1->Button7->Enabled=1;    */
+
+	//--------------------------------------------------------------------------
+
+	/*long double x=Form1->eMolarCompositionCadmium->Text.ToDouble();//0.22; // мольный состав кадмия
+	long double T=Form1->eTemperature->Text.ToDouble();//77; // температура
+	long double ph=Form1->eHeavyHoleConcentration->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
+	long double A=Form1->eAFactor->Text.ToDouble();//5; // 5-8
+	long double k=Form1->eKFactor->Text.ToDouble();//1.3; //1.3-1.5 */
+
+	calcutatingCarrierParams(Form1->eMolarCompositionCadmium->Text.ToDouble(),
+	Form1->eTemperature->Text.ToDouble(),Form1->eHeavyHoleConcentration->Text.ToDouble(),
+	Form1->eAFactor->Text.ToDouble(),Form1->eKFactor->Text.ToDouble());
+
+	Form1->g_Nz_par->Cells[1][1]=FloatToStr(carrierParams.Concentration[2]);
+	Form1->g_Nz_par->Cells[2][1]=FloatToStr(carrierParams.Mobility[2]);
+	Form1->g_Nz_par->Cells[1][2]=FloatToStr(carrierParams.Concentration[1]);
+	Form1->g_Nz_par->Cells[2][2]=FloatToStr(carrierParams.Mobility[1]);
+	Form1->g_Nz_par->Cells[1][3]=FloatToStr(carrierParams.Concentration[0]);
+	Form1->g_Nz_par->Cells[2][3]=FloatToStr(carrierParams.Mobility[0]);
+
+	Form1->bCalculateCarrierParams->Enabled=true;
+	Form1->Button7->Enabled=1;
+
+	//--------------------------------------------------------------------------
 }
 
 
@@ -430,65 +554,64 @@ Form2->Show();
 //---------------------------------------------------------------------------
 
 
-// обратный расчет тензоров
-void __fastcall TForm1::Button8Click(TObject *Sender)
+// расчет тензоров на основе измеренных сигналов
+void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
 {
 long double d=eSampleThickness->Text.ToDouble(); // 1e-5; // толщина образца
 long double cb=eCBRatio->Text.ToDouble(); //3; // отношение с к b
 long double I=eCurrentIntensity->Text.ToDouble(); //1e-3; // ток от 1e-3 до 1e-4
+
 LineSeries3->Clear();
 LineSeries9->Clear();
 LineSeries1->Clear();
 LineSeries7->Clear();
-for(int i=0;i<l;i++)
-{
-  // теперь считаем в обратном направлении
-s_eff_n[i]=cb/d*I/Us_n[i];
-Rh_eff_n[i]=d*Uy_n[i]/I;
-//if(B[i])
-
-//else
-//Rh_eff_n[i]=0;//d*Uy_n[i]/I;
-
-	LineSeries3->AddXY(B[i],Us_n[i],"",clRed);
-	LineSeries9->AddXY(B[i],Uy_n[i],"",clRed);
-	LineSeries1->AddXY(B[i],s_eff_n[i],"",clRed);
-	LineSeries7->AddXY(B[i],Rh_eff_n[i],"",clRed);
-
-}
 Series3->Clear();
 Series4->Clear();
 Series5->Clear();
 LineSeries5->Clear();
-for(int i=0;i<l;i++)
+
+for(int i=0;i<NumberOfPoints;i++)
 {
-	sxx_n[i]=s_eff_n[i]/(Rh_eff_n[i]*Rh_eff_n[i]*s_eff_n[i]*s_eff_n[i]+1);
-	sxy_n[i]=s_eff_n[i]*s_eff_n[i]*Rh_eff_n[i]/(Rh_eff_n[i]*Rh_eff_n[i]*s_eff_n[i]*s_eff_n[i]+1);//Rh_eff_n[i]*s_eff_n[i]*sxx_n[i];
-	Series5->AddXY(B[i],sxx_n[i],"",clRed);
-	LineSeries5->AddXY(B[i],sxy_n[i],"",clRed);
-	Series3->AddXY(B[i],sxx_n[i],"",clRed);
-	Series4->AddXY(B[i],sxy_n[i],"",clRed);
+  	// теперь считаем в обратном направлении
+	s_eff_withNoise[i]=cb/d*I/Us_withNoise[i];
+	Rh_eff_withNoise[i]=d*Uy_withNoise[i]/I;
+
+	LineSeries3->AddXY(B_ideal[i],Us_withNoise[i],"",clRed);
+	LineSeries9->AddXY(B_ideal[i],Uy_withNoise[i],"",clRed);
+	LineSeries1->AddXY(B_ideal[i],s_eff_withNoise[i],"",clRed);
+	LineSeries7->AddXY(B_ideal[i],Rh_eff_withNoise[i],"",clRed);
+
+}
+
+for(int i=0;i<NumberOfPoints;i++)
+{
+	sxx_withNoise[i]=s_eff_withNoise[i]/(Rh_eff_withNoise[i]*Rh_eff_withNoise[i]*s_eff_withNoise[i]*s_eff_withNoise[i]+1);
+	sxy_withNoise[i]=s_eff_withNoise[i]*s_eff_withNoise[i]*Rh_eff_withNoise[i]/(Rh_eff_withNoise[i]*Rh_eff_withNoise[i]*s_eff_withNoise[i]*s_eff_withNoise[i]+1);//Rh_eff_n[i]*s_eff_n[i]*sxx_n[i];
+
+	Series5->AddXY(B_ideal[i],sxx_withNoise[i],"",clRed);
+	LineSeries5->AddXY(B_ideal[i],sxy_withNoise[i],"",clRed);
+	Series3->AddXY(B_ideal[i],sxx_withNoise[i],"",clRed);
+	Series4->AddXY(B_ideal[i],sxy_withNoise[i],"",clRed);
 //    Memo1->Lines->Add(FloatToStr(sxy_n[i]));
 }
 
 // рассчитаем СКО для полученных графиков
 
-long double sko1=Sko(sxx,sxx_n,l);
-long double sko2=Sko(sxy,sxy_n,l);
-long double shx[l]={0};
-long double shy[l]={0};
-for(int i=0;i<l;i++)
+long double sko1=Sko(sxx_ideal,sxx_withNoise,NumberOfPoints);
+long double sko2=Sko(sxy_ideal,sxy_withNoise,NumberOfPoints);
+long double shx[NumberOfPoints]={0};
+long double shy[NumberOfPoints]={0};
+for(int i=0;i<NumberOfPoints;i++)
 {
-	shx[i]=sxx_n[i]-sxx[i];
-	shy[i]=sxy_n[i]-sxy[i];
+	shx[i]=sxx_withNoise[i]-sxx_ideal[i];
+	shy[i]=sxy_withNoise[i]-sxy_ideal[i];
 }
-long double mx=Mo(shx,l);
-long double my=Mo(shy,l);
+long double mx=Mo(shx,NumberOfPoints);
+long double my=Mo(shy,NumberOfPoints);
 Edit1->Text=FloatToStr(sko1);
 Edit2->Text=FloatToStr(sko2);
-Edit3->Text=FloatToStr(mx/Mo(sxx,l)*100);
-Edit4->Text=FloatToStr(my/Mo(sxy,l)*100);
-;
+Edit3->Text=FloatToStr(mx/Mo(sxx_ideal,NumberOfPoints)*100);
+Edit4->Text=FloatToStr(my/Mo(sxy_ideal,NumberOfPoints)*100);
 }
 //---------------------------------------------------------------------------
 
@@ -520,7 +643,7 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 */
 silentMode=true;
 int h=eStepByTemperature->Text.ToInt(); // шаг по температуре
-int T1=300; // начальная температура
+int T1=80; // начальная температура
 int Tmax=300; // конечная температура
 
 int koef=1;// начальный коэффициент шума
@@ -529,14 +652,14 @@ int endkoef=5;  // конечный коэффициент
 int h_koef=1; // шаг по уровню шума
 eFilterLength->Text=IntToStr(80); // задаём длину фильтра, внимание - это для симметричного и удлиненного графика!
 g_hsize->Text=FloatToStr(0.0125);
-UnicodeString oldName; // старое имя файла
+UnicodeString standartName; // эталонное имя файла
 UnicodeString fName;   // новое имя файла
 
 // если в диалоге имя было выбрано
 if (sg1->Execute()) {
 	mDebug->Lines->Add( sg1->FileName); // выводим его в мемо
 }
-oldName = sg1->FileName;     // и запоминаем
+standartName = sg1->FileName;     // и запоминаем
 
 for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 {
@@ -544,17 +667,17 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 	 bCalculateCarrierParams->Click(); // нажимаем кнопку рассчитать
      // задаём имя файла
 	 fName="T_"+IntToStr(T)+"_params_"+Edit3->Text+".txt";
-	 sg1->FileName=oldName+fName;
+	 sg1->FileName=standartName+fName;
 	 bSaveFilmParams->Click(); // сохраняем параметры плёнки
 
 
 	 rbLeftPlot->Checked=true; // выбираем идеальный график тензоров
 	 // задаём имя файла
 	 fName="T_"+IntToStr(T)+"_tenzor_ideal_vseZnachenia_"+Edit3->Text+".txt";
-	 sg1->FileName=oldName+fName;
+	 sg1->FileName=standartName+fName;
 	 bSaveAllPoints->Click();     	 // сохраняем все точки идеального графика тензора
 	 fName="T_"+IntToStr(T)+"_tenzor_ideal_11Znacheniy_"+Edit3->Text+".txt";
-	 sg1->FileName=oldName+fName;
+	 sg1->FileName=standartName+fName;
 	 // сохраняем 11 точек идеального графика тензора
 	 bSaveElevenPoints->Click();
 
@@ -562,25 +685,25 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 	 rbIdealPlot->Checked=true; // выбираем идеальный график измеряемых сигналов
      // задаём имя файла
 	 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_vseZnachenia_"+Edit3->Text+".txt";
-	 sg1->FileName=oldName+fName;
+	 sg1->FileName=standartName+fName;
 	 bSaveAllPoints->Click();     	 // сохраняем все точки идеального графика сигналов
 	 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_11Znacheniy_"+Edit3->Text+".txt";
-	 sg1->FileName=oldName+fName;
+	 sg1->FileName=standartName+fName;
 	 // сохраняем 11 точек идеального графика сигналов
 	 bSaveElevenPoints->Click();
 
      for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
 	 {
-		  Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(Uy[l-1]))); // задаем коэффициенты
-		  Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(Uy[l-1])));
+		  Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(Uy_ideal[NumberOfPoints-1]))); // задаем коэффициенты
+		  Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(Uy_ideal[NumberOfPoints-1])));
 		  bGaussianNoiseGenerator->Click(); // генератор шума
 
 		  rbRightPlot->Checked=true; // выбираем зашумленный график измеряемого сигнала
 		  fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-		 sg1->FileName=oldName+fName;
+		 sg1->FileName=standartName+fName;
 		 bSaveAllPoints->Click();     	 // сохраняем все точки идеального графика тензора
 		 fName="T_"+IntToStr(T)+"_Us_Uy_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-		 sg1->FileName=oldName+fName;
+		 sg1->FileName=standartName+fName;
 		 // сохраняем 11 точек идеального графика тензора
 		 bSaveElevenPoints->Click();
 
@@ -590,19 +713,19 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 		 // сохраняем результаты фильтрации (все точки)-------------------------
 		 rbFilteredPlot->Checked=true; // выбираем фильтрованный график
 		 fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
-		 sg1->FileName=oldName+fName;
+		 sg1->FileName=standartName+fName;
 		 bSaveAllPoints->Click();
          //---------------------------------------------------------------------
 
-		  Button8->Click(); // обратный расчет
+		  tenzorCalculating->Click(); // обратный расчет
 		  //--------------------------------------------------------------------
 		  // надо сохранять результаты генератора
 		  rbRightPlot->Checked=1;
 		  fName="T_"+IntToStr(T)+"_tenzor_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-		  sg1->FileName=oldName+fName;
+		  sg1->FileName=standartName+fName;
 		  bSaveAllPoints->Click();// теперь сохранить
 		  fName="T_"+IntToStr(T)+"_tenzor_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-		  sg1->FileName=oldName+fName;
+		  sg1->FileName=standartName+fName;
 		  // сохраняем 11 точек графика
 		  bSaveElevenPoints->Click();
 		  //--------------------------------------------------------------------
@@ -610,21 +733,21 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 
 		  //1T_80_Us_Uy_vseZnachenia_filtr_k_50.txt
 		  fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
-		  sg1->FileName=oldName+fName;
+		  sg1->FileName=standartName+fName;
 		  rbIdealPlot->Checked=1;
 		  bLoadingPlots->Click();
 
 		  //-------обратный расчет для фильтрованных сигналов
-		  Button8->Click();
+		  tenzorCalculating->Click();
 		  //--------------------------------------------------------------------
           //--------------------------------------------------------------------
 		  rbRightPlot->Checked=1;// сохранять результаты фильтрованных тензоров
 		  fName="T_"+IntToStr(T)+"_tenzor_filt_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-		  sg1->FileName=oldName+fName;
+		  sg1->FileName=standartName+fName;
 		  bSaveAllPoints->Click();
 		  // в двух форматах: все точки и 11 точек.
 		  fName="T_"+IntToStr(T)+"_tenzor_filt_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-		  sg1->FileName=oldName+fName;
+		  sg1->FileName=standartName+fName;
 		  bSaveElevenPoints->Click();
 		  //--------------------------------------------------------------------
 	 }
@@ -806,10 +929,10 @@ if (rbLeftPlot->Checked) // левый
 if (rbRightPlot->Checked) // правый
 {
 	LoadingDataFromFile(Series3,Series4);
-	for (int i=0; i < l; i++)
+	for (int i=0; i < NumberOfPoints; i++)
 	{
-		Us_n[i]=Series3->YValues->Value[i];
-		Uy_n[i]=Series4->YValues->Value[i];
+		Us_withNoise[i]=Series3->YValues->Value[i];
+		Uy_withNoise[i]=Series4->YValues->Value[i];
 	}
 }
 if (rbFilteredPlot->Checked) // фильтрованный
@@ -848,9 +971,9 @@ if (rbIdealPlot->Checked) // идеальный
 	 }
      //ShowMessage(LineSeries3->YValues->Count);
 
- for (int i=0; i <l /*LineSeries3->YValues->Count*/; i++) { //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	Us_n[i]=LineSeries3->YValues->Value[i];
-	Uy_n[i]=LineSeries9->YValues->Value[i];
+ for (int i=0; i <NumberOfPoints /*LineSeries3->YValues->Count*/; i++) { //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Us_withNoise[i]=LineSeries3->YValues->Value[i];
+	Uy_withNoise[i]=LineSeries9->YValues->Value[i];
  }
 
 
@@ -967,6 +1090,7 @@ extrapolate5Degree(Series2, 0, 2.5, 0.2,Series4);
 
 }
 //---------------------------------------------------------------------------
+
 
 
 

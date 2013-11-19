@@ -81,7 +81,7 @@ __published:	// IDE-managed Components
 	TLineSeries *LineSeries9;
 	TLineSeries *LineSeries10;
 	TSaveDialog *sg1;
-	TButton *Button8;
+	TButton *tenzorCalculating;
 	TButton *bAutomaticCalculation;
 	TEdit *eStepByTemperature;
 	TLabel *Label11;
@@ -107,7 +107,7 @@ __published:	// IDE-managed Components
 	void __fastcall g_Nz_parKeyPress(TObject *Sender, wchar_t &Key);
 	void __fastcall bWhiteNoiseGeneratorClick(TObject *Sender);
 	void __fastcall Button7Click(TObject *Sender);
-	void __fastcall Button8Click(TObject *Sender);
+	void __fastcall tenzorCalculatingClick(TObject *Sender);
 	void __fastcall bAutomaticCalculationClick(TObject *Sender);
 	void __fastcall bFilteringPlotsClick(TObject *Sender);
 	void __fastcall bSaveElevenPointsClick(TObject *Sender);

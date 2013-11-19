@@ -481,7 +481,7 @@
         Height = 21
         TabOrder = 25
       end
-      object Button8: TButton
+      object tenzorCalculating: TButton
         Left = 88
         Top = 211
         Width = 97
@@ -489,7 +489,7 @@
         Caption = #1054#1073#1088#1072#1090#1085#1099#1081' '#1088#1072#1089#1095#1077#1090
         Enabled = False
         TabOrder = 26
-        OnClick = Button8Click
+        OnClick = tenzorCalculatingClick
       end
       object bAutomaticCalculation: TButton
         Left = 154
