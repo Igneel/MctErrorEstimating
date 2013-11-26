@@ -139,7 +139,7 @@ long double Rh_eff;
 };    */
 
 
-
+const long double THEALMOSTZERO=0.00000000001;
 
 
 
@@ -279,7 +279,12 @@ void getEffectiveParamsFromSignals(MagneticFieldDependences* mfd,CarrierParams* 
 {
 	for (int i = 0; i < NumberOfPoints ; i++)
 	{
-		mfd->s_eff[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->Us[i];
+		if(fabs(mfd->Us[i])<THEALMOSTZERO)
+			mfd->s_eff[i]=0;
+		else
+		{
+			mfd->s_eff[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->Us[i];
+        }
 		mfd->Rh_eff[i]=cp->Thickness*mfd->Uy[i]/cp->CurrentIntensity;
 	}
 }
@@ -796,19 +801,50 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 	Series4->AddXY(x[i],y[i],"",clRed);
  }
 
- delete [] x;
- delete [] y;    */
+	*/
+
+ long double *x=new long double[2*NumberOfPoints];
+ long double *y=new long double[2*NumberOfPoints];
+
+ long double *x2=new long double[2*NumberOfPoints];
+ long double *y2=new long double[2*NumberOfPoints];
+
+
+
+ for (int i = 0; i < NumberOfPoints; i++) {
+	y[i]=ParamsWithNoise.Us[NumberOfPoints-i-1];
+	x[i]=-ParamsWithNoise.B[NumberOfPoints-i-1];
+	y[i+NumberOfPoints]=ParamsWithNoise.Us[i];
+	x[i+NumberOfPoints]=ParamsWithNoise.B[i];
+ }
 
  Series7->Clear();
  Series8->Clear();
 
- TrForMassiveFilter(ParamsWithNoise.B,ParamsWithNoise.Us,FilteredParams.B,
-	FilteredParams.Us,NumberOfPoints,eFilterLength->Text.ToInt(),5000,15,25);
+ TrForMassiveFilter(x,y,x2,y2,2*NumberOfPoints,eFilterLength->Text.ToInt(),5000,15,25);
+
+ for (int i = 0; i < NumberOfPoints; i++)
+ {
+	FilteredParams.Us[i]=y2[i+NumberOfPoints];
+	FilteredParams.B[i]=x2[i+NumberOfPoints];
+ }
+
+ //TrForMassiveFilter(ParamsWithNoise.B,ParamsWithNoise.Us,FilteredParams.B,
+ //	FilteredParams.Us,NumberOfPoints,eFilterLength->Text.ToInt(),5000,15,25);
  TrForMassiveFilter(ParamsWithNoise.B,ParamsWithNoise.Uy,FilteredParams.B,
 	FilteredParams.Uy,NumberOfPoints,eFilterLength->Text.ToInt(),5000,15,25);
 
+ getEffectiveParamsFromSignals(&FilteredParams,&carrierParams);
+ getTenzorFromEffectiveParams(&FilteredParams);
+
  constructPlotFromTwoMassive(FilteredParams.B,FilteredParams.Us,NumberOfPoints,Series7,clBlue);
  constructPlotFromTwoMassive(FilteredParams.B,FilteredParams.Uy,NumberOfPoints,Series8,clBlue);
+
+ delete [] x;
+ delete [] y;
+ delete [] x2;
+ delete [] y2;
+
 
   //extrapolate2Degree(Series3, 0, 2.75, 0.01,Series3);
   //extrapolate2Degree(Series4, 0, 2.75, 0.01,Series4);

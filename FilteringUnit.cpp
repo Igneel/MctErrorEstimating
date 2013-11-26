@@ -106,10 +106,15 @@ double TrForMassiveFilter(long double *inB,long double *inY,long double* outB,lo
 int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh)
 {
 
+// перед фильтрацией делаем массив нечетной функцией.
+
+
 //int size=inS->YValues->Count;  // получаем размер
 double *in=new double[lengthMassive];  // выделяем память
 for(int i=0;i<lengthMassive;i++)       // копируем
-in[i]=inY[i];
+{
+	in[i]=inY[i];
+}
 double *out=new double[lengthMassive]; // выделяем память для выходных значений
 double k=Filter(in,out,lengthMassive,lengthFilter,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
  k*=(inB[lengthMassive-1]-inB[0])/(double)lengthMassive;// вычисляем сдвиг фаз
@@ -128,12 +133,12 @@ k2*=(inS->XValues->MaxValue-inS->XValues->MinValue)/(double)inS->XValues->Count;
 */
 
 //----------------------------------------------
-
 for(int i=0;i<lengthMassive;i++) // выводим
 {
-    outB[i]=inB[i]-k;
+	outB[i]=inB[i]-k;
 	outY[i]=out[i];
 }
+
 delete[] in;  // прибираемся
 //delete[] in2;  // прибираемся
 delete[] out;
