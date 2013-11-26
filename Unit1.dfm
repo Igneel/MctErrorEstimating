@@ -238,7 +238,7 @@
         Height = 139
         TabOrder = 11
       end
-      object Button7: TButton
+      object BuildingPlots: TButton
         Left = 154
         Top = 17
         Width = 75
@@ -246,7 +246,7 @@
         Caption = #1043#1088#1072#1092#1080#1082#1080
         Enabled = False
         TabOrder = 12
-        OnClick = Button7Click
+        OnClick = BuildingPlotsClick
       end
       object g_Nz_par: TStringGrid
         Left = 16

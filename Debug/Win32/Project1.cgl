@@ -12,7 +12,7 @@ Resource types used:
  object (30 allocs, 30 max)
  memory block (30 allocs, 19 max)
 Modules used:
- 00400000 11/20/2013 03:17:32 K:\Дела\Институт физики
+ 00400000 11/26/2013 10:07:48 K:\Дела\Институт физики
  полупроводников\La-7\MctErrorEstimating\.\Debug\Win32\Project1.exe
  0CD00000 08/28/2010 04:55:00 J:\Program Files (x86)\Embarcadero\RAD
  Studio\8.0\bin\CG32.DLL
@@ -23,48 +23,48 @@ Modules used:
  42200000 08/28/2010 04:55:00 C:\Windows\system32\Tee9150.bpl
  50030000 08/28/2010 04:55:00 C:\Windows\system32\rtl150.bpl
  50250000 08/28/2010 04:55:00 C:\Windows\system32\vcl150.bpl
- 628A0000 11/21/2010 10:24:02 C:\Windows\AppPatch\AcLayers.DLL
- 6B090000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
- 6E660000 07/14/2009 08:16:14 C:\Windows\system32\profapi.dll
- 6EE50000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
- 6EE70000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
- 6EF00000 07/14/2009 08:15:46 C:\Windows\system32\msimg32.dll
- 6FCA0000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
- 6FEB0000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
- 6FED0000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
- 70BE0000 11/21/2010 10:23:56
+ 62D60000 11/21/2010 10:24:02 C:\Windows\AppPatch\AcLayers.DLL
+ 6D9D0000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
+ Switcher\pshook.dll
+ 6EBA0000 11/21/2010 10:24:18 C:\Windows\system32\USERENV.dll
+ 6F510000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
+ 6F530000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
+ 6F5C0000 07/14/2009 08:15:46 C:\Windows\system32\msimg32.dll
+ 700D0000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
+ 702E0000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
+ 70300000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
+ 70390000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
+ 70450000 07/14/2009 08:16:14 C:\Windows\system32\profapi.dll
+ 709F0000 11/21/2010 10:23:56
  C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.
 7601.17514_none_41e6975e2bd6f2b2\comctl32.dll
- 70DF0000 11/21/2010 10:24:16 C:\Windows\system32\apphelp.dll
- 70E70000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
- 73600000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
- Switcher\pshook.dll
- 743E0000 11/21/2010 10:24:18 C:\Windows\system32\USERENV.dll
- 74960000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
- 749A0000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
- 74B40000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
- 74C10000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
- 74C20000 11/24/2012 21:05:50 C:\Windows\syswow64\SspiCli.dll
- 74D40000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
- 74DD0000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
- 74E30000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
- 74FF0000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
- 75080000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
- 75150000 07/14/2009 08:11:24 C:\Windows\syswow64\LPK.dll
- 75160000 11/21/2010 10:24:16 C:\Windows\syswow64\GDI32.dll
- 75390000 11/21/2010 10:24:30 C:\Windows\syswow64\ADVAPI32.dll
- 75430000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
- 75650000 11/24/2012 20:58:20 C:\Windows\syswow64\SHELL32.dll
- 762A0000 11/24/2012 20:54:48 C:\Windows\syswow64\IMAGEHLP.DLL
- 762D0000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
- 763D0000 11/21/2010 10:24:12 C:\Windows\syswow64\RPCRT4.dll
- 764C0000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
- 76520000 10/04/2012 23:47:42 C:\Windows\syswow64\KERNELBASE.dll
- 76570000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
- 76670000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
- 76730000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
- 767E0000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
- 76B50000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
- 76B70000 10/04/2012 23:47:42 C:\Windows\syswow64\kernel32.dll
- 77540000 11/24/2012 20:54:24 C:\Windows\SysWOW64\ntdll.dll
+ 72520000 11/21/2010 10:24:16 C:\Windows\system32\apphelp.dll
+ 72670000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
+ 72680000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
+ 74C60000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
+ 74FD0000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
+ 750B0000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
+ 750C0000 11/24/2012 21:05:50 C:\Windows\syswow64\SspiCli.dll
+ 753E0000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
+ 75480000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
+ 754E0000 11/24/2012 20:54:48 C:\Windows\syswow64\IMAGEHLP.DLL
+ 75510000 11/24/2012 20:58:20 C:\Windows\syswow64\SHELL32.dll
+ 76190000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
+ 76220000 11/21/2010 10:24:30 C:\Windows\syswow64\ADVAPI32.dll
+ 762C0000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
+ 763C0000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
+ 76450000 10/04/2012 23:47:42 C:\Windows\syswow64\KERNELBASE.dll
+ 764A0000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
+ 765E0000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
+ 76740000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
+ 76820000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
+ 768C0000 10/04/2012 23:47:42 C:\Windows\syswow64\kernel32.dll
+ 769D0000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
+ 769E0000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
+ 76B20000 07/14/2009 08:11:24 C:\Windows\syswow64\LPK.dll
+ 76B60000 11/21/2010 10:24:16 C:\Windows\syswow64\GDI32.dll
+ 76EF0000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
+ 76F60000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
+ 77030000 11/21/2010 10:24:12 C:\Windows\syswow64\RPCRT4.dll
+ 779E0000 11/24/2012 20:54:24 C:\Windows\SysWOW64\ntdll.dll
 ==========================================

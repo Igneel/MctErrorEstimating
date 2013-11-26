@@ -34,7 +34,7 @@ __published:	// IDE-managed Components
 	TButton *bGaussianNoiseGenerator;
 	TButton *bCalculateCarrierParams;
 	TMemo *mDebug;
-	TButton *Button7;
+	TButton *BuildingPlots;
 	TStringGrid *g_Nz_par;
 	TEdit *g_hsize;
 	TLabel *Label1;
@@ -106,7 +106,7 @@ __published:	// IDE-managed Components
 	void __fastcall bSaveAllPointsClick(TObject *Sender);
 	void __fastcall g_Nz_parKeyPress(TObject *Sender, wchar_t &Key);
 	void __fastcall bWhiteNoiseGeneratorClick(TObject *Sender);
-	void __fastcall Button7Click(TObject *Sender);
+	void __fastcall BuildingPlotsClick(TObject *Sender);
 	void __fastcall tenzorCalculatingClick(TObject *Sender);
 	void __fastcall bAutomaticCalculationClick(TObject *Sender);
 	void __fastcall bFilteringPlotsClick(TObject *Sender);

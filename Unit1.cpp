@@ -19,6 +19,8 @@
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 
+
+
 /*
 
 TO DO:
@@ -46,7 +48,7 @@ class Carrier
 class
 
 */
-
+  /*
 class carrier
 {
 
@@ -134,7 +136,7 @@ long double s_eff;
 long double Rh_eff;
 
 
-};
+};    */
 
 
 
@@ -150,7 +152,7 @@ const int NumberOfNumbersAfterPoint=4; // параметр округления.
 
 const int NumberOfCarrierTypes=3;
 
-long double q=1.60217646E-19; // заряд электрона
+long double electronCharge=1.60217646E-19; // заряд электрона
 long double h; // величина шага
 
 //------------------------------------------------------------------------------
@@ -224,22 +226,75 @@ g_Nz_par->Cells[2][0]="подвижность";
 }
 //---------------------------------------------------------------------------
 
+void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
 void ParamsKRT(void);
 
-/*void calculateMagneticFieldDependences(MagneticFieldDependences mfd,carrierParams cp)
+
+void getTenzorFromCarrierParams(MagneticFieldDependences* mfd,CarrierParams* cp)
+{
+	mfd->B[0]=0;
+
+	for(int i=1;i<NumberOfPoints;i++)
+	{
+		mfd->B[i]=mfd->B[i-1]+h;  // это наше магнитное поле
+	}
+
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+	mfd->sxx[i]=mfd->sxy[i]=0;
+
+		for(int j=0;j<NumberOfCarrierTypes;j++)
+		{
+		mfd->sxx[i]+=electronCharge*cp->Concentration[j]*cp->Mobility[j]/(1.0+
+		cp->Mobility[j]*cp->Mobility[j]*mfd->B[i]*mfd->B[i]);
+
+		mfd->sxy[i]+=electronCharge*cp->Concentration[j]*cp->Mobility[j]*cp->Mobility[j]*
+		mfd->B[i]/(1.0+cp->Mobility[j]*cp->Mobility[j]*mfd->B[i]*mfd->B[i]);
+		}
+	}
+
+}
+
+void getEffectiveParamsFromTenzor(MagneticFieldDependences* mfd)
+{
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		mfd->s_eff[i]=(mfd->sxx[i]*mfd->sxx[i]+mfd->sxy[i]*mfd->sxy[i])/mfd->sxx[i];
+		mfd->Rh_eff[i]=mfd->sxy[i]/(mfd->sxx[i]*mfd->sxx[i]+mfd->sxy[i]*mfd->sxy[i]);
+	}
+}
+
+
+void getSignalsFromEffecriveParams(MagneticFieldDependences* mfd,CarrierParams* cp)
+{
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		mfd->Us[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->s_eff[i];
+		mfd->Uy[i]=mfd->Rh_eff[i]*cp->CurrentIntensity/cp->Thickness;
+	}
+
+}
+
+void calculateMagneticFieldDependences(MagneticFieldDependences* mfd,CarrierParams* cp)
+{
+	getTenzorFromCarrierParams(mfd,cp);
+	getEffectiveParamsFromTenzor(mfd);
+	getSignalsFromEffecriveParams(mfd,cp);
+}
+
+void constructPlotFromMassive()
 {
 ;
-}     */
-
-
-void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
+}
 
 
 
 // расчет тензоров проводимости
 void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 {
-ParamsKRT();
+	ParamsKRT();
+
+
 /*
 
 Читаем концентрации и подвижности с формы.
@@ -252,7 +307,30 @@ ParamsKRT();
 
 
 */
+	Series1->Clear();     // чистим все графики
+	Series2->Clear();
+	Series5->Clear();
+	LineSeries5->Clear();
 
+	LineSeries1->Clear();
+	LineSeries7->Clear();
+
+	LineSeries3->Clear();
+	LineSeries9->Clear();
+
+	for(int i=0;i<NumberOfCarrierTypes;i++) // читаем значения с формы
+	{
+		carrierParams.Mobility[i]=g_Nz_par->Cells[2][i+1].ToDouble();
+		carrierParams.Concentration[i]=g_Nz_par->Cells[1][i+1].ToDouble();
+	}
+
+	h=g_hsize->Text.ToDouble(); // сохраняем значение шага
+
+	getTenzorFromCarrierParams(&IdealParams,&carrierParams);
+
+
+
+/*
 Series1->Clear();     // чистим все графики
 Series2->Clear();
 Series5->Clear();
@@ -286,10 +364,10 @@ for(int i=0;i<NumberOfPoints;i++)
 {
 sxx_ideal[i]=sxy_ideal[i]=0;
 
-	for(int j=0;j<3;j++)
+	for(int j=0;j<NumberOfCarrierTypes;j++)
 	{
-		sxx_ideal[i]+=q*n[j]*u[j]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
-		sxy_ideal[i]+=q*n[j]*u[j]*u[j]*B_ideal[i]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
+		sxx_ideal[i]+=electronCharge*n[j]*u[j]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
+		sxy_ideal[i]+=electronCharge*n[j]*u[j]*u[j]*B_ideal[i]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
 	}
 	Series1->AddXY(B_ideal[i],sxx_ideal[i],"",clRed);  // рисуем их на графиках
 	Series2->AddXY(B_ideal[i],sxy_ideal[i],"",clRed);
@@ -314,7 +392,7 @@ long double cb=eCBRatio->Text.ToDouble(); //3; // отношение с к b
 long double I=eCurrentIntensity->Text.ToDouble(); //1e-3; // ток от 1e-3 до 1e-4
 
 
-//-------------------------------------------------------------------------------------
+//------------------------------------
 for(int i=0;i<NumberOfPoints;i++)
 {
    //Us(B)=cb/d*I/s(B)
@@ -327,7 +405,7 @@ Uy_ideal[i]=Rh_eff_ideal[i]*I/d;   // Rh_eff[i]*I*B[i]/d;
 	LineSeries3->AddY(Us_ideal[i],"",clRed);
 	LineSeries9->AddY(Uy_ideal[i],"",clRed);
 }
-
+   */
 }
 //---------------------------------------------------------------------------
 // округление результатов при сохранении, необходимо потому что если этого не сделать
@@ -470,65 +548,30 @@ long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2*x)*T;
 return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2/k/T); // собственная концентрация
 }
 
-void calcutatingCarrierParams(long double molarCompositionCadmium,long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor)
+void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor)
 {
-	carrierParams.MolarCompositionCadmium=molarCompositionCadmium;
-	carrierParams.CurrentTemperature=Temperature;
-	carrierParams.Concentration[0]=heavyHoleConcentrerion;
-	carrierParams.AFactor=AFactor;
-	carrierParams.KFactor=KFactor;
+	carrierParams->MolarCompositionCadmium=molarCompositionCadmium;
+	carrierParams->CurrentTemperature=Temperature;
+	carrierParams->Concentration[0]=heavyHoleConcentrerion;
+	carrierParams->AFactor=AFactor;
+	carrierParams->KFactor=KFactor;
 
 	long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
 	long double mh=0.443*m0; // масса тяжелых дырок
 	long double ml=0.001*m0; // масса легких дырок
 
-	carrierParams.Concentration[1]=pow(ml/mh,1.5)*carrierParams.Concentration[0]*50; // концентрация легких дырок домножена на 50
-	carrierParams.Concentration[2]=-pow(niSob(carrierParams.CurrentTemperature,carrierParams.MolarCompositionCadmium),2)/carrierParams.Concentration[0];
+	carrierParams->Concentration[1]=pow(ml/mh,1.5)*carrierParams->Concentration[0]*50; // концентрация легких дырок домножена на 50
+	carrierParams->Concentration[2]=-pow(niSob(carrierParams->CurrentTemperature,
+	 carrierParams->MolarCompositionCadmium),2)/carrierParams->Concentration[0];
 
-	carrierParams.Mobility[2]=-carrierParams.AFactor*pow(carrierParams.CurrentTemperature/77.0,-carrierParams.KFactor);
-	carrierParams.Mobility[1]=-0.1*carrierParams.Mobility[2];
-	carrierParams.Mobility[0]=-0.005*carrierParams.Mobility[2];
+	carrierParams->Mobility[2]=-carrierParams->AFactor*pow(carrierParams->CurrentTemperature/77.0,-carrierParams->KFactor);
+	carrierParams->Mobility[1]=-0.1*carrierParams->Mobility[2];
+	carrierParams->Mobility[0]=-0.005*carrierParams->Mobility[2];
 }
 
 void ParamsKRT(void)
 {
-	/*long double x=Form1->eMolarCompositionCadmium->Text.ToDouble();//0.22; // мольный состав кадмия
-	long double T=Form1->eTemperature->Text.ToDouble();//77; // температура
-	long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
-	long double mh=0.443*m0; // масса тяжелых дырок
-	long double ml=0.001*m0; // масса легких дырок
-
-	long double ph=Form1->eHeavyHoleConcentration->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
-	long double pl=pow(ml/mh,1.5)*ph*50; // концентрация легких дырок домножена на 50
-	long double n=-pow(niSob(T,x),2)/ph;
-	long double A=Form1->eAFactor->Text.ToDouble();//5; // 5-8
-	long double k=Form1->eKFactor->Text.ToDouble();//1.3; //1.3-1.5
-	long double ue=A*pow(T/77.0,-k); // подвижность электронов в области 77-300К
-
-	long double uh=0.005*ue;   // подвижности тяжелых и
-	long double ul=0.1*ue;     // легких дырок в первом приближении
-	ue*=-1;
-
-	Form1->g_Nz_par->Cells[1][1]=FloatToStr(n);
-	Form1->g_Nz_par->Cells[2][1]=FloatToStr(ue);
-	Form1->g_Nz_par->Cells[1][2]=FloatToStr(pl);
-	Form1->g_Nz_par->Cells[2][2]=FloatToStr(ul);
-	Form1->g_Nz_par->Cells[1][3]=FloatToStr(ph);
-	Form1->g_Nz_par->Cells[2][3]=FloatToStr(uh);
-
-
-	Form1->bCalculateCarrierParams->Enabled=true;
-	Form1->Button7->Enabled=1;    */
-
-	//--------------------------------------------------------------------------
-
-	/*long double x=Form1->eMolarCompositionCadmium->Text.ToDouble();//0.22; // мольный состав кадмия
-	long double T=Form1->eTemperature->Text.ToDouble();//77; // температура
-	long double ph=Form1->eHeavyHoleConcentration->Text.ToDouble();//1.0E22; // концентрация тяжелых дырок
-	long double A=Form1->eAFactor->Text.ToDouble();//5; // 5-8
-	long double k=Form1->eKFactor->Text.ToDouble();//1.3; //1.3-1.5 */
-
-	calcutatingCarrierParams(Form1->eMolarCompositionCadmium->Text.ToDouble(),
+	calcutatingCarrierParams(&carrierParams,Form1->eMolarCompositionCadmium->Text.ToDouble(),
 	Form1->eTemperature->Text.ToDouble(),Form1->eHeavyHoleConcentration->Text.ToDouble(),
 	Form1->eAFactor->Text.ToDouble(),Form1->eKFactor->Text.ToDouble());
 
@@ -540,14 +583,14 @@ void ParamsKRT(void)
 	Form1->g_Nz_par->Cells[2][3]=FloatToStr(carrierParams.Mobility[0]);
 
 	Form1->bCalculateCarrierParams->Enabled=true;
-	Form1->Button7->Enabled=1;
+	Form1->BuildingPlots->Enabled=1;
 
 	//--------------------------------------------------------------------------
 }
 
 
 
-void __fastcall TForm1::Button7Click(TObject *Sender)
+void __fastcall TForm1::BuildingPlotsClick(TObject *Sender)
 {
 Form2->Show();
 }
