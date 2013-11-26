@@ -36,7 +36,7 @@ i=i;
 // расчет среднего квадратичного отклонения
 //--------------------------------------------------------------------------
 
-long double Sko (long double *x0,long double *x,int l)
+long double Sko (const long double *x0,long double *x,int l)
 {
 long double z=0;
 for(int i=0;i<l;i++)
@@ -49,7 +49,7 @@ return sqrt(z);
 // расчет математического ожидания
 //-------------------------------------------------
 
- long double Mo (long double *x,int l)
+ long double Mo (const long double *x,int l)
  {
  long double M=0;
  for(int i=0;i<l;i++)
@@ -59,7 +59,7 @@ return sqrt(z);
 
 //---------------------------------------------------------------------------
 // возвращает величину математического ожидания шума.
-void ShumAdding(long double *x,long double *out,long double *ret, long double koeff,const int l)
+void ShumAdding(const long double *x,long double *out,long double *ret, long double koeff,const int l)
 {
 long double *y= new long double[l]; // шум для нашего графика
 BoxMull(y,l);
@@ -69,7 +69,6 @@ for(int i=0;i<l;i++)
   ret[0]=Mo(y,l); // математическое ожидание
   ret[1]=Sko(x,out,l);  // СКО
   ret[2]=ret[0]/Mo(x,l)*100; // СКО в %  от математического ожидания исходного графика
-
   delete[] y;
 }
 

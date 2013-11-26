@@ -265,7 +265,7 @@ void getEffectiveParamsFromTenzor(MagneticFieldDependences* mfd)
 }
 
 
-void getSignalsFromEffecriveParams(MagneticFieldDependences* mfd,CarrierParams* cp)
+void getSignalsFromEffectiveParams(MagneticFieldDependences* mfd,CarrierParams* cp)
 {
 	for(int i=0;i<NumberOfPoints;i++)
 	{
@@ -275,16 +275,47 @@ void getSignalsFromEffecriveParams(MagneticFieldDependences* mfd,CarrierParams* 
 
 }
 
+void getEffectiveParamsFromSignals(MagneticFieldDependences* mfd,CarrierParams* cp)
+{
+	for (int i = 0; i < NumberOfPoints ; i++)
+	{
+		mfd->s_eff[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->Us[i];
+		mfd->Rh_eff[i]=cp->Thickness*mfd->Uy[i]/cp->CurrentIntensity;
+	}
+}
+
+void getTenzorFromEffectiveParams(MagneticFieldDependences* mfd)
+{
+	for (int i = 0; i < NumberOfPoints ; i++)
+	{
+		mfd->sxx[i]=mfd->s_eff[i]/
+			(mfd->Rh_eff[i]*mfd->Rh_eff[i]*mfd->s_eff[i]*mfd->s_eff[i]+1);
+		mfd->sxy[i]=mfd->s_eff[i]*mfd->s_eff[i]*mfd->Rh_eff[i]/
+		   (mfd->Rh_eff[i]*mfd->Rh_eff[i]*mfd->s_eff[i]*mfd->s_eff[i]+1);
+    }
+}
+
 void calculateMagneticFieldDependences(MagneticFieldDependences* mfd,CarrierParams* cp)
 {
 	getTenzorFromCarrierParams(mfd,cp);
 	getEffectiveParamsFromTenzor(mfd);
-	getSignalsFromEffecriveParams(mfd,cp);
+	getSignalsFromEffectiveParams(mfd,cp);
 }
 
-void constructPlotFromMassive()
+void constructPlotFromTwoMassive(long double *x,long double *y,int length,TLineSeries* s,TColor color)
 {
-;
+	for (int i = 0; i < length; i++)
+	{
+		s->AddXY(x[i],y[i],"",color);
+	}
+}
+
+void constructPlotFromOneMassive(long double *y,int length,TLineSeries* s,TColor color)
+{
+	for (int i = 0; i < length; i++)
+	{
+		s->AddY(y[i],"",color);
+	}
 }
 
 
@@ -292,8 +323,6 @@ void constructPlotFromMassive()
 // расчет тензоров проводимости
 void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 {
-	ParamsKRT();
-
 
 /*
 
@@ -307,6 +336,8 @@ void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 
 
 */
+	ParamsKRT();
+
 	Series1->Clear();     // чистим все графики
 	Series2->Clear();
 	Series5->Clear();
@@ -326,86 +357,20 @@ void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 
 	h=g_hsize->Text.ToDouble(); // сохраняем значение шага
 
-	getTenzorFromCarrierParams(&IdealParams,&carrierParams);
+	calculateMagneticFieldDependences(&IdealParams,&carrierParams);
+	
+	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxx,NumberOfPoints,Series1,clRed);
+	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxy,NumberOfPoints,Series2,clRed);
+	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxx,NumberOfPoints,Series5,clRed);
+	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxy,NumberOfPoints,LineSeries5,clRed);
 
+	bGaussianNoiseGenerator->Enabled=1;
 
+	constructPlotFromTwoMassive(IdealParams.B,IdealParams.s_eff,NumberOfPoints,LineSeries1,clRed);
+	constructPlotFromTwoMassive(IdealParams.B,IdealParams.Rh_eff,NumberOfPoints,LineSeries7,clRed);
 
-/*
-Series1->Clear();     // чистим все графики
-Series2->Clear();
-Series5->Clear();
-LineSeries5->Clear();
-
-LineSeries1->Clear();
-LineSeries7->Clear();
-
-LineSeries3->Clear();
-LineSeries9->Clear();
-
-long double u[NumberOfCarrierTypes]={0}; // подвижности НЗ
-long double n[NumberOfCarrierTypes]={0}; // концентрации НЗ
-
-for(int i=0;i<NumberOfCarrierTypes;i++) // читаем эти значения с формы
-{
-	u[i]=g_Nz_par->Cells[2][i+1].ToDouble();
-	n[i]=g_Nz_par->Cells[1][i+1].ToDouble();
-}
-h=g_hsize->Text.ToDouble(); // сохраняем значение шага
-
-B_ideal[0]=0;
-for(int i=1;i<NumberOfPoints;i++)
-{
-	B_ideal[i]=B_ideal[i-1]+h;  // это наше магнитное поле
-}
-// рассчитываем компоненты тензона проводимости
-
-
-for(int i=0;i<NumberOfPoints;i++)
-{
-sxx_ideal[i]=sxy_ideal[i]=0;
-
-	for(int j=0;j<NumberOfCarrierTypes;j++)
-	{
-		sxx_ideal[i]+=electronCharge*n[j]*u[j]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
-		sxy_ideal[i]+=electronCharge*n[j]*u[j]*u[j]*B_ideal[i]/(1.0+u[j]*u[j]*B_ideal[i]*B_ideal[i]);
-	}
-	Series1->AddXY(B_ideal[i],sxx_ideal[i],"",clRed);  // рисуем их на графиках
-	Series2->AddXY(B_ideal[i],sxy_ideal[i],"",clRed);
-	Series5->AddXY(B_ideal[i],sxx_ideal[i],"",clRed);
-	LineSeries5->AddXY(B_ideal[i],sxy_ideal[i],"",clRed);
-
-
-}
-bGaussianNoiseGenerator->Enabled=1;
-//-------------------------------------------------
-//- рассчитываем эффективные значения
-for(int i=0;i<NumberOfPoints;i++)
-{
-	s_eff_ideal[i]=(sxx_ideal[i]*sxx_ideal[i]+sxy_ideal[i]*sxy_ideal[i])/sxx_ideal[i];
-	Rh_eff_ideal[i]=sxy_ideal[i]/(sxx_ideal[i]*sxx_ideal[i]+sxy_ideal[i]*sxy_ideal[i]); // 1/B
-	LineSeries1->AddXY(B_ideal[i],s_eff_ideal[i],"",clRed);
-	LineSeries7->AddXY(B_ideal[i],Rh_eff_ideal[i],"",clRed);
-}
-//-------------------------------------------------
-long double d=eSampleThickness->Text.ToDouble(); // 1e-5; // толщина образца
-long double cb=eCBRatio->Text.ToDouble(); //3; // отношение с к b
-long double I=eCurrentIntensity->Text.ToDouble(); //1e-3; // ток от 1e-3 до 1e-4
-
-
-//------------------------------------
-for(int i=0;i<NumberOfPoints;i++)
-{
-   //Us(B)=cb/d*I/s(B)
-   //Uy(B)=Rh(B)*I*B/d
-
-   // вот к этим значениям будет добавляться шум.
-Us_ideal[i]=cb/d*I/s_eff_ideal[i];
-Uy_ideal[i]=Rh_eff_ideal[i]*I/d;   // Rh_eff[i]*I*B[i]/d;
-
-	LineSeries3->AddY(Us_ideal[i],"",clRed);
-	LineSeries9->AddY(Uy_ideal[i],"",clRed);
-}
-   */
+	constructPlotFromOneMassive(IdealParams.Us,NumberOfPoints,LineSeries3,clRed);
+	constructPlotFromOneMassive(IdealParams.Uy,NumberOfPoints,LineSeries9,clRed);
 }
 //---------------------------------------------------------------------------
 // округление результатов при сохранении, необходимо потому что если этого не сделать
@@ -428,35 +393,35 @@ x[i]=ceil(x[i]*S)/S;
 void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 {
 /*
-
 К идеальным значениям сигнала добавляется шум.
 Выводится на экран.
-
 */
 
 srand(time(NULL));
-long double noiseForSxx[NumberOfPoints]={0}; // шум для sxx
-long double noiseForSxy[NumberOfPoints]={0};  // шум для sxy
 long double vz[3]={0};  // М СКО и СКО в %
-ShumAdding(Us_ideal,noiseForSxx,vz,Edit5->Text.ToDouble(),NumberOfPoints);
+
+for (int i = 0; i < NumberOfPoints; i++) {
+	ParamsWithNoise.Us[i]=IdealParams.Us[i];
+	ParamsWithNoise.Uy[i]=IdealParams.Uy[i];
+	ParamsWithNoise.B[i]=IdealParams.B[i];
+}
+
+ShumAdding(IdealParams.Us,ParamsWithNoise.Us,vz,Edit5->Text.ToDouble(),NumberOfPoints);
 Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit1->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit3->Text=FloatToStr(vz[2]);
 
-ShumAdding(Uy_ideal,noiseForSxy,vz,Edit5->Text.ToDouble(),NumberOfPoints);
+ShumAdding(IdealParams.Uy,ParamsWithNoise.Uy,vz,Edit5->Text.ToDouble(),NumberOfPoints);
 Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit2->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit4->Text=FloatToStr(vz[2]);
 
 Series3->Clear();
 Series4->Clear();
-for(int i=0;i<NumberOfPoints;i++)
-{
- Series3->AddXY(B_ideal[i],noiseForSxx[i],"",clRed);  // выводим графики с шумом
- Us_withNoise[i]=noiseForSxx[i];                        // и сохраняем их для обратного расчета
- Series4->AddXY(B_ideal[i],noiseForSxy[i],"",clRed);
- Uy_withNoise[i]=noiseForSxy[i];
-}
+
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,Series3,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,Series4,clRed);
+
 tenzorCalculating->Enabled=1;
 }
 //---------------------------------------------------------------------------
@@ -548,13 +513,18 @@ long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2*x)*T;
 return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2/k/T); // собственная концентрация
 }
 
-void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor)
+void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,
+long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
+long double thikness,long double cbRatio,long double currentIntensity)
 {
 	carrierParams->MolarCompositionCadmium=molarCompositionCadmium;
 	carrierParams->CurrentTemperature=Temperature;
 	carrierParams->Concentration[0]=heavyHoleConcentrerion;
 	carrierParams->AFactor=AFactor;
 	carrierParams->KFactor=KFactor;
+	carrierParams->Thickness=thikness;
+	carrierParams->CBRatio=cbRatio;
+	carrierParams->CurrentIntensity =currentIntensity;
 
 	long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
 	long double mh=0.443*m0; // масса тяжелых дырок
@@ -573,7 +543,9 @@ void ParamsKRT(void)
 {
 	calcutatingCarrierParams(&carrierParams,Form1->eMolarCompositionCadmium->Text.ToDouble(),
 	Form1->eTemperature->Text.ToDouble(),Form1->eHeavyHoleConcentration->Text.ToDouble(),
-	Form1->eAFactor->Text.ToDouble(),Form1->eKFactor->Text.ToDouble());
+	Form1->eAFactor->Text.ToDouble(),Form1->eKFactor->Text.ToDouble(),
+	Form1->eSampleThickness->Text.ToDouble(),Form1->eCBRatio->Text.ToDouble(),
+	Form1->eCurrentIntensity->Text.ToDouble());
 
 	Form1->g_Nz_par->Cells[1][1]=FloatToStr(carrierParams.Concentration[2]);
 	Form1->g_Nz_par->Cells[2][1]=FloatToStr(carrierParams.Mobility[2]);
@@ -600,9 +572,6 @@ Form2->Show();
 // расчет тензоров на основе измеренных сигналов
 void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
 {
-long double d=eSampleThickness->Text.ToDouble(); // 1e-5; // толщина образца
-long double cb=eCBRatio->Text.ToDouble(); //3; // отношение с к b
-long double I=eCurrentIntensity->Text.ToDouble(); //1e-3; // ток от 1e-3 до 1e-4
 
 LineSeries3->Clear();
 LineSeries9->Clear();
@@ -613,48 +582,36 @@ Series4->Clear();
 Series5->Clear();
 LineSeries5->Clear();
 
-for(int i=0;i<NumberOfPoints;i++)
-{
-  	// теперь считаем в обратном направлении
-	s_eff_withNoise[i]=cb/d*I/Us_withNoise[i];
-	Rh_eff_withNoise[i]=d*Uy_withNoise[i]/I;
+getEffectiveParamsFromSignals(&ParamsWithNoise,&carrierParams);
+getTenzorFromEffectiveParams(&ParamsWithNoise);
 
-	LineSeries3->AddXY(B_ideal[i],Us_withNoise[i],"",clRed);
-	LineSeries9->AddXY(B_ideal[i],Uy_withNoise[i],"",clRed);
-	LineSeries1->AddXY(B_ideal[i],s_eff_withNoise[i],"",clRed);
-	LineSeries7->AddXY(B_ideal[i],Rh_eff_withNoise[i],"",clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,LineSeries3,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,LineSeries9,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.s_eff,NumberOfPoints,LineSeries1,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Rh_eff,NumberOfPoints,LineSeries7,clRed);
 
-}
-
-for(int i=0;i<NumberOfPoints;i++)
-{
-	sxx_withNoise[i]=s_eff_withNoise[i]/(Rh_eff_withNoise[i]*Rh_eff_withNoise[i]*s_eff_withNoise[i]*s_eff_withNoise[i]+1);
-	sxy_withNoise[i]=s_eff_withNoise[i]*s_eff_withNoise[i]*Rh_eff_withNoise[i]/(Rh_eff_withNoise[i]*Rh_eff_withNoise[i]*s_eff_withNoise[i]*s_eff_withNoise[i]+1);//Rh_eff_n[i]*s_eff_n[i]*sxx_n[i];
-
-	Series5->AddXY(B_ideal[i],sxx_withNoise[i],"",clRed);
-	LineSeries5->AddXY(B_ideal[i],sxy_withNoise[i],"",clRed);
-	Series3->AddXY(B_ideal[i],sxx_withNoise[i],"",clRed);
-	Series4->AddXY(B_ideal[i],sxy_withNoise[i],"",clRed);
-//    Memo1->Lines->Add(FloatToStr(sxy_n[i]));
-}
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxx,NumberOfPoints,Series5,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxy,NumberOfPoints,LineSeries5,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,Series3,clRed);
+constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,Series4,clRed);
 
 // рассчитаем СКО для полученных графиков
 
-long double sko1=Sko(sxx_ideal,sxx_withNoise,NumberOfPoints);
-long double sko2=Sko(sxy_ideal,sxy_withNoise,NumberOfPoints);
+long double sko1=Sko(IdealParams.sxx,ParamsWithNoise.sxx,NumberOfPoints);
+long double sko2=Sko(IdealParams.sxy,ParamsWithNoise.sxy,NumberOfPoints);
 long double shx[NumberOfPoints]={0};
 long double shy[NumberOfPoints]={0};
 for(int i=0;i<NumberOfPoints;i++)
 {
-	shx[i]=sxx_withNoise[i]-sxx_ideal[i];
-	shy[i]=sxy_withNoise[i]-sxy_ideal[i];
+	shx[i]=ParamsWithNoise.sxx[i]-IdealParams.sxx[i];
+	shy[i]=ParamsWithNoise.sxy[i]-IdealParams.sxy[i];
 }
 long double mx=Mo(shx,NumberOfPoints);
 long double my=Mo(shy,NumberOfPoints);
 Edit1->Text=FloatToStr(sko1);
 Edit2->Text=FloatToStr(sko2);
-Edit3->Text=FloatToStr(mx/Mo(sxx_ideal,NumberOfPoints)*100);
-Edit4->Text=FloatToStr(my/Mo(sxy_ideal,NumberOfPoints)*100);
+Edit3->Text=FloatToStr(mx/Mo(IdealParams.sxx,NumberOfPoints)*100);
+Edit4->Text=FloatToStr(my/Mo(IdealParams.sxy,NumberOfPoints)*100);
 }
 //---------------------------------------------------------------------------
 
@@ -694,7 +651,8 @@ int endkoef=5;  // конечный коэффициент
 
 int h_koef=1; // шаг по уровню шума
 eFilterLength->Text=IntToStr(80); // задаём длину фильтра, внимание - это для симметричного и удлиненного графика!
-g_hsize->Text=FloatToStr(0.0125);
+g_hsize->Text=FloatToStr(0.0125); // шаг по магнитному полю.
+
 UnicodeString standartName; // эталонное имя файла
 UnicodeString fName;   // новое имя файла
 
@@ -737,8 +695,8 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 
      for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
 	 {
-		  Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(Uy_ideal[NumberOfPoints-1]))); // задаем коэффициенты
-		  Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(Uy_ideal[NumberOfPoints-1])));
+		  Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(IdealParams.Uy[NumberOfPoints-1]))); // задаем коэффициенты
+		  Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(IdealParams.Uy[NumberOfPoints-1])));
 		  bGaussianNoiseGenerator->Click(); // генератор шума
 
 		  rbRightPlot->Checked=true; // выбираем зашумленный график измеряемого сигнала
@@ -841,13 +799,23 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
  delete [] x;
  delete [] y;    */
 
-  extrapolate2Degree(Series3, 0, 2.75, 0.01,Series3);
-  extrapolate2Degree(Series4, 0, 2.75, 0.01,Series4);
+ Series7->Clear();
+ Series8->Clear();
+
+ TrForMassiveFilter(ParamsWithNoise.B,ParamsWithNoise.Us,FilteredParams.B,
+	FilteredParams.Us,NumberOfPoints,eFilterLength->Text.ToInt(),5000,15,25);
+ TrForMassiveFilter(ParamsWithNoise.B,ParamsWithNoise.Uy,FilteredParams.B,
+	FilteredParams.Uy,NumberOfPoints,eFilterLength->Text.ToInt(),5000,15,25);
+
+ constructPlotFromTwoMassive(FilteredParams.B,FilteredParams.Us,NumberOfPoints,Series7,clBlue);
+ constructPlotFromTwoMassive(FilteredParams.B,FilteredParams.Uy,NumberOfPoints,Series8,clBlue);
+
+  //extrapolate2Degree(Series3, 0, 2.75, 0.01,Series3);
+  //extrapolate2Degree(Series4, 0, 2.75, 0.01,Series4);
 
 
-
-Tr_Filter(Series3,Series7,eFilterLength->Text.ToInt(),5000,15,25);
-Tr_Filter(Series4,Series8,eFilterLength->Text.ToInt(),5000,15,25);
+//Tr_Filter(Series3,Series7,eFilterLength->Text.ToInt(),5000,15,25);
+//Tr_Filter(Series4,Series8,eFilterLength->Text.ToInt(),5000,15,25);
 
 }
 
@@ -895,16 +863,15 @@ int length=Saving1->XValues->Count;
 
  //int counting=0;
 for (int i = 0; i < 11; i++) {
-int index=0;
-double r=4;
+	int index=0;
+	double r=4;
 	for(int k=0;k<length;k++)
 	{
-	
-	if(fabs(fabs(Saving1->XValues->Value[k])-points[i])<=r)
-	{
-		r=fabs(Saving1->XValues->Value[k]-points[i]);
-		index=k;
-    }
+		if(fabs(fabs(Saving1->XValues->Value[k])-fabs(points[i]))<=r)
+		{
+			r=fabs(Saving1->XValues->Value[k]-points[i]);
+			index=k;
+		}
 	}
 		
 	tsl->Add(FloatToStr(Saving1->XValues->Value[index])+"\t"+Saving1->YValues->Value[index]+"\t"+Saving2->YValues->Value[index]);
@@ -1105,7 +1072,7 @@ void __fastcall TForm1::bSaveFilmParamsClick(TObject *Sender)
 {
 TStringList * tsl=new TStringList();
 wchar_t *s;
-for (int i = 0; i < 3; i++) {
+for (int i = 0; i < NumberOfCarrierTypes; i++) {
 tsl->Add(g_Nz_par->Cells[1][i+1] +"\t"+g_Nz_par->Cells[2][i+1]);
 s=tsl->Strings[i].w_str() ;
 for(int j=0;j<tsl->Strings[i].Length();j++)

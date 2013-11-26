@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FilteringUnit.h"
+#include <math.h>
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -67,7 +68,6 @@ ShowMessage("Пустой массив!");
 return 0;
 }
 int size=inS->YValues->Count;  // получаем размер
-//size=inS->XValues->Count;  // получаем размер
 double *in=new double[size];  // выделяем память
 for(int i=0;i<size;i++)       // копируем
 in[i]=inS->YValues->Value[i];
@@ -92,12 +92,48 @@ outS->Clear(); // чистим график, перед выводом
 for(int i=0;i<size;i++) // выводим
 {
 outS->AddXY(inS->XValues->Value[i]-k,out[i],"",clBlue);
-//Form1->Series2->AddY(out2[i]-k+k2,"",clBlue);
-//Form1->Series3->AddY(inS->XValues->Value[i]-k,"",clRed);
-//Form1->Series4->AddY(out[i],"",clBlack);
-//Form1->Series5->AddY(out2[i],"",clYellow);
+}
+delete[] in;  // прибираемся
+//delete[] in2;  // прибираемся
+delete[] out;
+//delete[] out2;
+return k;
+}
 
- }
+
+// функция трамплин для фильтра.  ----------------------------------------------
+double TrForMassiveFilter(long double *inB,long double *inY,long double* outB,long double *outY,
+int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh)
+{
+
+//int size=inS->YValues->Count;  // получаем размер
+double *in=new double[lengthMassive];  // выделяем память
+for(int i=0;i<lengthMassive;i++)       // копируем
+in[i]=inY[i];
+double *out=new double[lengthMassive]; // выделяем память для выходных значений
+double k=Filter(in,out,lengthMassive,lengthFilter,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
+ k*=(inB[lengthMassive-1]-inB[0])/(double)lengthMassive;// вычисляем сдвиг фаз
+ // если что тут максимум и минимум надо бы вычислять.
+
+//----------------------------------------------
+//---------добавление для фильтрации магнитного поля
+// внимание - она пока работает не корректно ибо фильтр наполняется только за
+// его длину.
+/*double *in2=new double[size];  // выделяем память
+for(int i=0;i<size;i++)       // копируем
+in2[i]=inS->XValues->Value[i];
+double *out2=new double[size]; // выделяем память для выходных значений
+double k2=Filter(in2,out2,size,length,Fdisk,Fpropysk,Fzatyh); // вызываем фильтр
+k2*=(inS->XValues->MaxValue-inS->XValues->MinValue)/(double)inS->XValues->Count;// вычисляем сдвиг фаз
+*/
+
+//----------------------------------------------
+
+for(int i=0;i<lengthMassive;i++) // выводим
+{
+    outB[i]=inB[i]-k;
+	outY[i]=out[i];
+}
 delete[] in;  // прибираемся
 //delete[] in2;  // прибираемся
 delete[] out;
