@@ -126,6 +126,6 @@ public:		// User declarations
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
-long double niSob(long double T, long double x);
+long double ownConcentrationOfElectrons(long double T, long double x);
 //---------------------------------------------------------------------------
 #endif

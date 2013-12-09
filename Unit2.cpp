@@ -30,7 +30,7 @@ long double n[size]={0};
 long double Tn[size]={0};
 for(int i=0;i<size;i++,T+=1)
 {
-n[i]=-pow(niSob(T,x),2)/ph;
+n[i]=-pow(ownConcentrationOfElectrons(T,x),2)/ph;
 Tn[i]=T;
 Series1->AddXY(Tn[i],n[i],"",clBlack);
 }

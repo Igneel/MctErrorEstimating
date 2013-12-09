@@ -19,23 +19,86 @@
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 
+void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
+void ParamsKRT(void);
 
+
+bool silentModeEnabled=false; // если флаг равен тру - то функции сохранения не спрашивают имя файла
+// флаг используется для крупных расчетов))
 
 /*
 
 TO DO:
 
-1. Адекватное сохранение чистого измеряемого сигнала
-2. Автоматическую фильтрацию измеряемого сигнала, а не компонент тензора
-3. Автоматическое сохранение измеряемого сигнала, с шумом и без
-4. Доработка конвейра согласно п 1-3.
-5. Видимо сгенерить опять кучу данных и посчитать.
-6. Возможно сделать расфасовку данных для разных температур по разным папкам.
-7. Было бы неплохо сделать построение спектров графиков прямо в этой проге, хотя это пожалуй избыточно.
+1. Перед фильтрацией прикрутить нормальное достроение графика в отрицательную область магнитного поля.
+2. Попробовать использовать экстраполяцию ПОСЛЕ фильтрации.
+3. Подбор длины фильтра относительно величины отклонения точки (0,0) от истинного значения.
+4. Коррекция смещения точки, проходящей через начало координат.
+
+
+На данный момент код, отвечающий за расчет параметров переписан с использованием структур.
 
 */
 
+   /*
+class clMagneticFieldDependences {
 
+	public:
+
+    clMagneticFieldDependences();
+	~clMagneticFieldDependences();
+
+	void getTenzorFromCarrierParams();
+	void getEffectiveParamsFromTenzor();
+	void getSignalsFromEffectiveParams();
+	void getEffectiveParamsFromSignals();
+	void getTenzorFromEffectiveParams();
+	void calculateMagneticFieldDependences();
+
+	private:
+
+	const int Length;
+	long double *sxx;
+	long double *sxy;
+	long double *B;
+	long double *Us; // продольный сигнал
+	long double *Uy; // поперечный сигнал
+	long double *s_eff;
+	long double *Rh_eff;
+};
+
+clMagneticFieldDependences::clMagneticFieldDependences()
+{
+
+}
+
+class film {
+
+	public:
+
+	film();
+	~film();
+
+	void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,
+long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
+long double thikness,long double cbRatio,long double currentIntensity);
+
+	private:
+	long double Thickness;
+	long double CBRatio;
+	long double MolarCompositionCadmium;
+	long double CurrentTemperature;
+	long double CurrentIntensity;
+	long double AFactor;
+	long double KFactor;
+
+	const int NumberOfCarrierTypes;
+
+	long double *Concentration;
+	long double *Mobility;
+
+
+};  // */
 
 /*
 
@@ -44,8 +107,6 @@ TO DO:
 class Film
 
 class Carrier
-
-class
 
 */
   /*
@@ -141,12 +202,6 @@ long double Rh_eff;
 
 const long double THEALMOSTZERO=0.00000000001;
 
-
-
-__fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner)
-{
-}
 const int NumberOfPoints=201;//11;  // количество точек
 const int NumberOfNumbersAfterPoint=4; // параметр округления.
 
@@ -154,6 +209,14 @@ const int NumberOfCarrierTypes=3;
 
 long double electronCharge=1.60217646E-19; // заряд электрона
 long double h; // величина шага
+
+
+__fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+
+
 
 //------------------------------------------------------------------------------
 
@@ -190,7 +253,7 @@ MagneticFieldDependences FilteredParams;
 
 
 
-long double B_ideal[NumberOfPoints]={0};
+/*long double B_ideal[NumberOfPoints]={0};
 
 long double sxx_ideal[NumberOfPoints]={0};  // тензор проводимости
 long double sxy_ideal[NumberOfPoints]={0};
@@ -211,10 +274,9 @@ long double Rh_eff_filtered[NumberOfPoints]={0};  // эффект Холла
 long double Us_filtered[NumberOfPoints]={0};  // измеряемый сигнал
 long double Uy_filtered[NumberOfPoints]={0};  // измеряемый сигнал
 long double sxx_filtered[NumberOfPoints]={0};  // тензор проводимости
-long double sxy_filtered[NumberOfPoints]={0};
+long double sxy_filtered[NumberOfPoints]={0};*/
 
-bool silentMode=false; // если флаг равен тру - то функции сохранения не спрашивают имя файла
-// флаг используется для крупных расчетов))
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
@@ -226,8 +288,20 @@ g_Nz_par->Cells[2][0]="подвижность";
 }
 //---------------------------------------------------------------------------
 
-void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
-void ParamsKRT(void);
+void getTenzorFromCarrierParams(MagneticFieldDependences* mfd,CarrierParams* cp);
+void getEffectiveParamsFromTenzor(MagneticFieldDependences* mfd);
+void getSignalsFromEffectiveParams(MagneticFieldDependences* mfd,CarrierParams* cp);
+void getEffectiveParamsFromSignals(MagneticFieldDependences* mfd,CarrierParams* cp);
+void getTenzorFromEffectiveParams(MagneticFieldDependences* mfd);
+void calculateMagneticFieldDependences(MagneticFieldDependences* mfd,CarrierParams* cp);
+void constructPlotFromTwoMassive(long double *x,long double *y,int length,TLineSeries* s,TColor color);
+void constructPlotFromOneMassive(long double *y,int length,TLineSeries* s,TColor color);
+void RoundM(long double * x,int length);
+
+void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,
+long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
+long double thikness,long double cbRatio,long double currentIntensity);
+
 
 
 void getTenzorFromCarrierParams(MagneticFieldDependences* mfd,CarrierParams* cp)
@@ -309,6 +383,7 @@ void calculateMagneticFieldDependences(MagneticFieldDependences* mfd,CarrierPara
 
 void constructPlotFromTwoMassive(long double *x,long double *y,int length,TLineSeries* s,TColor color)
 {
+	s->Clear();
 	for (int i = 0; i < length; i++)
 	{
 		s->AddXY(x[i],y[i],"",color);
@@ -317,6 +392,7 @@ void constructPlotFromTwoMassive(long double *x,long double *y,int length,TLineS
 
 void constructPlotFromOneMassive(long double *y,int length,TLineSeries* s,TColor color)
 {
+	s->Clear();
 	for (int i = 0; i < length; i++)
 	{
 		s->AddY(y[i],"",color);
@@ -342,17 +418,6 @@ void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 
 */
 	ParamsKRT();
-
-	Series1->Clear();     // чистим все графики
-	Series2->Clear();
-	Series5->Clear();
-	LineSeries5->Clear();
-
-	LineSeries1->Clear();
-	LineSeries7->Clear();
-
-	LineSeries3->Clear();
-	LineSeries9->Clear();
 
 	for(int i=0;i<NumberOfCarrierTypes;i++) // читаем значения с формы
 	{
@@ -420,9 +485,6 @@ ShumAdding(IdealParams.Uy,ParamsWithNoise.Uy,vz,Edit5->Text.ToDouble(),NumberOfP
 Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
 Form1->Edit2->Text=FloatToStr(vz[1]); // СКО
 Form1->Edit4->Text=FloatToStr(vz[2]);
-
-Series3->Clear();
-Series4->Clear();
 
 constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,Series3,clRed);
 constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,Series4,clRed);
@@ -510,12 +572,11 @@ Series4->AddXY(B[i],y1[i],"",clRed);
 }
 //---------------------------------------------------------------------------
 // вычисление собственной концентрации электронов
-long double niSob(long double T, long double x)
-
+long double ownConcentrationOfElectrons(long double T, long double x)
 {
-long double k=1.380648813E-23/1.60217646E-19; // постоянная больцмана в электрон-Вольтах
-long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2*x)*T;
-return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2/k/T); // собственная концентрация
+	long double k=1.380648813E-23/1.60217646E-19; // постоянная больцмана в электрон-Вольтах
+	long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2.0*x)*T;
+	return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2./k/T); // собственная концентрация
 }
 
 void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,
@@ -536,8 +597,8 @@ long double thikness,long double cbRatio,long double currentIntensity)
 	long double ml=0.001*m0; // масса легких дырок
 
 	carrierParams->Concentration[1]=pow(ml/mh,1.5)*carrierParams->Concentration[0]*50; // концентрация легких дырок домножена на 50
-	carrierParams->Concentration[2]=-pow(niSob(carrierParams->CurrentTemperature,
-	 carrierParams->MolarCompositionCadmium),2)/carrierParams->Concentration[0];
+	carrierParams->Concentration[2]=-pow(ownConcentrationOfElectrons(carrierParams->CurrentTemperature,
+	carrierParams->MolarCompositionCadmium),2)/carrierParams->Concentration[0];
 
 	carrierParams->Mobility[2]=-carrierParams->AFactor*pow(carrierParams->CurrentTemperature/77.0,-carrierParams->KFactor);
 	carrierParams->Mobility[1]=-0.1*carrierParams->Mobility[2];
@@ -577,46 +638,36 @@ Form2->Show();
 // расчет тензоров на основе измеренных сигналов
 void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
 {
+	getEffectiveParamsFromSignals(&ParamsWithNoise,&carrierParams);
+	getTenzorFromEffectiveParams(&ParamsWithNoise);
 
-LineSeries3->Clear();
-LineSeries9->Clear();
-LineSeries1->Clear();
-LineSeries7->Clear();
-Series3->Clear();
-Series4->Clear();
-Series5->Clear();
-LineSeries5->Clear();
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,LineSeries3,clRed);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,LineSeries9,clRed);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.s_eff,NumberOfPoints,LineSeries1,clRed);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Rh_eff,NumberOfPoints,LineSeries7,clRed);
 
-getEffectiveParamsFromSignals(&ParamsWithNoise,&carrierParams);
-getTenzorFromEffectiveParams(&ParamsWithNoise);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxx,NumberOfPoints,Series5,clRed);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxy,NumberOfPoints,LineSeries5,clRed);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxx,NumberOfPoints,Series3,clRed);
+	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxy,NumberOfPoints,Series4,clRed);
 
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,LineSeries3,clRed);
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,LineSeries9,clRed);
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.s_eff,NumberOfPoints,LineSeries1,clRed);
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Rh_eff,NumberOfPoints,LineSeries7,clRed);
+	// рассчитаем СКО для полученных графиков
 
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxx,NumberOfPoints,Series5,clRed);
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxy,NumberOfPoints,LineSeries5,clRed);
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,Series3,clRed);
-constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,Series4,clRed);
-
-// рассчитаем СКО для полученных графиков
-
-long double sko1=Sko(IdealParams.sxx,ParamsWithNoise.sxx,NumberOfPoints);
-long double sko2=Sko(IdealParams.sxy,ParamsWithNoise.sxy,NumberOfPoints);
-long double shx[NumberOfPoints]={0};
-long double shy[NumberOfPoints]={0};
-for(int i=0;i<NumberOfPoints;i++)
-{
-	shx[i]=ParamsWithNoise.sxx[i]-IdealParams.sxx[i];
-	shy[i]=ParamsWithNoise.sxy[i]-IdealParams.sxy[i];
-}
-long double mx=Mo(shx,NumberOfPoints);
-long double my=Mo(shy,NumberOfPoints);
-Edit1->Text=FloatToStr(sko1);
-Edit2->Text=FloatToStr(sko2);
-Edit3->Text=FloatToStr(mx/Mo(IdealParams.sxx,NumberOfPoints)*100);
-Edit4->Text=FloatToStr(my/Mo(IdealParams.sxy,NumberOfPoints)*100);
+	long double sko1=Sko(IdealParams.sxx,ParamsWithNoise.sxx,NumberOfPoints);
+	long double sko2=Sko(IdealParams.sxy,ParamsWithNoise.sxy,NumberOfPoints);
+	long double shx[NumberOfPoints]={0};
+	long double shy[NumberOfPoints]={0};
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		shx[i]=ParamsWithNoise.sxx[i]-IdealParams.sxx[i];
+		shy[i]=ParamsWithNoise.sxy[i]-IdealParams.sxy[i];
+	}
+	long double mx=Mo(shx,NumberOfPoints);
+	long double my=Mo(shy,NumberOfPoints);
+	Edit1->Text=FloatToStr(sko1);
+	Edit2->Text=FloatToStr(sko2);
+	Edit3->Text=FloatToStr(mx/Mo(IdealParams.sxx,NumberOfPoints)*100);
+	Edit4->Text=FloatToStr(my/Mo(IdealParams.sxy,NumberOfPoints)*100);
 }
 //---------------------------------------------------------------------------
 
@@ -641,12 +692,12 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 Обратно можно не приводить, т.к. во время фильтрации мы издеваемся над графиком, а рассчитываем по массивам.
 
 +12. Сохраняем все точки и 11 точек зашумленных компонент тензора.
-13. Обрабатываем фильтрованный измеренный сигнал, так чтобы он стал пригоден для расчетов.
++13. Обрабатываем фильтрованный измеренный сигнал, так чтобы он стал пригоден для расчетов.
 +14. Выполняем обратный расчет для фильтрованного зашумленного сигнала.
 +15. Сохраняем все точки и 11 точек фильтрованных компонент тензора.
 
 */
-silentMode=true;
+silentModeEnabled=true;
 int h=eStepByTemperature->Text.ToInt(); // шаг по температуре
 int T1=80; // начальная температура
 int Tmax=300; // конечная температура
@@ -758,7 +809,7 @@ for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 		  //--------------------------------------------------------------------
 	 }
 }
-silentMode=false;
+silentModeEnabled=false;
 }
 //---------------------------------------------------------------------------
 
@@ -921,7 +972,7 @@ for (int i = 0; i < 11; i++) {
 	
 }
 
-if (silentMode || sg1->Execute()) {
+if (silentModeEnabled || sg1->Execute()) {
 tsl->SaveToFile(sg1->FileName);
 }
 delete tsl;
@@ -931,7 +982,7 @@ delete tsl;
 void LoadingDataFromFile(TLineSeries * Series1,TLineSeries * Series2)
 {
 TStringList * tls=new TStringList();
-if (silentMode || Form1->sg1->Execute()) {
+if (silentModeEnabled || Form1->sg1->Execute()) {
 tls->LoadFromFile(Form1->sg1->FileName);
 Series1->Clear();
 	  Series2->Clear();
@@ -968,6 +1019,8 @@ delete tls;
 void __fastcall TForm1::bLoadingPlotsClick(TObject *Sender)
 {
 
+// NEED'S UP TO DATE!!!!
+
 if (rbLeftPlot->Checked) // левый
 {
 	LoadingDataFromFile(Series1,Series2);
@@ -977,8 +1030,8 @@ if (rbRightPlot->Checked) // правый
 	LoadingDataFromFile(Series3,Series4);
 	for (int i=0; i < NumberOfPoints; i++)
 	{
-		Us_withNoise[i]=Series3->YValues->Value[i];
-		Uy_withNoise[i]=Series4->YValues->Value[i];
+		ParamsWithNoise.Us[i]=Series3->YValues->Value[i];
+		ParamsWithNoise.Uy[i]=Series4->YValues->Value[i];
 	}
 }
 if (rbFilteredPlot->Checked) // фильтрованный
@@ -1018,8 +1071,8 @@ if (rbIdealPlot->Checked) // идеальный
      //ShowMessage(LineSeries3->YValues->Count);
 
  for (int i=0; i <NumberOfPoints /*LineSeries3->YValues->Count*/; i++) { //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	Us_withNoise[i]=LineSeries3->YValues->Value[i];
-	Uy_withNoise[i]=LineSeries9->YValues->Value[i];
+	ParamsWithNoise.Us[i]=LineSeries3->YValues->Value[i];
+	ParamsWithNoise.Uy[i]=LineSeries9->YValues->Value[i];
  }
 
 
@@ -1095,7 +1148,7 @@ tsl->Add(s);
 
 }
 // если включен тихий режим - имя уже должно быть известно
-if (silentMode || Form1->sg1->Execute()) {
+if (silentModeEnabled || Form1->sg1->Execute()) {
 tsl->SaveToFile(Form1->sg1->FileName);
 }
 delete[] x;
@@ -1117,7 +1170,7 @@ if(s[j]==',')
 tsl->Delete(i);
 tsl->Add(s);
 }
-if (silentMode || Form1->sg1->Execute()) {
+if (silentModeEnabled || Form1->sg1->Execute()) {
 tsl->SaveToFile(Form1->sg1->FileName);
 }
 delete tsl;

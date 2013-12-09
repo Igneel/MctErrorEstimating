@@ -1,14 +1,5 @@
 Functions called:
  delete (21 times)
- sinl (304 times)
- cosl (620 times)
- delete[] (44 times)
- sqrt (404 times)
- log (400 times)
- new[] (44 times)
- time (1 times)
- exp (1 times)
- pow (809 times)
  realloc (1 times)
  memcpy (1 times)
  free (29 times)
@@ -16,11 +7,10 @@ Functions called:
  calloc (10 times)
  malloc (19 times)
 Resource types used:
- object array (44 allocs, 9 max)
  object (30 allocs, 30 max)
  memory block (30 allocs, 19 max)
 Modules used:
- 00400000 11/26/2013 20:04:16 K:\Дела\Институт физики
+ 00400000 12/09/2013 21:59:36 K:\Дела\Институт физики
  полупроводников\La-7\MctErrorEstimating\.\Debug\Win32\Project1.exe
  0CD00000 08/28/2010 04:55:00 J:\Program Files (x86)\Embarcadero\RAD
  Studio\8.0\bin\CG32.DLL
@@ -31,48 +21,48 @@ Modules used:
  42200000 08/28/2010 04:55:00 C:\Windows\system32\Tee9150.bpl
  50030000 08/28/2010 04:55:00 C:\Windows\system32\rtl150.bpl
  50250000 08/28/2010 04:55:00 C:\Windows\system32\vcl150.bpl
- 60F40000 11/21/2010 10:24:02 C:\Windows\AppPatch\AcLayers.DLL
- 64940000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
- 6E980000 11/21/2010 10:24:18 C:\Windows\system32\USERENV.dll
- 6EA10000 07/14/2009 08:16:14 C:\Windows\system32\profapi.dll
- 6EE00000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
- 6EE20000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
- 6F3B0000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
- 6FC70000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
- 6FC90000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
- 6FD20000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
- 6FDE0000 11/21/2010 10:24:16 C:\Windows\system32\apphelp.dll
- 6FE40000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
- 6FF60000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
- 6FFE0000 07/14/2009 08:15:46 C:\Windows\system32\msimg32.dll
- 70230000 11/21/2010 10:23:56
+ 684D0000 11/21/2010 10:24:02 C:\Windows\AppPatch\AcLayers.DLL
+ 6D3C0000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
+ 6F230000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
+ Switcher\pshook.dll
+ 70B40000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
+ 70B80000 11/21/2010 10:24:16 C:\Windows\system32\apphelp.dll
+ 71CD0000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
+ 71D90000 07/14/2009 08:16:14 C:\Windows\system32\profapi.dll
+ 71DA0000 11/21/2010 10:24:18 C:\Windows\system32\USERENV.dll
+ 72290000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
+ 72900000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
+ 72980000 07/14/2009 08:15:46 C:\Windows\system32\msimg32.dll
+ 72BD0000 11/21/2010 10:23:56
  C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.
 7601.17514_none_41e6975e2bd6f2b2\comctl32.dll
- 73AF0000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
- Switcher\pshook.dll
- 748A0000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
- 74970000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
- 74980000 11/24/2012 21:05:50 C:\Windows\syswow64\SspiCli.dll
- 74BB0000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
- 74D10000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
- 74E20000 07/14/2009 08:11:24 C:\Windows\syswow64\LPK.dll
- 74FD0000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
- 750C0000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
- 75150000 11/24/2012 20:54:48 C:\Windows\syswow64\IMAGEHLP.DLL
- 751B0000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
- 751C0000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
- 753D0000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
- 75450000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
- 754F0000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
- 755B0000 11/21/2010 10:24:30 C:\Windows\syswow64\ADVAPI32.dll
- 75650000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
- 757B0000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
- 75810000 10/04/2012 23:47:42 C:\Windows\syswow64\KERNELBASE.dll
- 758B0000 11/21/2010 10:24:16 C:\Windows\syswow64\GDI32.dll
- 75A60000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
- 75B70000 10/04/2012 23:47:42 C:\Windows\syswow64\kernel32.dll
- 75C80000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
- 75CA0000 11/24/2012 20:58:20 C:\Windows\syswow64\SHELL32.dll
- 768F0000 11/21/2010 10:24:12 C:\Windows\syswow64\RPCRT4.dll
- 772A0000 11/24/2012 20:54:24 C:\Windows\SysWOW64\ntdll.dll
+ 736F0000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
+ 73740000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
+ 749C0000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
+ 749E0000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
+ 74A90000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
+ 74B60000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
+ 74B70000 11/24/2012 21:05:50 C:\Windows\syswow64\SspiCli.dll
+ 74D70000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
+ 74D80000 07/14/2009 08:11:24 C:\Windows\syswow64\LPK.dll
+ 74D90000 10/04/2012 23:47:42 C:\Windows\syswow64\kernel32.dll
+ 74EF0000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
+ 74F30000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
+ 74FD0000 11/24/2012 20:54:48 C:\Windows\syswow64\IMAGEHLP.DLL
+ 75000000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
+ 75020000 11/24/2012 20:58:20 C:\Windows\syswow64\SHELL32.dll
+ 75DC0000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
+ 75E50000 10/04/2012 23:47:42 C:\Windows\syswow64\KERNELBASE.dll
+ 75F00000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
+ 76000000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
+ 76060000 11/21/2010 10:24:30 C:\Windows\syswow64\ADVAPI32.dll
+ 76100000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
+ 761B0000 11/21/2010 10:24:16 C:\Windows\syswow64\GDI32.dll
+ 763F0000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
+ 76450000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
+ 764D0000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
+ 76910000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
+ 769E0000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
+ 76AE0000 11/21/2010 10:24:12 C:\Windows\syswow64\RPCRT4.dll
+ 77490000 11/24/2012 20:54:24 C:\Windows\SysWOW64\ntdll.dll
 ==========================================
