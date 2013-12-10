@@ -68,9 +68,17 @@
 			<TASM_Debugging>None</TASM_Debugging>
 		</PropertyGroup>
 		<ItemGroup>
+			<CppCompile Include="clMagneticFiledDepences.cpp">
+				<DependentOn>clMagneticFiledDepences.h</DependentOn>
+				<BuildOrder>7</BuildOrder>
+			</CppCompile>
 			<CppCompile Include="ExtrapolateUnit.cpp">
 				<DependentOn>ExtrapolateUnit.h</DependentOn>
 				<BuildOrder>4</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="film.cpp">
+				<DependentOn>film.h</DependentOn>
+				<BuildOrder>8</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="FilteringUnit.cpp">
 				<DependentOn>FilteringUnit.h</DependentOn>

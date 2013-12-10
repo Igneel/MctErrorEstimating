@@ -40,65 +40,12 @@ TO DO:
 
 */
 
-   /*
-class clMagneticFieldDependences {
-
-	public:
-
-    clMagneticFieldDependences();
-	~clMagneticFieldDependences();
-
-	void getTenzorFromCarrierParams();
-	void getEffectiveParamsFromTenzor();
-	void getSignalsFromEffectiveParams();
-	void getEffectiveParamsFromSignals();
-	void getTenzorFromEffectiveParams();
-	void calculateMagneticFieldDependences();
-
-	private:
-
-	const int Length;
-	long double *sxx;
-	long double *sxy;
-	long double *B;
-	long double *Us; // продольный сигнал
-	long double *Uy; // поперечный сигнал
-	long double *s_eff;
-	long double *Rh_eff;
-};
-
-clMagneticFieldDependences::clMagneticFieldDependences()
-{
-
-}
-
-class film {
-
-	public:
-
-	film();
-	~film();
-
-	void calcutatingCarrierParams(CarrierParams *carrierParams,long double molarCompositionCadmium,
-long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
-long double thikness,long double cbRatio,long double currentIntensity);
-
-	private:
-	long double Thickness;
-	long double CBRatio;
-	long double MolarCompositionCadmium;
-	long double CurrentTemperature;
-	long double CurrentIntensity;
-	long double AFactor;
-	long double KFactor;
-
-	const int NumberOfCarrierTypes;
-
-	long double *Concentration;
-	long double *Mobility;
 
 
-};  // */
+
+
+
+ // */
 
 /*
 
@@ -358,7 +305,7 @@ void getEffectiveParamsFromSignals(MagneticFieldDependences* mfd,CarrierParams* 
 		else
 		{
 			mfd->s_eff[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->Us[i];
-        }
+		}
 		mfd->Rh_eff[i]=cp->Thickness*mfd->Uy[i]/cp->CurrentIntensity;
 	}
 }
