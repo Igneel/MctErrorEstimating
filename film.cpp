@@ -87,6 +87,27 @@ long double film::getCurrentIntensity()
     return CurrentIntensity;
 }
 
+long double film::getAFactor()
+{
+	return AFactor;
+
+}
+
+long double film::getKFactor()
+{
+	return KFactor;
+}
+
+long double film::getMolarCompositionCadmium()
+{
+	return MolarCompositionCadmium;
+}
+
+long double film::getCurrentTemperature()
+{
+    return CurrentTemperature;
+}
+
 long double film::ownConcentrationOfElectrons()
 {
 	long double T=CurrentTemperature;

@@ -330,14 +330,14 @@ for (int i = 0; i < NumberOfPoints; i++) {
 }
 
 ShumAdding(IdealParams.Us,ParamsWithNoise.Us,vz,Edit5->Text.ToDouble(),NumberOfPoints);
-Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
-Form1->Edit1->Text=FloatToStr(vz[1]); // ÑÊÎ
-Form1->Edit3->Text=FloatToStr(vz[2]);
+mDebug->Lines->Add(FloatToStr(vz[0]));
+Edit1->Text=FloatToStr(vz[1]); // ÑÊÎ
+Edit3->Text=FloatToStr(vz[2]);
 
 ShumAdding(IdealParams.Uy,ParamsWithNoise.Uy,vz,Edit5->Text.ToDouble(),NumberOfPoints);
-Form1->mDebug->Lines->Add(FloatToStr(vz[0]));
-Form1->Edit2->Text=FloatToStr(vz[1]); // ÑÊÎ
-Form1->Edit4->Text=FloatToStr(vz[2]);
+mDebug->Lines->Add(FloatToStr(vz[0]));
+Edit2->Text=FloatToStr(vz[1]); // ÑÊÎ
+Edit4->Text=FloatToStr(vz[2]);
 
 constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,Series3,clRed);
 constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,Series4,clRed);

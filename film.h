@@ -22,10 +22,13 @@ class film {
 	long double getThickness();
 	long double getCBRatio();
     long double getCurrentIntensity();
+	long double getCurrentTemperature();
+	long double getAFactor();
+	long double getKFactor();
+
+	long double getMolarCompositionCadmium();
 
 	private:
-
-
 
 	void calcutatingCarrierParams();
 

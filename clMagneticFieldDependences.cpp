@@ -5,20 +5,8 @@
 
 #include "clMagneticFieldDependences.h"
 
-
-
-clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,
-long double molarCompositionCadmium,
-long double Temperature,long double heavyHoleConcentrerion,
-long double AFactor,long double KFactor,
-long double thickness,long double cbRatio,
-long double currentIntensity,long double numberOfCarrierTypes)
-:NumberOfPoints(size),electronCharge(1.60217646E-19),THEALMOSTZERO(0.00000000001)
+void clMagneticFieldDependences::MemoryAllocation()
 {
-	carrierParams = new film(molarCompositionCadmium,Temperature,heavyHoleConcentrerion,
-	AFactor,KFactor,thickness,cbRatio,currentIntensity,numberOfCarrierTypes);
-
-	h=shag;
 	sxx=new long double[NumberOfPoints];
 	sxy=new long double[NumberOfPoints];
 	B=new long double[NumberOfPoints];
@@ -37,6 +25,31 @@ long double currentIntensity,long double numberOfCarrierTypes)
 		s_eff[i]=0;
 		Rh_eff[i]=0;
 	}
+
+}
+
+clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,
+long double molarCompositionCadmium,
+long double Temperature,long double heavyHoleConcentrerion,
+long double AFactor,long double KFactor,
+long double thickness,long double cbRatio,
+long double currentIntensity,long double numberOfCarrierTypes)
+:NumberOfPoints(size),electronCharge(1.60217646E-19),THEALMOSTZERO(0.00000000001)
+{
+	carrierParams = new film(molarCompositionCadmium,Temperature,heavyHoleConcentrerion,
+	AFactor,KFactor,thickness,cbRatio,currentIntensity,numberOfCarrierTypes);
+
+	h=shag;
+	MemoryAllocation();
+}
+
+clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,film * cp)
+{
+	carrierParams = new film(cp->getMolarCompositionCadmium(),
+	cp->getCurrentTemperature(),cp->getConcentration(0),
+	cp->getAFactor(),cp->getKFactor(),cp->getThickness(),
+	cp->getCBRatio(),cp->getCurrentIntensity(),cp->getNumberOfCarrierTypes());
+	MemoryAllocation();
 }
 
 clMagneticFieldDependences::~clMagneticFieldDependences()

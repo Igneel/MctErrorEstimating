@@ -14,8 +14,11 @@ class clMagneticFieldDependences {
 
 	public:
 	clMagneticFieldDependences(int size,long double shag,long double molarCompositionCadmium,
-long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
-long double thickness,long double cbRatio,long double currentIntensity,long double numberOfCarrierTypes);
+	long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
+	long double thickness,long double cbRatio,long double currentIntensity,long double numberOfCarrierTypes);
+
+	clMagneticFieldDependences(int size,long double shag,film * cp);
+
 	~clMagneticFieldDependences();
 
 	void getTenzorFromCarrierParams();
@@ -30,6 +33,8 @@ long double thickness,long double cbRatio,long double currentIntensity,long doub
 	film *carrierParams;
 
 	private:
+
+	void MemoryAllocation();
 
     const long double THEALMOSTZERO;
 
