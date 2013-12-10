@@ -115,6 +115,7 @@ __published:	// IDE-managed Components
 	void __fastcall Button13Click(TObject *Sender);
 	void __fastcall bSaveFilmParamsClick(TObject *Sender);
 	void __fastcall bTestingSomethingClick(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 
 

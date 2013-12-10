@@ -7,45 +7,43 @@
 #include <math.h>
 
 
+
 film::film(long double molarCompositionCadmium,
-long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
+long double Temperature,long double heavyHoleConcentration,long double aFactor,long double kFactor,
 long double thickness,long double cbRatio,long double currentIntensity,
 long double numberOfCarrierTypes):NumberOfCarrierTypes(numberOfCarrierTypes)
 {
 	Concentration=new long double[NumberOfCarrierTypes];
 	Mobility=new long double[NumberOfCarrierTypes];
 
-	calcutatingCarrierParams(molarCompositionCadmium,
-	Temperature,heavyHoleConcentrerion,AFactor,
-	KFactor,thickness,cbRatio,currentIntensity);
+	MolarCompositionCadmium=molarCompositionCadmium;
+	CurrentTemperature=Temperature;
+	Concentration[0]=heavyHoleConcentration;
+	AFactor=aFactor;
+	KFactor=kFactor;
+	Thickness=thickness;
+	CBRatio=cbRatio;
+	CurrentIntensity=currentIntensity;
+
+	calcutatingCarrierParams();
 }
 
 film::~film()
 {
 	delete[] Concentration;
+	Concentration=NULL;
 	delete[] Mobility;
+	Mobility=NULL;
 }
 
-void film::calcutatingCarrierParams(long double molarCompositionCadmium,
-long double Temperature,long double heavyHoleConcentrerion,long double AFactor,
-long double KFactor,long double thickness,long double cbRatio,long double currentIntensity)
+void film::calcutatingCarrierParams()
 {
-	MolarCompositionCadmium=molarCompositionCadmium;
-	CurrentTemperature=Temperature;
-	Concentration[0]=heavyHoleConcentrerion;
-	AFactor=AFactor;
-	KFactor=KFactor;
-	Thickness=thickness;
-	CBRatio=cbRatio;
-	CurrentIntensity=currentIntensity;
-
 	long double m0=9.10938188E-31; // масса электрона хотя она и не нужна в общем-то:)
 	long double mh=0.443*m0; // масса тяжелых дырок
 	long double ml=0.001*m0; // масса легких дырок
 
 	Concentration[1]=pow(ml/mh,1.5)*Concentration[0]*50; // концентрация легких дырок домножена на 50
-	Concentration[2]=-pow(ownConcentrationOfElectrons(CurrentTemperature,
-	MolarCompositionCadmium),2)/Concentration[0];
+	Concentration[2]=-pow(ownConcentrationOfElectrons(),2)/Concentration[0];
 
 	Mobility[2]=-AFactor*pow(CurrentTemperature/77.0,-KFactor);
 	Mobility[1]=-0.1*Mobility[2];
@@ -89,8 +87,10 @@ long double film::getCurrentIntensity()
     return CurrentIntensity;
 }
 
-long double film::ownConcentrationOfElectrons(long double T, long double x)
+long double film::ownConcentrationOfElectrons()
 {
+	long double T=CurrentTemperature;
+	long double x=MolarCompositionCadmium;
 	long double k=1.380648813E-23/1.60217646E-19; // постоянная больцмана в электрон-Вольтах
 	long double Eg=-0.302+1.93*x-0.81*x*x+0.832*x*x*x+5.35E-4*(1-2.0*x)*T;
 	return  (5.585-3.82*x+1.753E-3*T-1.364E-3*x*T)*1E20*pow(Eg,3/4.)*pow(T,1.5)*exp(-Eg/2./k/T); // собственная концентрация

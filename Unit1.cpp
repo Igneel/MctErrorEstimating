@@ -8,6 +8,7 @@
 #include "ExtrapolateUnit.h"
 #include "FilteringUnit.h"
 #include "NoiseUnit.h"
+#include "clMagneticFieldDependences.h"
 #include <math.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -40,112 +41,7 @@ TO DO:
 
 */
 
-
-
-
-
-
  // */
-
-/*
-
-Итак, попробуем изобрести классы
-
-class Film
-
-class Carrier
-
-*/
-  /*
-class carrier
-{
-
-
-public:
-
-long double getMobility() {return Mobility;}
-long double getConcentration() {return Concentration;}
-void setMobility(long double m) {Mobility=m;}
-void setConcentration(long double c) {Concentration=c;}
-
-
-carrier(long double concentration, long double mobility)
-{
-Concentration=concentration;
-Mobility=mobility;
-}
-
-private:
-
-long double Concentration;
-long double Mobility;
-
-};
-
-class film
-{
-public:
-
-film(int numberOfCarriers, long double *carrierParams )
-{
-NumberOfCarriers=numberOfCarriers;
-for (int i=0; i < NumberOfCarriers; i++) {
- Carriers[i] = new carrier(carrierParams[2*i],carrierParams[2*i+1]);
-}
-
-}
-
-void setFilmParams(long double thickness,long double cBRatio,
-long double molarCompositionCadmium,long double currentTemperature,
-long double currentIntensity,long double aFactor,long double kFactor)
-{
-Thickness=thickness;
-CBRatio=cBRatio;
-MolarCompositionCadmium=molarCompositionCadmium;
-CurrentTemperature=currentTemperature;
-CurrentIntensity=currentIntensity;
-AFactor=aFactor;
-KFactor=kFactor;
-}
-
-
-
-private:
-int NumberOfCarriers;
-long double Thickness;
-long double CBRatio;
-long double MolarCompositionCadmium;
-long double CurrentTemperature;
-long double CurrentIntensity;
-long double AFactor;
-long double KFactor;
-carrier **Carriers;
-
-};
-
-class magneticFieldDependences
-{
-public:
-
-magneticFieldDependences(long double B, long double Us, long double Uy)
-{
-;
-}
-
-private:
-
-int Length;
-long double sxx;
-long double sxy;
-long double B;
-long double Us; // продольный сигнал
-long double Uy; // поперечный сигнал
-long double s_eff;
-long double Rh_eff;
-
-
-};    */
-
 
 const long double THEALMOSTZERO=0.00000000001;
 
@@ -168,7 +64,6 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //------------------------------------------------------------------------------
 
 struct MagneticFieldDependences {
-	//const int Length;
 	long double sxx[NumberOfPoints];
 	long double sxy[NumberOfPoints];
 	long double B[NumberOfPoints];
@@ -194,6 +89,10 @@ struct CarrierParams
 MagneticFieldDependences IdealParams;
 MagneticFieldDependences ParamsWithNoise;
 MagneticFieldDependences FilteredParams;
+
+clMagneticFieldDependences *Ip;
+clMagneticFieldDependences *PWN;
+clMagneticFieldDependences *FP;
 
 
 //------------------------------------------------------------------------------
@@ -366,28 +265,35 @@ void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 */
 	ParamsKRT();
 
-	for(int i=0;i<NumberOfCarrierTypes;i++) // читаем значения с формы
-	{
-		carrierParams.Mobility[i]=g_Nz_par->Cells[2][i+1].ToDouble();
-		carrierParams.Concentration[i]=g_Nz_par->Cells[1][i+1].ToDouble();
-	}
-
-	h=g_hsize->Text.ToDouble(); // сохраняем значение шага
-
 	calculateMagneticFieldDependences(&IdealParams,&carrierParams);
 	
-	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxx,NumberOfPoints,Series1,clRed);
+	/*constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxx,NumberOfPoints,Series1,clRed);
 	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxy,NumberOfPoints,Series2,clRed);
 	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxx,NumberOfPoints,Series5,clRed);
 	constructPlotFromTwoMassive(IdealParams.B,IdealParams.sxy,NumberOfPoints,LineSeries5,clRed);
-
-	bGaussianNoiseGenerator->Enabled=1;
 
 	constructPlotFromTwoMassive(IdealParams.B,IdealParams.s_eff,NumberOfPoints,LineSeries1,clRed);
 	constructPlotFromTwoMassive(IdealParams.B,IdealParams.Rh_eff,NumberOfPoints,LineSeries7,clRed);
 
 	constructPlotFromOneMassive(IdealParams.Us,NumberOfPoints,LineSeries3,clRed);
-	constructPlotFromOneMassive(IdealParams.Uy,NumberOfPoints,LineSeries9,clRed);
+	constructPlotFromOneMassive(IdealParams.Uy,NumberOfPoints,LineSeries9,clRed);    */
+
+    //------------------Классы--------------------------------------------------
+	Ip->calculateMagneticFieldDependences();
+
+	Ip->constructPlotFromTwoMassive(SXX,Series1,clRed);
+	Ip->constructPlotFromTwoMassive(SXY,Series2,clRed);
+	Ip->constructPlotFromTwoMassive(SXX,Series5,clRed);
+	Ip->constructPlotFromTwoMassive(SXY,LineSeries5,clRed);
+
+	Ip->constructPlotFromTwoMassive(S_EFF,LineSeries1,clRed);
+	Ip->constructPlotFromTwoMassive(RH_EFF,LineSeries7,clRed);
+
+	Ip->constructPlotFromOneMassive(US,LineSeries3,clRed);
+	Ip->constructPlotFromOneMassive(UY,LineSeries9,clRed);
+
+	//------------------Классы--------------------------------------------------
+	bGaussianNoiseGenerator->Enabled=1;
 }
 //---------------------------------------------------------------------------
 // округление результатов при сохранении, необходимо потому что если этого не сделать
@@ -439,7 +345,7 @@ constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,
 tenzorCalculating->Enabled=1;
 }
 //---------------------------------------------------------------------------
-// сохранение зашумленных результатов
+// сохранение результатов
 void __fastcall TForm1::bSaveAllPointsClick(TObject *Sender)
 {
 if (rbLeftPlot->Checked)
@@ -566,6 +472,24 @@ void ParamsKRT(void)
 	Form1->g_Nz_par->Cells[2][2]=FloatToStr(carrierParams.Mobility[1]);
 	Form1->g_Nz_par->Cells[1][3]=FloatToStr(carrierParams.Concentration[0]);
 	Form1->g_Nz_par->Cells[2][3]=FloatToStr(carrierParams.Mobility[0]);
+
+	h=Form1->g_hsize->Text.ToDouble(); // сохраняем значение шага
+
+	//--------------------------Классы------------------------------------------
+    Ip=new clMagneticFieldDependences(NumberOfPoints,h,
+	Form1->eMolarCompositionCadmium->Text.ToDouble(),
+	Form1->eTemperature->Text.ToDouble(),Form1->eHeavyHoleConcentration->Text.ToDouble(),
+	Form1->eAFactor->Text.ToDouble(),Form1->eKFactor->Text.ToDouble(),
+	Form1->eSampleThickness->Text.ToDouble(),Form1->eCBRatio->Text.ToDouble(),
+	Form1->eCurrentIntensity->Text.ToDouble(),NumberOfCarrierTypes);
+
+	Form1->g_Nz_par->Cells[1][1]=FloatToStr(Ip->carrierParams->getConcentration(2));
+	Form1->g_Nz_par->Cells[2][1]=FloatToStr(Ip->carrierParams->getMobility(2));
+	Form1->g_Nz_par->Cells[1][2]=FloatToStr(Ip->carrierParams->getConcentration(1));
+	Form1->g_Nz_par->Cells[2][2]=FloatToStr(Ip->carrierParams->getMobility(1));
+	Form1->g_Nz_par->Cells[1][3]=FloatToStr(Ip->carrierParams->getConcentration(0));
+	Form1->g_Nz_par->Cells[2][3]=FloatToStr(Ip->carrierParams->getMobility(0));
+	//--------------------------Классы------------------------------------------
 
 	Form1->bCalculateCarrierParams->Enabled=true;
 	Form1->BuildingPlots->Enabled=1;
@@ -1139,4 +1063,13 @@ extrapolate5Degree(Series2, 0, 2.5, 0.2,Series4);
 
 
 
+
+
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+delete Ip;
+delete PWN;
+delete FP;
+}
+//---------------------------------------------------------------------------
 

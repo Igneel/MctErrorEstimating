@@ -3,8 +3,9 @@
 
 #pragma hdrstop
 
-#include "clMagneticFiledDepences.h"
-#include <math.h>
+#include "clMagneticFieldDependences.h"
+
+
 
 clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,
 long double molarCompositionCadmium,
@@ -12,7 +13,7 @@ long double Temperature,long double heavyHoleConcentrerion,
 long double AFactor,long double KFactor,
 long double thickness,long double cbRatio,
 long double currentIntensity,long double numberOfCarrierTypes)
-:NumberOfPoints(size),electronCharge(1.60217646E-19)
+:NumberOfPoints(size),electronCharge(1.60217646E-19),THEALMOSTZERO(0.00000000001)
 {
 	carrierParams = new film(molarCompositionCadmium,Temperature,heavyHoleConcentrerion,
 	AFactor,KFactor,thickness,cbRatio,currentIntensity,numberOfCarrierTypes);
@@ -40,6 +41,7 @@ long double currentIntensity,long double numberOfCarrierTypes)
 
 clMagneticFieldDependences::~clMagneticFieldDependences()
 {
+	delete carrierParams;
 	delete[] sxx;
 	delete[] sxy;
 	delete[] B;
@@ -113,66 +115,76 @@ void clMagneticFieldDependences::getEffectiveParamsFromSignals()
 
 void clMagneticFieldDependences::getTenzorFromEffectiveParams()
 {
-
+	for (int i = 0; i < NumberOfPoints ; i++)
+	{
+		sxx[i]=s_eff[i]/
+			(Rh_eff[i]*Rh_eff[i]*s_eff[i]*s_eff[i]+1);
+		sxy[i]=s_eff[i]*s_eff[i]*Rh_eff[i]/
+		   (Rh_eff[i]*Rh_eff[i]*s_eff[i]*s_eff[i]+1);
+	}
 }
 
 void clMagneticFieldDependences::calculateMagneticFieldDependences()
 {
-
+	getTenzorFromCarrierParams();
+	getEffectiveParamsFromTenzor();
+	getSignalsFromEffectiveParams();
 }
 
-/*
 
-void getSignalsFromEffectiveParams(MagneticFieldDependences* mfd,CarrierParams* cp)
-{
-	for(int i=0;i<NumberOfPoints;i++)
-	{
-		mfd->Us[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->s_eff[i];
-		mfd->Uy[i]=mfd->Rh_eff[i]*cp->CurrentIntensity/cp->Thickness;
-	}
-
-}
-
-void getEffectiveParamsFromSignals(MagneticFieldDependences* mfd,CarrierParams* cp)
-{
-	for (int i = 0; i < NumberOfPoints ; i++)
-	{
-		if(fabs(mfd->Us[i])<THEALMOSTZERO)
-			mfd->s_eff[i]=0;
-		else
-		{
-			mfd->s_eff[i]=cp->CBRatio/cp->Thickness*cp->CurrentIntensity/mfd->Us[i];
-		}
-		mfd->Rh_eff[i]=cp->Thickness*mfd->Uy[i]/cp->CurrentIntensity;
-	}
-}
-
-void getTenzorFromEffectiveParams(MagneticFieldDependences* mfd)
-{
-	for (int i = 0; i < NumberOfPoints ; i++)
-	{
-		mfd->sxx[i]=mfd->s_eff[i]/
-			(mfd->Rh_eff[i]*mfd->Rh_eff[i]*mfd->s_eff[i]*mfd->s_eff[i]+1);
-		mfd->sxy[i]=mfd->s_eff[i]*mfd->s_eff[i]*mfd->Rh_eff[i]/
-		   (mfd->Rh_eff[i]*mfd->Rh_eff[i]*mfd->s_eff[i]*mfd->s_eff[i]+1);
-    }
-}
-
-void calculateMagneticFieldDependences(MagneticFieldDependences* mfd,CarrierParams* cp)
-{
-	getTenzorFromCarrierParams(mfd,cp);
-	getEffectiveParamsFromTenzor(mfd);
-	getSignalsFromEffectiveParams(mfd,cp);
-}
-
-void constructPlotFromTwoMassive(long double *x,long double *y,int length,TLineSeries* s,TColor color)
+void clMagneticFieldDependences::constructPlotFromTwoMassive(ChartType type,TLineSeries* s,TColor color)
 {
 	s->Clear();
-	for (int i = 0; i < length; i++)
+	long double *y=0;
+	switch(type)
 	{
-		s->AddXY(x[i],y[i],"",color);
+	case SXX: y=sxx;
+		break;
+	case SXY: y=sxy;
+		break;
+	case US: y=Us;
+		break;
+	case UY: y=Uy;
+		break;
+	case S_EFF: y=s_eff;
+		break;
+	case RH_EFF: y=Rh_eff;
+		break;
+	}
+
+	for (int i = 0; i < NumberOfPoints; i++)
+	{
+		s->AddXY(B[i],y[i],"",color);
 	}
 }
+
+void clMagneticFieldDependences::constructPlotFromOneMassive(ChartType type, TLineSeries* s,TColor color)
+{
+	s->Clear();
+	long double *y=0;
+	switch(type)
+	{
+	case SXX: y=sxx;
+		break;
+	case SXY: y=sxy;
+		break;
+	case US: y=Us;
+		break;
+	case UY: y=Uy;
+		break;
+	case S_EFF: y=s_eff;
+		break;
+	case RH_EFF: y=Rh_eff;
+		break;
+	}
+	for (int i = 0; i < NumberOfPoints; i++)
+	{
+		s->AddY(y[i],"",color);
+	}
+}
+
+
+/*
 
 void constructPlotFromOneMassive(long double *y,int length,TLineSeries* s,TColor color)
 {

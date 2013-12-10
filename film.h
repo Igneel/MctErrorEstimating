@@ -8,7 +8,7 @@ class film {
 	public:
 
 	film(long double molarCompositionCadmium,
-	long double Temperature,long double heavyHoleConcentrerion,
+	long double Temperature,long double heavyHoleConcentration,
 	long double AFactor,long double KFactor,
 	long double thickness,long double cbRatio,
 	long double currentIntensity,long double numberOfCarrierTypes);
@@ -26,12 +26,10 @@ class film {
 	private:
 
 
-	static const long double THEALMOSTZERO=0.00000000001;
-	void calcutatingCarrierParams(long double molarCompositionCadmium,
-	long double Temperature,long double heavyHoleConcentrerion,long double AFactor,
-	long double KFactor,long double thickness,long double cbRatio,long double currentIntensity);
-    long double ownConcentrationOfElectrons(long double T, long double x);
 
+	void calcutatingCarrierParams();
+
+	long double ownConcentrationOfElectrons();
 	long double Thickness;
 	long double CBRatio;
 	long double MolarCompositionCadmium;
