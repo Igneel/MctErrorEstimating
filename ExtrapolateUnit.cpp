@@ -203,21 +203,21 @@ for (int i = 0; i < length; i++) {
     }
 
 
-// прибираемся.
-for (int i = 0; i < a; i++) {
-	delete[] K5[i];
-}
+	// прибираемся.
+	for (int i = 0; i < a; i++) {
+		delete[] K5[i];
+	}
 
-for (int i = 0; i < length; i++) {
-	delete[] fullMatrix[i];
-}
-delete[] fullMatrix;
-for (int i = 0; i < a; i++) {
-		for (int j = 0; j < a; j++) {
-			delete[] delta[i][j];
+	for (int i = 0; i < length; i++) {
+		delete[] fullMatrix[i];
 	}
-			 delete[] delta[i];
-	}
+	delete[] fullMatrix;
+	for (int i = 0; i < a; i++) {
+			for (int j = 0; j < a; j++) {
+				delete[] delta[i][j];
+		}
+				 delete[] delta[i];
+		}
 
 }
 //---------------------------------------------------------------------------

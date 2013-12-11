@@ -1,26 +1,27 @@
 Functions called:
- delete (39 times)
- sinl (640 times)
- cosl (1300 times)
- delete[] (157 times)
- sqrt (1206 times)
- log (1200 times)
- time (3 times)
- new[] (157 times)
- exp (10 times)
- pow (1256 times)
+ delete (27 times)
+ sinl (48 times)
+ cosl (100 times)
+ ceil (2 times)
+ delete[] (43 times)
+ sqrt (404 times)
+ log (400 times)
+ time (1 times)
+ exp (3 times)
+ pow (819 times)
+ new[] (43 times)
  realloc (1 times)
  memcpy (1 times)
  free (29 times)
- new (48 times)
+ new (36 times)
  calloc (10 times)
  malloc (19 times)
 Resource types used:
- object array (157 allocs, 36 max)
- object (48 allocs, 36 max)
+ object array (43 allocs, 36 max)
+ object (36 allocs, 36 max)
  memory block (30 allocs, 19 max)
 Modules used:
- 00400000 12/11/2013 18:26:46 K:\Дела\Институт физики
+ 00400000 12/11/2013 20:16:34 K:\Дела\Институт физики
  полупроводников\La-7\MctErrorEstimating\.\Debug\Win32\Project1.exe
  0CD00000 08/28/2010 04:55:00 J:\Program Files (x86)\Embarcadero\RAD
  Studio\8.0\bin\CG32.DLL

@@ -247,8 +247,8 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 {
 	long double * tempInB=new long double[2*NumberOfPoints];
 	long double * tempInSignal=new long double[2*NumberOfPoints];
-	long double * tempOutB=new long double[2*NumberOfPoints];
-	long double * tempOutSignal=new long double[2*NumberOfPoints];
+	long double * tempOutB=new long double[2*NumberOfPoints+ceil(lengthFilter/2.0)];
+	long double * tempOutSignal=new long double[2*NumberOfPoints+ceil(lengthFilter/2.0)];
 
 	for (int i = 0; i < NumberOfPoints; i++)
 	{
