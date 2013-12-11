@@ -28,28 +28,35 @@ void clMagneticFieldDependences::MemoryAllocation()
 
 }
 
+const long double clMagneticFieldDependences::THEALMOSTZERO=0.00000000001;
+const long double clMagneticFieldDependences::electronCharge=1.60217646E-19;
+
 clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,
 long double molarCompositionCadmium,
 long double Temperature,long double heavyHoleConcentrerion,
 long double AFactor,long double KFactor,
 long double thickness,long double cbRatio,
 long double currentIntensity,long double numberOfCarrierTypes)
-:NumberOfPoints(size),electronCharge(1.60217646E-19),THEALMOSTZERO(0.00000000001)
+:NumberOfPoints(size)
 {
 	carrierParams = new film(molarCompositionCadmium,Temperature,heavyHoleConcentrerion,
 	AFactor,KFactor,thickness,cbRatio,currentIntensity,numberOfCarrierTypes);
 
 	h=shag;
-	MemoryAllocation();
+    MemoryAllocation();
+	calculateMagneticFieldPoints();
 }
 
 clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,film * cp)
+:NumberOfPoints(size)
 {
-	carrierParams = new film(cp->getMolarCompositionCadmium(),
+	h=shag;
+    carrierParams = new film(cp->getMolarCompositionCadmium(),
 	cp->getCurrentTemperature(),cp->getConcentration(0),
 	cp->getAFactor(),cp->getKFactor(),cp->getThickness(),
 	cp->getCBRatio(),cp->getCurrentIntensity(),cp->getNumberOfCarrierTypes());
 	MemoryAllocation();
+	calculateMagneticFieldPoints();
 }
 
 clMagneticFieldDependences::~clMagneticFieldDependences()
@@ -64,15 +71,18 @@ clMagneticFieldDependences::~clMagneticFieldDependences()
 	delete[] Rh_eff;
 }
 
-void clMagneticFieldDependences::getTenzorFromCarrierParams()
+void clMagneticFieldDependences::calculateMagneticFieldPoints()
 {
 	B[0]=0;
-
 	for(int i=1;i<NumberOfPoints;i++)
 	{
 		B[i]=B[i-1]+h;  // это наше магнитное поле
 	}
 
+}
+
+void clMagneticFieldDependences::calculateTenzorFromCarrierParams()
+{
 	for(int i=0;i<NumberOfPoints;i++)
 	{
 		sxx[i]=sxy[i]=0;
@@ -92,7 +102,7 @@ void clMagneticFieldDependences::getTenzorFromCarrierParams()
 
 }
 
-void clMagneticFieldDependences::getEffectiveParamsFromTenzor()
+void clMagneticFieldDependences::calculateEffectiveParamsFromTenzor()
 {
 	for(int i=0;i<NumberOfPoints;i++)
 	{
@@ -102,7 +112,7 @@ void clMagneticFieldDependences::getEffectiveParamsFromTenzor()
 
 }
 
-void clMagneticFieldDependences::getSignalsFromEffectiveParams()
+void clMagneticFieldDependences::calculateSignalsFromEffectiveParams()
 {
 	for(int i=0;i<NumberOfPoints;i++)
 	{
@@ -111,7 +121,7 @@ void clMagneticFieldDependences::getSignalsFromEffectiveParams()
 	}
 
 }
-void clMagneticFieldDependences::getEffectiveParamsFromSignals()
+void clMagneticFieldDependences::calculateEffectiveParamsFromSignals()
 {
 	for (int i = 0; i < NumberOfPoints ; i++)
 	{
@@ -126,7 +136,7 @@ void clMagneticFieldDependences::getEffectiveParamsFromSignals()
 
 }
 
-void clMagneticFieldDependences::getTenzorFromEffectiveParams()
+void clMagneticFieldDependences::calculateTenzorFromEffectiveParams()
 {
 	for (int i = 0; i < NumberOfPoints ; i++)
 	{
@@ -139,9 +149,9 @@ void clMagneticFieldDependences::getTenzorFromEffectiveParams()
 
 void clMagneticFieldDependences::calculateMagneticFieldDependences()
 {
-	getTenzorFromCarrierParams();
-	getEffectiveParamsFromTenzor();
-	getSignalsFromEffectiveParams();
+	calculateTenzorFromCarrierParams();
+	calculateEffectiveParamsFromTenzor();
+	calculateSignalsFromEffectiveParams();
 }
 
 
@@ -197,16 +207,94 @@ void clMagneticFieldDependences::constructPlotFromOneMassive(ChartType type, TLi
 }
 
 
-/*
-
-void constructPlotFromOneMassive(long double *y,int length,TLineSeries* s,TColor color)
+long double const * clMagneticFieldDependences::getSignalUs()
 {
-	s->Clear();
-	for (int i = 0; i < length; i++)
-	{
-		s->AddY(y[i],"",color);
-	}
+    return Us;
 }
+
+long double const * clMagneticFieldDependences::getSignalUy()
+{
+    return Uy;
+}
+
+long double const * clMagneticFieldDependences::getSxx()
+{
+	return sxx;
+}
+
+long double const * clMagneticFieldDependences::getSxy()
+{
+    return sxy;
+}
+
+int clMagneticFieldDependences::modifySignals
+(void (*ShumAdding)(const long double *,long double *,long double *,
+long double,const int),const long double * idealUs,const long double * idealUy,long double *returnData,long double koeff)
+{
+	ShumAdding(idealUs,Us,returnData,koeff,NumberOfPoints);
+	ShumAdding(idealUy,Uy,(returnData+3),koeff,NumberOfPoints);
+
+	calculateEffectiveParamsFromSignals();
+	calculateTenzorFromEffectiveParams();
+
+    return 6;
+}
+
+int clMagneticFieldDependences::modifySignals(double (*TrForMassiveFilter)(long double *inB,
+long double *inY,long double* outB,long double *outY,
+int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh),
+const long double * idealUs,const long double * idealUy,int lengthFilter)
+{
+	long double * tempInB=new long double[2*NumberOfPoints];
+	long double * tempInSignal=new long double[2*NumberOfPoints];
+	long double * tempOutB=new long double[2*NumberOfPoints];
+	long double * tempOutSignal=new long double[2*NumberOfPoints];
+
+	for (int i = 0; i < NumberOfPoints; i++)
+	{
+		tempInSignal[i]=-idealUs[NumberOfPoints-i-1]+2*idealUs[0];
+		tempInB[i]=-B[NumberOfPoints-i-1];
+		tempInSignal[i+NumberOfPoints]=idealUs[i];
+		tempInB[i+NumberOfPoints]=B[i];
+	}
+
+	TrForMassiveFilter(tempInB,tempInSignal,tempOutB,tempOutSignal,2*NumberOfPoints,lengthFilter,5000,15,25);
+
+	// надо добавить обработку полученных результатов после фильтрации.
+	// и экстрапол€цию
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+        Us[i]=tempOutSignal[i+NumberOfPoints-1];
+    }
+
+	for (int i = 0; i < NumberOfPoints; i++)
+	{
+		tempInSignal[i]=-idealUy[NumberOfPoints-i-1]+2*idealUy[0];
+		tempInB[i]=-B[NumberOfPoints-i-1];
+		tempInSignal[i+NumberOfPoints]=idealUy[i];
+		tempInB[i+NumberOfPoints]=B[i];
+	}
+
+	TrForMassiveFilter(tempInB,tempInSignal,tempOutB,tempOutSignal,2*NumberOfPoints,lengthFilter,5000,15,25);
+
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		B[i]=tempOutB[i+NumberOfPoints-1];
+		Uy[i]=tempOutSignal[i+NumberOfPoints-1];
+	}
+
+	calculateEffectiveParamsFromSignals();
+	calculateTenzorFromEffectiveParams();
+
+	delete[] tempInB;
+	delete[] tempInSignal;
+	delete[] tempOutB;
+	delete[] tempOutSignal;
+
+	return 1;
+}
+
+/*
    */
 //---------------------------------------------------------------------------
 

@@ -36,7 +36,7 @@ i=i;
 // расчет среднего квадратичного отклонения
 //--------------------------------------------------------------------------
 
-long double Sko (const long double *x0,long double *x,int l)
+long double Sko (const long double *x0,const long double *x,int l)
 {
 long double z=0;
 for(int i=0;i<l;i++)

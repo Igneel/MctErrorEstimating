@@ -90,9 +90,9 @@ MagneticFieldDependences IdealParams;
 MagneticFieldDependences ParamsWithNoise;
 MagneticFieldDependences FilteredParams;
 
-clMagneticFieldDependences *Ip;
-clMagneticFieldDependences *PWN;
-clMagneticFieldDependences *FP;
+clMagneticFieldDependences *Ip=0;
+clMagneticFieldDependences *PWN=0;
+clMagneticFieldDependences *FP=0;
 
 
 //------------------------------------------------------------------------------
@@ -250,7 +250,8 @@ void constructPlotFromOneMassive(long double *y,int length,TLineSeries* s,TColor
 // расчет тензоров проводимости
 void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 {
-
+if(Ip!=0)
+delete Ip;
 /*
 
 Читаем концентрации и подвижности с формы.
@@ -319,13 +320,35 @@ void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 К идеальным значениям сигнала добавляется шум.
 Выводится на экран.
 */
+//--------------------Классы----------------------------------------------------
 
 srand(time(NULL));
+
+long double vz[6]={0};  // М СКО и СКО в %
+if(PWN!=0)
+delete PWN;
+PWN= new clMagneticFieldDependences(NumberOfPoints,h,Ip->carrierParams);
+PWN->modifySignals(ShumAdding,Ip->getSignalUs(),Ip->getSignalUy(),vz,Edit5->Text.ToDouble());
+
+mDebug->Lines->Add(FloatToStr(vz[0]));
+Edit1->Text=FloatToStr(vz[1]); // СКО
+Edit3->Text=FloatToStr(vz[2]);
+
+mDebug->Lines->Add(FloatToStr(vz[3]));
+Edit2->Text=FloatToStr(vz[4]); // СКО
+Edit4->Text=FloatToStr(vz[5]);
+
+PWN->constructPlotFromTwoMassive(US,Series3,clRed);
+PWN->constructPlotFromTwoMassive(UY,Series4,clRed);
+
+//--------------------Классы----------------------------------------------------
+
+
+
+/*srand(time(NULL));
 long double vz[3]={0};  // М СКО и СКО в %
 
 for (int i = 0; i < NumberOfPoints; i++) {
-	ParamsWithNoise.Us[i]=IdealParams.Us[i];
-	ParamsWithNoise.Uy[i]=IdealParams.Uy[i];
 	ParamsWithNoise.B[i]=IdealParams.B[i];
 }
 
@@ -341,7 +364,7 @@ Edit4->Text=FloatToStr(vz[2]);
 
 constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,Series3,clRed);
 constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Uy,NumberOfPoints,Series4,clRed);
-
+                             */
 tenzorCalculating->Enabled=1;
 }
 //---------------------------------------------------------------------------
@@ -509,7 +532,37 @@ Form2->Show();
 // расчет тензоров на основе измеренных сигналов
 void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
 {
-	getEffectiveParamsFromSignals(&ParamsWithNoise,&carrierParams);
+
+//-----------------------------Классы-------------------------------------------
+	PWN->constructPlotFromTwoMassive(US,LineSeries3,clRed);
+	PWN->constructPlotFromTwoMassive(UY,LineSeries9,clRed);
+	PWN->constructPlotFromTwoMassive(S_EFF,LineSeries1,clRed);
+	PWN->constructPlotFromTwoMassive(RH_EFF,LineSeries7,clRed);
+
+	PWN->constructPlotFromTwoMassive(SXX,Series5,clRed);
+	PWN->constructPlotFromTwoMassive(SXY,LineSeries5,clRed);
+	PWN->constructPlotFromTwoMassive(SXX,Series3,clRed);
+	PWN->constructPlotFromTwoMassive(SXY,Series4,clRed);
+
+	long double sko1=Sko(Ip->getSxx(),PWN->getSxx(),NumberOfPoints);
+	long double sko2=Sko(Ip->getSxy(),PWN->getSxy(),NumberOfPoints);
+	long double shx[NumberOfPoints]={0};
+	long double shy[NumberOfPoints]={0};
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		shx[i]=PWN->getSxx()[i]-Ip->getSxx()[i];
+		shy[i]=PWN->getSxy()[i]-Ip->getSxy()[i];
+	}
+	long double mx=Mo(shx,NumberOfPoints);
+	long double my=Mo(shy,NumberOfPoints);
+	Edit1->Text=FloatToStr(sko1);
+	Edit2->Text=FloatToStr(sko2);
+	Edit3->Text=FloatToStr(mx/Mo(Ip->getSxx(),NumberOfPoints)*100);
+	Edit4->Text=FloatToStr(my/Mo(Ip->getSxy(),NumberOfPoints)*100);
+
+
+//-----------------------------Классы_------------------------------------------
+   /*	getEffectiveParamsFromSignals(&ParamsWithNoise,&carrierParams);
 	getTenzorFromEffectiveParams(&ParamsWithNoise);
 
 	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.Us,NumberOfPoints,LineSeries3,clRed);
@@ -521,10 +574,10 @@ void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
 	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxy,NumberOfPoints,LineSeries5,clRed);
 	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxx,NumberOfPoints,Series3,clRed);
 	constructPlotFromTwoMassive(ParamsWithNoise.B,ParamsWithNoise.sxy,NumberOfPoints,Series4,clRed);
-
+	*/
 	// рассчитаем СКО для полученных графиков
 
-	long double sko1=Sko(IdealParams.sxx,ParamsWithNoise.sxx,NumberOfPoints);
+	/*long double sko1=Sko(IdealParams.sxx,ParamsWithNoise.sxx,NumberOfPoints);
 	long double sko2=Sko(IdealParams.sxy,ParamsWithNoise.sxy,NumberOfPoints);
 	long double shx[NumberOfPoints]={0};
 	long double shy[NumberOfPoints]={0};
@@ -538,7 +591,7 @@ void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
 	Edit1->Text=FloatToStr(sko1);
 	Edit2->Text=FloatToStr(sko2);
 	Edit3->Text=FloatToStr(mx/Mo(IdealParams.sxx,NumberOfPoints)*100);
-	Edit4->Text=FloatToStr(my/Mo(IdealParams.sxy,NumberOfPoints)*100);
+	Edit4->Text=FloatToStr(my/Mo(IdealParams.sxy,NumberOfPoints)*100);   */
 }
 //---------------------------------------------------------------------------
 
@@ -725,6 +778,19 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 
 	*/
 
+
+ //------------------Классы-----------------------------------------------------
+ if(FP!=0)
+ delete FP;
+
+ FP=new clMagneticFieldDependences(NumberOfPoints,h,Ip->carrierParams);
+ FP->modifySignals(TrForMassiveFilter,PWN->getSignalUs(),PWN->getSignalUy(),eFilterLength->Text.ToInt());
+
+ FP->constructPlotFromTwoMassive(US,Series7,clBlue);
+ FP->constructPlotFromTwoMassive(UY,Series8,clBlue);
+
+ //------------------Классы-----------------------------------------------------
+ /*
  long double *x=new long double[2*NumberOfPoints];
  long double *y=new long double[2*NumberOfPoints];
 
@@ -774,7 +840,7 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 
 //Tr_Filter(Series3,Series7,eFilterLength->Text.ToInt(),5000,15,25);
 //Tr_Filter(Series4,Series8,eFilterLength->Text.ToInt(),5000,15,25);
-
+               */
 }
 
 
@@ -1070,6 +1136,10 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 delete Ip;
 delete PWN;
 delete FP;
+
+Ip=0;
+PWN=0;
+FP=0;
 }
 //---------------------------------------------------------------------------
 

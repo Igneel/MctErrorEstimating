@@ -21,11 +21,22 @@ class clMagneticFieldDependences {
 
 	~clMagneticFieldDependences();
 
-	void getTenzorFromCarrierParams();
-	void getEffectiveParamsFromTenzor();
-	void getSignalsFromEffectiveParams();
-	void getEffectiveParamsFromSignals();
-	void getTenzorFromEffectiveParams();
+	long double const * getSignalUs();
+	long double const * getSignalUy();
+	long double const * getSxx();
+	long double const * getSxy();
+
+	int modifySignals(void (*ShumAdding)(const long double *x,long double *out,long double *ret, long double koeff,const int l),
+	const long double * idealUs,const long double * idealUy,long double *returnData,long double koeff);
+
+	int modifySignals(double (*TrForMassiveFilter)(long double *inB,
+	long double *inY,long double* outB,long double *outY,
+	int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh),
+	const long double * idealUs,const long double * idealUy,int lengthFilter);
+
+
+	void calculateEffectiveParamsFromSignals();
+	void calculateTenzorFromEffectiveParams();
 	void calculateMagneticFieldDependences();
 	void constructPlotFromTwoMassive(ChartType type,TLineSeries* s,TColor color);
     void constructPlotFromOneMassive(ChartType type, TLineSeries* s,TColor color);
@@ -34,11 +45,14 @@ class clMagneticFieldDependences {
 
 	private:
 
+	void calculateTenzorFromCarrierParams();
+	void calculateEffectiveParamsFromTenzor();
+	void calculateSignalsFromEffectiveParams();
+	void calculateMagneticFieldPoints();
 	void MemoryAllocation();
 
-    const long double THEALMOSTZERO;
-
-    long double electronCharge;
+	static const long double THEALMOSTZERO;
+    static const long double electronCharge;
 
 	long double h;
 	const int NumberOfPoints;
