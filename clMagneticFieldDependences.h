@@ -8,7 +8,8 @@
 
 #include <Series.hpp>
 
-enum ChartType {SXX,SXY,US,UY,S_EFF,RH_EFF};
+enum SignalType {SXX,SXY,US,UY,S_EFF,RH_EFF};
+enum FileSaveMode {ALL_POINTS, SOME_POINTS}; // сейчас SOME_POINTS - это конечно 11 точек.
 
 class clMagneticFieldDependences {
 
@@ -18,6 +19,9 @@ class clMagneticFieldDependences {
 	long double thickness,long double cbRatio,long double currentIntensity,long double numberOfCarrierTypes);
 
 	clMagneticFieldDependences(int size,long double shag,film * cp);
+
+	//loadDataFromFile(ChartType * type, string )
+	bool saveDataToFile(SignalType type, FileSaveMode saveMode, String filePath);
 
 	~clMagneticFieldDependences();
 
@@ -38,8 +42,8 @@ class clMagneticFieldDependences {
 	void calculateEffectiveParamsFromSignals();
 	void calculateTenzorFromEffectiveParams();
 	void calculateMagneticFieldDependences();
-	void constructPlotFromTwoMassive(ChartType type,TLineSeries* s,TColor color);
-    void constructPlotFromOneMassive(ChartType type, TLineSeries* s,TColor color);
+	void constructPlotFromTwoMassive(SignalType type,TLineSeries* s,TColor color);
+	void constructPlotFromOneMassive(SignalType type, TLineSeries* s,TColor color);
 
 	film *carrierParams;
 
@@ -48,8 +52,8 @@ class clMagneticFieldDependences {
 	void calculateTenzorFromCarrierParams();
 	void calculateEffectiveParamsFromTenzor();
 	void calculateSignalsFromEffectiveParams();
-	void calculateMagneticFieldPoints();
-	void MemoryAllocation();
+	void calculateMagneticFieldPoints(); // расчет точек магнитного поля.
+	void MemoryAllocation(); // выделение памяти.
 
 	static const long double THEALMOSTZERO;
     static const long double electronCharge;

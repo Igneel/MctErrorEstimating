@@ -58,7 +58,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 //------------------------------------------------------------------------------
 
-
+// те самые объекты.
 clMagneticFieldDependences *IdealParams=0;
 clMagneticFieldDependences *ParamsWithNoise=0;
 clMagneticFieldDependences *FilteredParams=0;
@@ -171,7 +171,7 @@ void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 
 	long double vz[6]={0};  // М СКО и СКО в %
 	if(ParamsWithNoise!=0)
-	delete ParamsWithNoise;
+		delete ParamsWithNoise;
 	ParamsWithNoise= new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
 	ParamsWithNoise->modifySignals(ShumAdding,IdealParams->getSignalUs(),IdealParams->getSignalUy(),vz,Edit5->Text.ToDouble());
 
@@ -369,6 +369,11 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 	if (sg1->Execute()) {
 		mDebug->Lines->Add( sg1->FileName); // выводим его в мемо
 	}
+	else
+	{
+		return;
+	}
+
 	standartName = sg1->FileName;     // и запоминаем
 
 	for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
@@ -522,7 +527,6 @@ for (int i=1; i < 11; i++) {
 }
 
 TStringList * tsl=new TStringList();
-wchar_t *s;
 
 int length=Saving1->XValues->Count;
 
@@ -540,15 +544,8 @@ for (int i = 0; i < 11; i++) {
 	}
 		
 	tsl->Add(FloatToStr(Saving1->XValues->Value[index])+"\t"+Saving1->YValues->Value[index]+"\t"+Saving2->YValues->Value[index]);
-	s=tsl->Strings[i].w_str() ;
-	for(int j=0;j<tsl->Strings[i].Length();j++)
-	if(s[j]==',')
-		s[j]='.';
-	tsl->Delete(i);
-	tsl->Add(s);
-
-	
 }
+tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
 
 if (silentModeEnabled || sg1->Execute()) {
 tsl->SaveToFile(sg1->FileName);
@@ -560,29 +557,24 @@ delete tsl;
 void LoadingDataFromFile(TLineSeries * Series1,TLineSeries * Series2)
 {
 // работает с графиками, от структур свободна.
-TStringList * tls=new TStringList();
+TStringList * tsl=new TStringList();
 if (silentModeEnabled || Form1->sg1->Execute()) {
-tls->LoadFromFile(Form1->sg1->FileName);
+tsl->LoadFromFile(Form1->sg1->FileName);
 Series1->Clear();
 	  Series2->Clear();
 
-for(int i=0;i<tls->Count;i++) // по количеству строк
+tsl->Text=ReplaceTextW(tsl->Text,".",","); // заменить все точки на запятые
+
+for(int i=0;i<tsl->Count;i++) // по количеству строк
 	  {
 
-	  if(tls->Strings[i].IsEmpty()) // пустые строки пропускаем
+	  if(tsl->Strings[i].IsEmpty()) // пустые строки пропускаем
 	  continue;
-	  String s = tls->Strings[i];
-
-	  for (int k = 1; k <= s.Length(); k++) {
-		  if(s[k]==L'.')
-		  s[k]=L',';
-	  }
+	  String s = tsl->Strings[i];
 
 	  String s1=wcstok(s.c_str(),L" \t");
 	  String s2=wcstok(NULL,L" \t");
 	  String s3=wcstok(NULL,L" \t");
-
-
 
 	  Series1->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
 	  s2.ToDouble(),"",clRed);
@@ -590,9 +582,8 @@ for(int i=0;i<tls->Count;i++) // по количеству строк
 	  s3.ToDouble(),"",clRed);
 
 	  }
-
 }
-delete tls;
+delete tsl;
 }
 
 void __fastcall TForm1::bLoadingPlotsClick(TObject *Sender)
@@ -663,96 +654,85 @@ if (rbIdealPlot->Checked) // идеальный
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::Button13Click(TObject *Sender)
 {
-SavingAllPoints(Series7,Series8);
+	SavingAllPoints(Series7,Series8);
 }
 //---------------------------------------------------------------------------
 // функция сохраняет все точки двух графиков
 // т.е. предназначена в первую очередь для тензоров проводимости.
 void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8)
 {
+	bool isRoundNeeded = false;
 
-
-bool isRoundNeeded = false;
-
-
-if(!(Series7->YValues->Count || Series8->YValues->Count))
-{
- ShowMessage("График пуст!");
- return;
-}
-if(Series7->YValues->Count!=Series8->YValues->Count)
-{
- ShowMessage("Разное количество точек на графиках!");
- return;
-}
-long double * x = new long double[Series7->YValues->Count];
-// производим округление результатов
-for(int i=0;i<Series7->YValues->Count;i++)
-{
-	for(int j=0;j<Series7->YValues->Count;j++)
-		x[j]=Series7->YValues->Value[j];
-	if (isRoundNeeded) {
-	RoundM(x,Series7->YValues->Count);
+	if(!(Series7->YValues->Count || Series8->YValues->Count))
+	{
+	 ShowMessage("График пуст!");
+	 return;
 	}
+	if(Series7->YValues->Count!=Series8->YValues->Count)
+	{
+	 ShowMessage("Разное количество точек на графиках!");
+	 return;
+	}
+	long double * x = new long double[Series7->YValues->Count];
+	// производим округление результатов и запись в какой-то массив О_о
+	// так, мы берем много циферок с графика, округляем и пишем обратно, о как:)
 
-    for(int j=0;j<Series7->YValues->Count;j++)
-		Series7->YValues->Value[j]=x[j];
-	for(int j=0;j<Series8->YValues->Count;j++)
-		x[j]=Series8->YValues->Value[j];
-	if (isRoundNeeded) {
-	RoundM(x,Series8->YValues->Count);
-    }
-	for(int j=0;j<Series8->YValues->Count;j++)
-		Series8->YValues->Value[j]=x[j];
-}
+	if(isRoundNeeded)
+	{
+		for(int i=0;i<Series7->YValues->Count;i++)
+		{
+			for(int j=0;j<Series7->YValues->Count;j++)
+				x[j]=Series7->YValues->Value[j];
 
-TStringList * tsl=new TStringList();
-wchar_t *s;
-for(int i=0;i<Series7->YValues->Count;i++)
-{
-tsl->Add(FloatToStr(Series7->XValues->Value[i])+"\t"+Series7->YValues->Value[i]+"\t"+Series8->YValues->Value[i]);
-s=tsl->Strings[i].w_str() ;
-for(int j=0;j<tsl->Strings[i].Length();j++)
-if(s[j]==',')     // заменить все запятые на точки
-	s[j]='.';
-tsl->Delete(i);
-tsl->Add(s);
+			RoundM(x,Series7->YValues->Count);
 
-}
-// если включен тихий режим - имя уже должно быть известно
-if (silentModeEnabled || Form1->sg1->Execute()) {
-tsl->SaveToFile(Form1->sg1->FileName);
-}
-delete[] x;
-delete tsl;
+			for(int j=0;j<Series7->YValues->Count;j++)
+				Series7->YValues->Value[j]=x[j];
+			for(int j=0;j<Series8->YValues->Count;j++)
+				x[j]=Series8->YValues->Value[j];
+
+			RoundM(x,Series8->YValues->Count);
+
+			for(int j=0;j<Series8->YValues->Count;j++)
+				Series8->YValues->Value[j]=x[j];
+		}
+	}
+	// формируем строку.
+	TStringList * tsl=new TStringList();
+	for(int i=0;i<Series7->YValues->Count;i++)
+	{
+		tsl->Add(FloatToStr(Series7->XValues->Value[i])+"\t"+Series7->YValues->Value[i]+"\t"+Series8->YValues->Value[i]);
+	}
+	tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+	// если включен тихий режим - имя уже должно быть известно
+	if (silentModeEnabled || Form1->sg1->Execute())
+	{
+		tsl->SaveToFile(Form1->sg1->FileName);
+	}
+	delete[] x;
+	delete tsl;
 }
 
 // сохранение параметров КРТ
 // поддерживает тихий режим
 void __fastcall TForm1::bSaveFilmParamsClick(TObject *Sender)
 {
-TStringList * tsl=new TStringList();
-wchar_t *s;
-for (int i = 0; i < NumberOfCarrierTypes; i++) {
-tsl->Add(g_Nz_par->Cells[1][i+1] +"\t"+g_Nz_par->Cells[2][i+1]);
-s=tsl->Strings[i].w_str() ;
-for(int j=0;j<tsl->Strings[i].Length();j++)
-if(s[j]==',')
-	s[j]='.';
-tsl->Delete(i);
-tsl->Add(s);
-}
-if (silentModeEnabled || Form1->sg1->Execute()) {
-tsl->SaveToFile(Form1->sg1->FileName);
-}
-delete tsl;
+	TStringList * tsl=new TStringList();
+	for (int i = 0; i < NumberOfCarrierTypes; i++)
+	{
+		tsl->Add(g_Nz_par->Cells[1][i+1] +"\t"+g_Nz_par->Cells[2][i+1]);
+	}
+	tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+	if (silentModeEnabled || Form1->sg1->Execute())
+	{
+		tsl->SaveToFile(Form1->sg1->FileName);
+	}
+	delete tsl;
 }
 
 

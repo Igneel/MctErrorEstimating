@@ -39,23 +39,29 @@ long double thickness,long double cbRatio,
 long double currentIntensity,long double numberOfCarrierTypes)
 :NumberOfPoints(size)
 {
+	// инициализация пленки.
 	carrierParams = new film(molarCompositionCadmium,Temperature,heavyHoleConcentrerion,
 	AFactor,KFactor,thickness,cbRatio,currentIntensity,numberOfCarrierTypes);
 
 	h=shag;
-    MemoryAllocation();
+	MemoryAllocation();
+
 	calculateMagneticFieldPoints();
 }
 
 clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag,film * cp)
 :NumberOfPoints(size)
 {
+/*
+Вот загрузили мы данные в плёнку, заполнили массив магнитного поля.
+*/
 	h=shag;
     carrierParams = new film(cp->getMolarCompositionCadmium(),
 	cp->getCurrentTemperature(),cp->getConcentration(0),
 	cp->getAFactor(),cp->getKFactor(),cp->getThickness(),
 	cp->getCBRatio(),cp->getCurrentIntensity(),cp->getNumberOfCarrierTypes());
 	MemoryAllocation();
+
 	calculateMagneticFieldPoints();
 }
 
@@ -83,6 +89,7 @@ void clMagneticFieldDependences::calculateMagneticFieldPoints()
 
 void clMagneticFieldDependences::calculateTenzorFromCarrierParams()
 {
+	// вызывается автоматически из calculateMagneticFieldDependences()
 	for(int i=0;i<NumberOfPoints;i++)
 	{
 		sxx[i]=sxy[i]=0;
@@ -104,6 +111,7 @@ void clMagneticFieldDependences::calculateTenzorFromCarrierParams()
 
 void clMagneticFieldDependences::calculateEffectiveParamsFromTenzor()
 {
+	// вызывается автоматически из calculateMagneticFieldDependences()
 	for(int i=0;i<NumberOfPoints;i++)
 	{
 		s_eff[i]=(sxx[i]*sxx[i]+sxy[i]*sxy[i])/sxx[i];
@@ -138,6 +146,7 @@ void clMagneticFieldDependences::calculateEffectiveParamsFromSignals()
 
 void clMagneticFieldDependences::calculateTenzorFromEffectiveParams()
 {
+	// вызывается автоматически из calculateMagneticFieldDependences()
 	for (int i = 0; i < NumberOfPoints ; i++)
 	{
 		sxx[i]=s_eff[i]/
@@ -155,8 +164,9 @@ void clMagneticFieldDependences::calculateMagneticFieldDependences()
 }
 
 
-void clMagneticFieldDependences::constructPlotFromTwoMassive(ChartType type,TLineSeries* s,TColor color)
+void clMagneticFieldDependences::constructPlotFromTwoMassive(SignalType type,TLineSeries* s,TColor color)
 {
+	// строим график по х - магнитное поле, по у - нужный сигнал.
 	s->Clear();
 	long double *y=0;
 	switch(type)
@@ -181,8 +191,9 @@ void clMagneticFieldDependences::constructPlotFromTwoMassive(ChartType type,TLin
 	}
 }
 
-void clMagneticFieldDependences::constructPlotFromOneMassive(ChartType type, TLineSeries* s,TColor color)
+void clMagneticFieldDependences::constructPlotFromOneMassive(SignalType type, TLineSeries* s,TColor color)
 {
+	// по х - просто номер точки.
 	s->Clear();
 	long double *y=0;
 	switch(type)
@@ -237,7 +248,7 @@ long double,const int),const long double * idealUs,const long double * idealUy,l
 	calculateEffectiveParamsFromSignals();
 	calculateTenzorFromEffectiveParams();
 
-    return 6;
+    return 6; // магическое число, обозначает количество элементов в возвращаемом массиве, надо будет пофиксить.
 }
 
 int clMagneticFieldDependences::modifySignals(double (*TrForMassiveFilter)(long double *inB,
@@ -250,6 +261,8 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 	long double * tempOutB=new long double[2*NumberOfPoints+ceil(lengthFilter/2.0)];
 	long double * tempOutSignal=new long double[2*NumberOfPoints+ceil(lengthFilter/2.0)];
 
+	// формируем сигнал для фильтра.
+	// достраивая его в отрицательные магнитные поля.
 	for (int i = 0; i < NumberOfPoints; i++)
 	{
 		tempInSignal[i]=-idealUs[NumberOfPoints-i-1]+2*idealUs[0];
@@ -258,15 +271,19 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 		tempInB[i+NumberOfPoints]=B[i];
 	}
 
+
+    // фильтруем
 	TrForMassiveFilter(tempInB,tempInSignal,tempOutB,tempOutSignal,2*NumberOfPoints,lengthFilter,5000,15,25);
 
 	// надо добавить обработку полученных результатов после фильтрации.
 	// и экстраполяцию
+
+	// нагло записываем положительную часть фильтрованного сигнала обратно.
 	for(int i=0;i<NumberOfPoints;i++)
 	{
         Us[i]=tempOutSignal[i+NumberOfPoints-1];
     }
-
+    // делаем то же самое с другим сигналом, хм, надо предусмотреть функцию.
 	for (int i = 0; i < NumberOfPoints; i++)
 	{
 		tempInSignal[i]=-idealUy[NumberOfPoints-i-1]+2*idealUy[0];
@@ -283,6 +300,7 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 		Uy[i]=tempOutSignal[i+NumberOfPoints-1];
 	}
 
+	// пересчитываем зависимости.
 	calculateEffectiveParamsFromSignals();
 	calculateTenzorFromEffectiveParams();
 
@@ -292,6 +310,41 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 	delete[] tempOutSignal;
 
 	return 1;
+}
+
+bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode saveMode, String filePath)
+{
+	bool isRoundNeeded = false;
+
+	if(isRoundNeeded)
+	{
+        ;
+    }
+
+	// формируем строку.
+	TStringList * tsl=new TStringList();
+
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		tsl->Add(FloatToStr(B[i])+"\t"+FloatToStr(sxx[i])+"\t"+FloatToStr(sxy[i]));
+	}
+	tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+
+	switch(type)
+	{
+	case SXX:
+	case SXY:
+
+		break;
+	case US:
+	case UY:
+
+		break;
+	case S_EFF:
+	case RH_EFF:
+	default:
+	return false;
+	}
 }
 
 /*

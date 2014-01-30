@@ -45,10 +45,6 @@ class film {
 
 	long double *Concentration;
 	long double *Mobility;
-
-
-
-
 };
 //---------------------------------------------------------------------------
 #endif
