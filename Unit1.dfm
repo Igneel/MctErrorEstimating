@@ -218,7 +218,7 @@
         Top = 242
         Width = 169
         Height = 25
-        Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1085#1086#1088#1084#1072#1083#1100#1085#1086#1075#1086' '#1096#1091#1084#1072
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1096#1091#1084' '#1074' '#1089#1080#1075#1085#1072#1083
         Enabled = False
         TabOrder = 9
         OnClick = bGaussianNoiseGeneratorClick
@@ -357,7 +357,7 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object Series8: TLineSeries
+        object gSeriesFilteredUy: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -378,6 +378,20 @@
           Marks.Visible = False
           SeriesColor = 10708548
           LinePen.Color = 10708548
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedUy: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -412,12 +426,26 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object Series7: TLineSeries
+        object gSeriesFilteredUs: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedUs: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -490,7 +518,6 @@
         Caption = #1054#1073#1088#1072#1090#1085#1099#1081' '#1088#1072#1089#1095#1077#1090
         Enabled = False
         TabOrder = 26
-        OnClick = tenzorCalculatingClick
       end
       object bAutomaticCalculation: TButton
         Left = 154
@@ -528,43 +555,75 @@
         OnClick = bSaveElevenPointsClick
       end
       object gbSavingPlot: TGroupBox
-        Left = 16
-        Top = 416
-        Width = 132
-        Height = 130
+        Left = 549
+        Top = 106
+        Width = 201
+        Height = 264
         Caption = #1057#1086#1093#1088#1072#1085#1103#1077#1084#1099#1081' '#1075#1088#1072#1092#1080#1082':'
         TabOrder = 31
-        object rbLeftPlot: TRadioButton
-          Left = 16
-          Top = 25
-          Width = 113
-          Height = 17
-          Caption = #1051#1077#1074#1099#1081
-          TabOrder = 0
-        end
-        object rbRightPlot: TRadioButton
-          Left = 16
-          Top = 48
-          Width = 113
-          Height = 17
-          Caption = #1055#1088#1072#1074#1099#1081
-          TabOrder = 1
-        end
-        object rbFilteredPlot: TRadioButton
+        object rbFilteredUPlot: TRadioButton
           Left = 16
           Top = 71
-          Width = 113
+          Width = 137
           Height = 17
-          Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081
-          TabOrder = 2
+          Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081' '#1089#1080#1075#1085#1072#1083
+          TabOrder = 0
         end
-        object rbIdealPlot: TRadioButton
+        object rbIdealUPlot: TRadioButton
           Left = 16
           Top = 94
           Width = 113
           Height = 17
           Caption = #1063#1080#1089#1090#1099#1081' '#1089#1080#1075#1085#1072#1083
+          TabOrder = 1
+        end
+        object rbIdealTenzorPlot: TRadioButton
+          Left = 16
+          Top = 117
+          Width = 113
+          Height = 17
+          Caption = #1063#1080#1089#1090#1099#1081' '#1090#1077#1085#1079#1086#1088
+          TabOrder = 2
+        end
+        object rbFilteredTenzor: TRadioButton
+          Left = 16
+          Top = 140
+          Width = 137
+          Height = 17
+          Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081' '#1090#1077#1085#1079#1086#1088
           TabOrder = 3
+        end
+        object rbExtrapolatedU: TRadioButton
+          Left = 16
+          Top = 163
+          Width = 169
+          Height = 17
+          Caption = #1069#1082#1089#1090#1088#1072#1087#1086#1083#1080#1088#1086#1074#1072#1085#1085#1099#1081' '#1089#1080#1075#1085#1072#1083
+          TabOrder = 4
+        end
+        object rbExtrapolatedTenzor: TRadioButton
+          Left = 16
+          Top = 186
+          Width = 169
+          Height = 17
+          Caption = #1069#1082#1089#1090#1088#1072#1087#1086#1083#1080#1088#1086#1074#1072#1085#1085#1099#1081' '#1090#1077#1085#1079#1086#1088
+          TabOrder = 5
+        end
+        object rbNoisyU: TRadioButton
+          Left = 16
+          Top = 209
+          Width = 169
+          Height = 17
+          Caption = #1047#1072#1096#1091#1084#1083#1077#1085#1085#1099#1081' '#1089#1080#1075#1085#1072#1083
+          TabOrder = 6
+        end
+        object rbNoisyTenzor: TRadioButton
+          Left = 16
+          Top = 232
+          Width = 169
+          Height = 17
+          Caption = #1047#1072#1096#1091#1084#1083#1077#1085#1085#1099#1081' '#1090#1077#1085#1079#1086#1088
+          TabOrder = 7
         end
       end
       object bLoadingPlots: TButton
@@ -617,7 +676,7 @@
         View3D = False
         TabOrder = 0
         ColorPaletteIndex = 13
-        object Series5: TLineSeries
+        object gSeriesIdealParamsSxx: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -631,12 +690,40 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object Series6: TLineSeries
+        object gSeriesParamsWithNoiseSxx: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesFilteredParamsSxx: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedParamsSxx: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -657,7 +744,7 @@
         View3D = False
         TabOrder = 1
         ColorPaletteIndex = 13
-        object LineSeries1: TLineSeries
+        object gSeriesIdealParamsS_eff: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -671,12 +758,40 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object LineSeries2: TLineSeries
+        object gSeriesParamsWithNoiseS_eff: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedParamsS_eff: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesFilteredParamsS_eff: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -697,7 +812,7 @@
         View3D = False
         TabOrder = 2
         ColorPaletteIndex = 13
-        object LineSeries3: TLineSeries
+        object gSeriesIdealParamsUs: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -711,12 +826,40 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object LineSeries4: TLineSeries
+        object gSeriesParamsWithNoiseUs: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedParamsUs: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesFilteredParamsUs: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -737,7 +880,7 @@
         View3D = False
         TabOrder = 3
         ColorPaletteIndex = 13
-        object LineSeries5: TLineSeries
+        object gSeriesIdealParamsSxy: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -751,12 +894,40 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object LineSeries6: TLineSeries
+        object gSeriesParamsWithNoiseSxy: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesFilteredParamsSxy: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedParamsSxy: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -777,7 +948,7 @@
         View3D = False
         TabOrder = 4
         ColorPaletteIndex = 13
-        object LineSeries7: TLineSeries
+        object gSeriesIdealParamsRh_eff: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -791,12 +962,40 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object LineSeries8: TLineSeries
+        object gSeriesParamsWithNoiseRh_eff: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedParamsRh_eff: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesFilteredParamsRh_eff: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False
@@ -817,7 +1016,7 @@
         View3D = False
         TabOrder = 5
         ColorPaletteIndex = 13
-        object LineSeries9: TLineSeries
+        object gSeriesIdealParamsUy: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
@@ -831,12 +1030,40 @@
           YValues.Name = 'Y'
           YValues.Order = loNone
         end
-        object LineSeries10: TLineSeries
+        object gSeriesParamsWithNoiseUy: TLineSeries
           Marks.Arrow.Visible = True
           Marks.Callout.Brush.Color = clBlack
           Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           LinePen.Color = 3513587
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesExtrapolatedParamsUy: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 1330417
+          Pointer.InflateMargins = True
+          Pointer.Style = psRectangle
+          Pointer.Visible = False
+          XValues.Name = 'X'
+          XValues.Order = loAscending
+          YValues.Name = 'Y'
+          YValues.Order = loNone
+        end
+        object gSeriesFilteredParamsUy: TLineSeries
+          Marks.Arrow.Visible = True
+          Marks.Callout.Brush.Color = clBlack
+          Marks.Callout.Arrow.Visible = True
+          Marks.Visible = False
+          LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
           Pointer.Visible = False

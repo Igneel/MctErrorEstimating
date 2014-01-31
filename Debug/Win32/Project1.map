@@ -1,6 +1,6 @@
 
  Start Length Name Class
- 0001:00401000 000011170H _TEXT                  CODE
- 0002:00413000 0000051B4H _DATA                  DATA
- 0003:004181B4 000000160H _BSS                   BSS
+ 0001:00401000 00001062CH _TEXT                  CODE
+ 0002:00412000 000004FE4H _DATA                  DATA
+ 0003:00416FE4 000000160H _BSS                   BSS
  0004:00000000 00000009CH _TLS                   TLS

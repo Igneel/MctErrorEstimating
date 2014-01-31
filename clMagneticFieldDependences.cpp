@@ -5,6 +5,7 @@
 
 #include "clMagneticFieldDependences.h"
 
+
 void clMagneticFieldDependences::MemoryAllocation()
 {
 	sxx=new long double[NumberOfPoints];
@@ -310,6 +311,63 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 	delete[] tempOutSignal;
 
 	return 1;
+}
+
+void clMagneticFieldDependences::setB_Us_Uy(long double *newB, long double * newUs,long double *newUy)
+{
+	for (int i = 0; i < NumberOfPoints; i++) {
+		B[i]=newB[i];
+		Us[i]=newUs[i];
+		Uy[i]=newUy[i];
+	}
+	calculateEffectiveParamsFromSignals();
+	calculateTenzorFromEffectiveParams();
+}
+
+int clMagneticFieldDependences::modifySignals(ModifyType type,clMagneticFieldDependences * extrapolatedParams)
+{
+int returnValue=1;
+const int a=6;
+long double * koef1= new long double [a];
+long double * koef2= new long double [a];
+
+long double * newB= new long double [NumberOfPoints];
+long double * newUs= new long double [NumberOfPoints];
+long double * newUy= new long double [NumberOfPoints];
+newB[0]=0;
+	switch(type)
+	{
+		case EXTRAPOLATE:
+
+			curveFitting5(B,Us,0,NumberOfPoints,koef1);
+			curveFitting5(B,Uy,0,NumberOfPoints,koef2);
+
+			for(int i=0;i<NumberOfPoints;i++)
+			{
+				if(i!=0) newB[i]=newB[i-1]+h;
+
+				newUs[i]=pow(newB[i],a-1)*koef1[0]+pow(newB[i],a-2)*koef1[1]+
+					pow(newB[i],a-3)*koef1[2]+pow(newB[i],a-4)*koef1[3]+
+					pow(newB[i],1)*koef1[4]+koef1[5];
+
+				newUy[i]=pow(newB[i],a-1)*koef2[0]+pow(newB[i],a-2)*koef2[1]+
+					pow(newB[i],a-3)*koef2[2]+pow(newB[i],a-4)*koef2[3]+
+					pow(newB[i],1)*koef2[4]+koef2[5];
+
+			}
+			extrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
+			break;
+		default:
+		returnValue=0;
+	}
+
+delete[] koef1;
+delete[] koef2;
+delete[] newB;
+delete[] newUs;
+delete[] newUy;
+return returnValue;
+
 }
 
 bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode saveMode, String filePath)

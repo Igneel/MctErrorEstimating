@@ -40,7 +40,7 @@ long double Sko (const long double *x0,const long double *x,int l)
 {
 long double z=0;
 for(int i=0;i<l;i++)
-z+= pow((x[i]-x0[i]),2);
+z+= pow(fabs((fabs(x[i])-fabs(x0[i]))),2);
 z/=(long double)l;
 return sqrt(z);
 }

@@ -4,12 +4,16 @@
 #define clMagneticFieldDependencesH
 
 #include "film.h"
+#include "ExtrapolateUnit.h"
+#include "FilteringUnit.h"
+#include "NoiseUnit.h"
 #include <math.h>
 
 #include <Series.hpp>
 
 enum SignalType {SXX,SXY,US,UY,S_EFF,RH_EFF};
 enum FileSaveMode {ALL_POINTS, SOME_POINTS}; // сейчас SOME_POINTS - это конечно 11 точек.
+enum ModifyType {SHUM_ADDING, FILTERING, EXTRAPOLATE};
 
 class clMagneticFieldDependences {
 
@@ -30,6 +34,8 @@ class clMagneticFieldDependences {
 	long double const * getSxx();
 	long double const * getSxy();
 
+	int modifySignals(ModifyType type,clMagneticFieldDependences * ExtrapolatedParams);
+
 	int modifySignals(void (*ShumAdding)(const long double *x,long double *out,long double *ret, long double koeff,const int l),
 	const long double * idealUs,const long double * idealUy,long double *returnData,long double koeff);
 
@@ -38,6 +44,7 @@ class clMagneticFieldDependences {
 	int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh),
 	const long double * idealUs,const long double * idealUy,int lengthFilter);
 
+	void setB_Us_Uy(long double *newB, long double * newUs,long double *newUy);
 
 	void calculateEffectiveParamsFromSignals();
 	void calculateTenzorFromEffectiveParams();

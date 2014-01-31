@@ -20,8 +20,7 @@
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 
-void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
-void ParamsKRT(void);
+
 
 
 bool silentModeEnabled=false; // если флаг равен тру - то функции сохранения не спрашивают имя файла
@@ -62,6 +61,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 clMagneticFieldDependences *IdealParams=0;
 clMagneticFieldDependences *ParamsWithNoise=0;
 clMagneticFieldDependences *FilteredParams=0;
+clMagneticFieldDependences *ExtrapolatedParams=0;
 
 
 //------------------------------------------------------------------------------
@@ -76,7 +76,6 @@ g_Nz_par->Cells[2][0]="подвижность";
 }
 //---------------------------------------------------------------------------
 
-void RoundM(long double * x,int length);
 
 void ParamsKRT(void)
 {
@@ -129,14 +128,15 @@ void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 
 	IdealParams->constructPlotFromTwoMassive(SXX,Series1,clRed);
 	IdealParams->constructPlotFromTwoMassive(SXY,Series2,clRed);
-	IdealParams->constructPlotFromTwoMassive(SXX,Series5,clRed);
-	IdealParams->constructPlotFromTwoMassive(SXY,LineSeries5,clRed);
 
-	IdealParams->constructPlotFromTwoMassive(S_EFF,LineSeries1,clRed);
-	IdealParams->constructPlotFromTwoMassive(RH_EFF,LineSeries7,clRed);
+	IdealParams->constructPlotFromTwoMassive(SXX,gSeriesIdealParamsSxx,clRed);
+	IdealParams->constructPlotFromTwoMassive(SXY,gSeriesIdealParamsSxy,clRed);
 
-	IdealParams->constructPlotFromOneMassive(US,LineSeries3,clRed);
-	IdealParams->constructPlotFromOneMassive(UY,LineSeries9,clRed);
+	IdealParams->constructPlotFromTwoMassive(S_EFF,gSeriesIdealParamsS_eff,clRed);
+	IdealParams->constructPlotFromTwoMassive(RH_EFF,gSeriesIdealParamsRh_eff,clRed);
+
+	IdealParams->constructPlotFromTwoMassive(US,gSeriesIdealParamsUs,clRed);
+	IdealParams->constructPlotFromTwoMassive(UY,gSeriesIdealParamsUy,clRed);
 
 	//------------------Классы--------------------------------------------------
 	bGaussianNoiseGenerator->Enabled=1;
@@ -144,16 +144,16 @@ void __fastcall TForm1::bCalculateCarrierParamsClick(TObject *Sender)
 //---------------------------------------------------------------------------
 // округление результатов при сохранении, необходимо потому что если этого не сделать
 // метод будет считать что мы с этой точностью измеряли - и мало что найдет
-void RoundM(long double * x,int length)
+void TForm1::RoundM(long double * x,int length)
 {
 	int S=pow(10,NumberOfNumbersAfterPoint);
 	for(int i=0;i<length;i++)
 	{
 		int n=(int)(x[i]*S)%10;
 		if(n<5)
-			x[i]=floor(x[i]*S)/S;
+			x[i]=floorl(x[i]*S)/S;
 		else
-			x[i]=ceil(x[i]*S)/S;
+			x[i]=ceill(x[i]*S)/S;
 	}
 }
 
@@ -185,30 +185,81 @@ void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 
 	ParamsWithNoise->constructPlotFromTwoMassive(US,Series3,clRed);
 	ParamsWithNoise->constructPlotFromTwoMassive(UY,Series4,clRed);
+	ParamsWithNoise->constructPlotFromTwoMassive(US,gSeriesParamsWithNoiseUs,clBlack);
+	ParamsWithNoise->constructPlotFromTwoMassive(UY,gSeriesParamsWithNoiseUy,clBlack);
+	ParamsWithNoise->constructPlotFromTwoMassive(S_EFF,gSeriesParamsWithNoiseS_eff,clBlack);
+	ParamsWithNoise->constructPlotFromTwoMassive(RH_EFF,gSeriesParamsWithNoiseRh_eff,clBlack);
 
-	//--------------------Классы----------------------------------------------------
+	ParamsWithNoise->constructPlotFromTwoMassive(SXX,gSeriesParamsWithNoiseSxx,clBlack);
+	ParamsWithNoise->constructPlotFromTwoMassive(SXY,gSeriesParamsWithNoiseSxy,clBlack);
+	ParamsWithNoise->constructPlotFromTwoMassive(SXX,Series3,clRed);
+	ParamsWithNoise->constructPlotFromTwoMassive(SXY,Series4,clRed);
 
-	tenzorCalculating->Enabled=1;
+    // расчет СКО и мат. ожидания.
+
+	long double sko1=Sko(IdealParams->getSxx(),ParamsWithNoise->getSxx(),NumberOfPoints);
+	long double sko2=Sko(IdealParams->getSxy(),ParamsWithNoise->getSxy(),NumberOfPoints);
+	long double shx[NumberOfPoints]={0};
+	long double shy[NumberOfPoints]={0};
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		shx[i]=ParamsWithNoise->getSxx()[i]-IdealParams->getSxx()[i];
+		shy[i]=ParamsWithNoise->getSxy()[i]-IdealParams->getSxy()[i];
+	}
+	long double mx=Mo(shx,NumberOfPoints);
+	long double my=Mo(shy,NumberOfPoints);
+	Edit1->Text=FloatToStr(sko1);
+	Edit2->Text=FloatToStr(sko2);
+	Edit3->Text=FloatToStr(mx/Mo(IdealParams->getSxx(),NumberOfPoints)*100);
+	Edit4->Text=FloatToStr(my/Mo(IdealParams->getSxy(),NumberOfPoints)*100);
+
+
+//-----------------------------Классы_------------------------------------------
 }
 //---------------------------------------------------------------------------
 // сохранение результатов
 void __fastcall TForm1::bSaveAllPointsClick(TObject *Sender)
 {
-	if (rbLeftPlot->Checked)
+
+	// идеальные данные
+	if (rbIdealUPlot->Checked)
 	{
-		 SavingAllPoints(Series1,Series2);
+		 SavingAllPoints(gSeriesIdealParamsUs,gSeriesIdealParamsUy);
 	}
-	if (rbRightPlot->Checked)
+
+	if (rbIdealTenzorPlot->Checked)
 	{
-		 SavingAllPoints(Series3,Series4);
+		SavingAllPoints(gSeriesIdealParamsSxx,gSeriesIdealParamsSxy);
 	}
-	if (rbFilteredPlot->Checked)
+
+	// зашумленные данные
+	if (rbNoisyU->Checked)
 	{
-		 SavingAllPoints(Series7,Series8);
+		SavingAllPoints(gSeriesParamsWithNoiseUs,gSeriesParamsWithNoiseUy);
 	}
-	if (rbIdealPlot->Checked)
+
+	if(rbNoisyTenzor->Checked)
 	{
-		 SavingAllPoints(LineSeries3,LineSeries9);
+		SavingAllPoints(gSeriesParamsWithNoiseSxx,gSeriesParamsWithNoiseSxy);
+	}
+
+	// фильтрованные данные
+	if (rbFilteredUPlot->Checked)
+	{
+		 SavingAllPoints(gSeriesFilteredParamsUs,gSeriesFilteredParamsUy);
+	}
+
+	if (rbFilteredTenzor->Checked)
+	{
+		SavingAllPoints(gSeriesFilteredParamsSxx,gSeriesFilteredParamsSxy);
+	}
+    // экстраполированные данные
+	if (rbExtrapolatedU->Checked) {
+		SavingAllPoints(gSeriesExtrapolatedParamsUs,gSeriesExtrapolatedParamsUy);
+	}
+
+	if (rbExtrapolatedTenzor->Checked) {
+        SavingAllPoints(gSeriesExtrapolatedParamsSxx,gSeriesExtrapolatedParamsSxy);
 	}
 }
 //---------------------------------------------------------------------------
@@ -289,40 +340,30 @@ void __fastcall TForm1::BuildingPlotsClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
-// расчет тензоров на основе измеренных сигналов
-void __fastcall TForm1::tenzorCalculatingClick(TObject *Sender)
+void TForm1::automaticCalculationHelper(UnicodeString SaveFileName)
 {
-//-----------------------------Классы-------------------------------------------
-	ParamsWithNoise->constructPlotFromTwoMassive(US,LineSeries3,clRed);
-	ParamsWithNoise->constructPlotFromTwoMassive(UY,LineSeries9,clRed);
-	ParamsWithNoise->constructPlotFromTwoMassive(S_EFF,LineSeries1,clRed);
-	ParamsWithNoise->constructPlotFromTwoMassive(RH_EFF,LineSeries7,clRed);
+/*
 
-	ParamsWithNoise->constructPlotFromTwoMassive(SXX,Series5,clRed);
-	ParamsWithNoise->constructPlotFromTwoMassive(SXY,LineSeries5,clRed);
-	ParamsWithNoise->constructPlotFromTwoMassive(SXX,Series3,clRed);
-	ParamsWithNoise->constructPlotFromTwoMassive(SXY,Series4,clRed);
+В SaveFileName нужно передавать _Us_Uy_vseZnachenia_k_"+IntToStr(i) и т.п.
 
-	long double sko1=Sko(IdealParams->getSxx(),ParamsWithNoise->getSxx(),NumberOfPoints);
-	long double sko2=Sko(IdealParams->getSxy(),ParamsWithNoise->getSxy(),NumberOfPoints);
-	long double shx[NumberOfPoints]={0};
-	long double shy[NumberOfPoints]={0};
-	for(int i=0;i<NumberOfPoints;i++)
-	{
-		shx[i]=ParamsWithNoise->getSxx()[i]-IdealParams->getSxx()[i];
-		shy[i]=ParamsWithNoise->getSxy()[i]-IdealParams->getSxy()[i];
-	}
-	long double mx=Mo(shx,NumberOfPoints);
-	long double my=Mo(shy,NumberOfPoints);
-	Edit1->Text=FloatToStr(sko1);
-	Edit2->Text=FloatToStr(sko2);
-	Edit3->Text=FloatToStr(mx/Mo(IdealParams->getSxx(),NumberOfPoints)*100);
-	Edit4->Text=FloatToStr(my/Mo(IdealParams->getSxy(),NumberOfPoints)*100);
+*/
 
+long double sko_xx=StrToFloat(Edit3->Text);
+RoundM(&sko_xx,1);
+long double sko_xy=StrToFloat(Edit4->Text);
+RoundM(&sko_xy,1);
+UnicodeString standartName; // эталонное имя файла
+standartName = sg1->FileName;     // запоминаем имя
+sg1->FileName=standartName+"T_"+eTemperature->Text+"_"+
+	SaveFileName+"_sko_p_xx"+FloatToStr(sko_xx)+ "_sko_p_xy"+FloatToStr(sko_xy)+".txt";
 
-//-----------------------------Классы_------------------------------------------
+bSaveAllPoints->Click();
+sg1->FileName=ReplaceStr(Form1->sg1->FileName,"vseZnachenia","11Znacheniy");
+bSaveElevenPoints->Click();
+
+sg1->FileName=standartName;
 }
-//---------------------------------------------------------------------------
+
 
 void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 {
@@ -341,13 +382,10 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 	+8. Сохраняем все точки и 11 точек зашумленного измеряемого сигнала.
 	+9. Запускаем фильтрацию.
 	+10. Сохраняем все точки фильтрованного сигнала.
-	+11. Выполняем обратный расчет для зашумленного сигнала (перед этим наверное стоит привести его в вид "как было"?).
-	Обратно можно не приводить, т.к. во время фильтрации мы издеваемся над графиком, а рассчитываем по массивам.
 
 	+12. Сохраняем все точки и 11 точек зашумленных компонент тензора.
-	+13. Обрабатываем фильтрованный измеренный сигнал, так чтобы он стал пригоден для расчетов.
-	+14. Выполняем обратный расчет для фильтрованного зашумленного сигнала.
 	+15. Сохраняем все точки и 11 точек фильтрованных компонент тензора.
+	+16. А также экстраполированных сигналов и тензоров.
 
 	*/
 	silentModeEnabled=true;
@@ -359,8 +397,8 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 	int endkoef=5;  // конечный коэффициент
 
 	int h_koef=1; // шаг по уровню шума
-	eFilterLength->Text=IntToStr(80); // задаём длину фильтра, внимание - это для симметричного и удлиненного графика!
-	g_hsize->Text=FloatToStr(0.0125); // шаг по магнитному полю.
+	eFilterLength->Text=IntToStr(50); // задаём длину фильтра, внимание - это для симметричного графика!
+	g_hsize->Text=FloatToStr(0.01); // шаг по магнитному полю., отныне честно идем только до 2 Тл.
 
 	UnicodeString standartName; // эталонное имя файла
 	UnicodeString fName;   // новое имя файла
@@ -374,97 +412,78 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 		return;
 	}
 
-	standartName = sg1->FileName;     // и запоминаем
+	standartName = sg1->FileName;     // запоминаем имя
 
 	for (int T=T1; T <= Tmax; T+=h)  // идем по температуре с заданным шагом
 	{
 		 eTemperature->Text=IntToStr(T);  // для красоты обновляем значение температуры
 		 bCalculateCarrierParams->Click(); // нажимаем кнопку рассчитать
+
 		 // задаём имя файла
 		 fName="T_"+IntToStr(T)+"_params_"+Edit3->Text+".txt";
 		 sg1->FileName=standartName+fName;
 		 bSaveFilmParams->Click(); // сохраняем параметры плёнки
 
-
-		 rbLeftPlot->Checked=true; // выбираем идеальный график тензоров
+         rbIdealTenzorPlot->Checked=true; // выбираем идеальный график тензоров
 		 // задаём имя файла
-		 fName="T_"+IntToStr(T)+"_tenzor_ideal_vseZnachenia_"+Edit3->Text+".txt";
+		 fName="T_"+IntToStr(T)+"_tenzor_ideal_vseZnachenia.txt";
 		 sg1->FileName=standartName+fName;
 		 bSaveAllPoints->Click();     	 // сохраняем все точки идеального графика тензора
-		 fName="T_"+IntToStr(T)+"_tenzor_ideal_11Znacheniy_"+Edit3->Text+".txt";
+		 fName="T_"+IntToStr(T)+"_tenzor_ideal_11Znacheniy.txt";
 		 sg1->FileName=standartName+fName;
 		 // сохраняем 11 точек идеального графика тензора
 		 bSaveElevenPoints->Click();
 
 
-		 rbIdealPlot->Checked=true; // выбираем идеальный график измеряемых сигналов
+		 rbIdealUPlot->Checked=true; // выбираем идеальный график измеряемых сигналов
 		 // задаём имя файла
-		 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_vseZnachenia_"+Edit3->Text+".txt";
+		 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_vseZnachenia.txt";
 		 sg1->FileName=standartName+fName;
 		 bSaveAllPoints->Click();     	 // сохраняем все точки идеального графика сигналов
-		 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_11Znacheniy_"+Edit3->Text+".txt";
+		 fName="T_"+IntToStr(T)+"_Us_Uy_ideal_11Znacheniy.txt";
 		 sg1->FileName=standartName+fName;
 		 // сохраняем 11 точек идеального графика сигналов
 		 bSaveElevenPoints->Click();
-
+		 sg1->FileName=standartName;
 		 for (int i=koef; i <= endkoef; i+=h_koef) // после чего начинается игра с коэффициентами
 		 {
 			Edit5->Text=FloatToStr(100.0/(long double)(i*fabs(IdealParams->getSignalUy()[NumberOfPoints-1]))); // задаем коэффициенты
 			Edit6->Text=FloatToStr(100.0/(long double)(i*fabs(IdealParams->getSignalUy()[NumberOfPoints-1])));
 			bGaussianNoiseGenerator->Click(); // генератор шума
+			bFilteringPlots->Click(); // запускаем фильтрацию
 
-			rbRightPlot->Checked=true; // выбираем зашумленный график измеряемого сигнала
-			fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-			 sg1->FileName=standartName+fName;
-			 bSaveAllPoints->Click();     	 // сохраняем все точки идеального графика тензора
-			 fName="T_"+IntToStr(T)+"_Us_Uy_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-			 sg1->FileName=standartName+fName;
-			 // сохраняем 11 точек идеального графика тензора
-			 bSaveElevenPoints->Click();
-
-			 // запускаем фильтрацию
-			 bFilteringPlots->Click();
-
-			 // сохраняем результаты фильтрации (все точки)-------------------------
-			 rbFilteredPlot->Checked=true; // выбираем фильтрованный график
-			 fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
-			 sg1->FileName=standartName+fName;
-			 bSaveAllPoints->Click();
-			 //---------------------------------------------------------------------
-
-			  tenzorCalculating->Click(); // обратный расчет
-			  //--------------------------------------------------------------------
-			  // надо сохранять результаты генератора
-			  rbRightPlot->Checked=1;
-			  fName="T_"+IntToStr(T)+"_tenzor_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-			  sg1->FileName=standartName+fName;
-			  bSaveAllPoints->Click();// теперь сохранить
-			  fName="T_"+IntToStr(T)+"_tenzor_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-			  sg1->FileName=standartName+fName;
-			  // сохраняем 11 точек графика
-			  bSaveElevenPoints->Click();
-			  //--------------------------------------------------------------------
-			  //-------обработка результатов фильтрации-----------------------------
-
-			  //1T_80_Us_Uy_vseZnachenia_filtr_k_50.txt
-			  fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
-			  sg1->FileName=standartName+fName;
-			  rbIdealPlot->Checked=1;
-			  bLoadingPlots->Click();
-
-			  //-------обратный расчет для фильтрованных сигналов
-			  tenzorCalculating->Click();
-			  //--------------------------------------------------------------------
-			  //--------------------------------------------------------------------
-			  rbRightPlot->Checked=1;// сохранять результаты фильтрованных тензоров
-			  fName="T_"+IntToStr(T)+"_tenzor_filt_vseZnachenia_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-			  sg1->FileName=standartName+fName;
-			  bSaveAllPoints->Click();
-			  // в двух форматах: все точки и 11 точек.
-			  fName="T_"+IntToStr(T)+"_tenzor_filt_11Znacheniy_k_"+IntToStr(i)+"_sko_p_xx"+Edit3->Text+"_sko_p_xy"+Edit3->Text+".txt";
-			  sg1->FileName=standartName+fName;
-			  bSaveElevenPoints->Click();
-			  //--------------------------------------------------------------------
+			sg1->FileName=standartName;
+			rbNoisyU->Checked=true; // выбираем зашумленный график измеряемого сигнала
+			fName="Us_Uy_vseZnachenia_k_"+IntToStr(i);
+			automaticCalculationHelper(fName);
+			// надо сохранять зашумленные результаты
+			rbNoisyTenzor->Checked=true;
+			sg1->FileName=standartName;
+			fName="tenzor_vseZnachenia_k_"+IntToStr(i);
+			automaticCalculationHelper(fName);
+			// сохраняем результаты фильтрации (все точки)-------------------------
+			rbFilteredUPlot->Checked=true; // выбираем фильтрованный график
+			sg1->FileName=standartName;
+			fName="T_"+IntToStr(T)+"_Us_Uy_vseZnachenia_filtr_k_"+IntToStr(i)+".txt";
+			sg1->FileName=standartName+fName;
+			bSaveAllPoints->Click();
+			// сохранять 11 точек на данный момент смысла нет.
+			//---------------------------------------------------------------------
+			rbFilteredTenzor->Checked=true;// сохранять результаты фильтрованных тензоров
+			sg1->FileName=standartName;
+			fName="tenzor_filt_vseZnachenia_k_"+IntToStr(i);
+			automaticCalculationHelper(fName);
+			//--------------------------------------------------------------------
+			rbExtrapolatedU->Checked=true;
+			sg1->FileName=standartName;
+			fName="Us_Uy_Extrapolated_vseZnachenia_k_"+IntToStr(i);
+			automaticCalculationHelper(fName);
+			//--------------------------------------------------------------------
+			rbExtrapolatedTenzor->Checked=true;
+			sg1->FileName=standartName;
+            fName="tenzor_Extrapolated_vseZnachenia_k_"+IntToStr(i);
+			automaticCalculationHelper(fName);
+			//--------------------------------------------------------------------
 		 }
 	}
 	silentModeEnabled=false;
@@ -481,10 +500,38 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
  FilteredParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
  FilteredParams->modifySignals(TrForMassiveFilter,ParamsWithNoise->getSignalUs(),ParamsWithNoise->getSignalUy(),eFilterLength->Text.ToInt());
 
- FilteredParams->constructPlotFromTwoMassive(US,Series7,clBlue);
- FilteredParams->constructPlotFromTwoMassive(UY,Series8,clBlue);
+ FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
+ FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredUy,clBlue);
+
+ FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredParamsUs,clBlue);
+ FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredParamsUy,clBlue);
+
+ FilteredParams->constructPlotFromTwoMassive(S_EFF,gSeriesFilteredParamsS_eff,clBlue);
+ FilteredParams->constructPlotFromTwoMassive(RH_EFF,gSeriesFilteredParamsRh_eff,clBlue);
+
+ FilteredParams->constructPlotFromTwoMassive(SXX,gSeriesFilteredParamsSxx,clBlue);
+ FilteredParams->constructPlotFromTwoMassive(SXY,gSeriesFilteredParamsSxy,clBlue);
 
  //------------------Классы-----------------------------------------------------
+
+ // и экстраполируем.
+ if(ExtrapolatedParams!=0)
+ delete ExtrapolatedParams;
+
+ ExtrapolatedParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
+ FilteredParams->modifySignals(EXTRAPOLATE,ExtrapolatedParams);
+
+ ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedUs,clGreen);
+ ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedUy,clGreen);
+
+ ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedParamsUs,clGreen);
+ ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedParamsUy,clGreen);
+
+ ExtrapolatedParams->constructPlotFromTwoMassive(S_EFF,gSeriesExtrapolatedParamsS_eff,clGreen);
+ ExtrapolatedParams->constructPlotFromTwoMassive(RH_EFF,gSeriesExtrapolatedParamsRh_eff,clGreen);
+
+ ExtrapolatedParams->constructPlotFromTwoMassive(SXX,gSeriesExtrapolatedParamsSxx,clGreen);
+ ExtrapolatedParams->constructPlotFromTwoMassive(SXY,gSeriesExtrapolatedParamsSxy,clGreen);
 }
 
 
@@ -495,62 +542,92 @@ void __fastcall TForm1::bSaveElevenPointsClick(TObject *Sender)
 // работает с графиками
 TLineSeries* Saving1=0;
 TLineSeries* Saving2=0;
-if(rbLeftPlot->Checked)
-{
- Saving1=Series1;
-  Saving2=Series2;
-}
-if(rbRightPlot->Checked)
-{
- Saving1=Series3;
-  Saving2=Series4;
-}
-if(rbFilteredPlot->Checked)
-{
- Saving1=Series7;
-  Saving2=Series8;
-}
 
-if(rbIdealPlot->Checked)
-{
- Saving1=LineSeries3;
-  Saving2=LineSeries9;
-}
-
-if(!Saving1)
-	return;
-
-double points[11]={0};
-double shag=0.2;
-for (int i=1; i < 11; i++) {
-    points[i]=points[i-1]+shag;
-}
-
-TStringList * tsl=new TStringList();
-
-int length=Saving1->XValues->Count;
-
- //int counting=0;
-for (int i = 0; i < 11; i++) {
-	int index=0;
-	double r=4;
-	for(int k=0;k<length;k++)
+	// идеальные данные
+	if (rbIdealUPlot->Checked)
 	{
-		if(fabs(fabs(Saving1->XValues->Value[k])-fabs(points[i]))<=r)
-		{
-			r=fabs(Saving1->XValues->Value[k]-points[i]);
-			index=k;
-		}
+		Saving1=gSeriesIdealParamsUs;
+		Saving2=gSeriesIdealParamsUy;
 	}
-		
-	tsl->Add(FloatToStr(Saving1->XValues->Value[index])+"\t"+Saving1->YValues->Value[index]+"\t"+Saving2->YValues->Value[index]);
-}
-tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
 
-if (silentModeEnabled || sg1->Execute()) {
-tsl->SaveToFile(sg1->FileName);
-}
-delete tsl;
+	if (rbIdealTenzorPlot->Checked)
+	{
+		Saving1=gSeriesIdealParamsSxx;
+		Saving2=gSeriesIdealParamsSxy;
+	}
+
+	// зашумленные данные
+	if (rbNoisyU->Checked)
+	{
+		Saving1=gSeriesParamsWithNoiseUs;
+		Saving2=gSeriesParamsWithNoiseUy;
+	}
+
+	if(rbNoisyTenzor->Checked)
+	{
+		Saving1=gSeriesParamsWithNoiseSxx;
+		Saving2=gSeriesParamsWithNoiseSxy;
+	}
+
+	// фильтрованные данные
+	if (rbFilteredUPlot->Checked)
+	{
+		 Saving1=gSeriesFilteredParamsUs;
+		 Saving2=gSeriesFilteredParamsUy;
+	}
+
+	if (rbFilteredTenzor->Checked)
+	{
+		Saving1=gSeriesFilteredParamsSxx;
+		Saving2=gSeriesFilteredParamsSxy;
+	}
+    // экстраполированные данные
+	if (rbExtrapolatedU->Checked)
+	{
+		Saving1=gSeriesExtrapolatedParamsUs;
+		Saving2=gSeriesExtrapolatedParamsUy;
+	}
+
+	if (rbExtrapolatedTenzor->Checked)
+	{
+		Saving1=gSeriesExtrapolatedParamsSxx;
+		Saving2=gSeriesExtrapolatedParamsSxy;
+	}
+
+	if(!Saving1)
+		return;
+
+	double points[11]={0};
+	double shag=0.2;
+	for (int i=1; i < 11; i++) {
+		points[i]=points[i-1]+shag;
+	}
+
+	TStringList * tsl=new TStringList();
+
+	int length=Saving1->XValues->Count;
+
+	 //int counting=0;
+	for (int i = 0; i < 11; i++) {
+		int index=0;
+		double r=4;
+		for(int k=0;k<length;k++)
+		{
+			if(fabs(fabs(Saving1->XValues->Value[k])-fabs(points[i]))<=r)
+			{
+				r=fabs(Saving1->XValues->Value[k]-points[i]);
+				index=k;
+			}
+		}
+
+		tsl->Add(FloatToStr(Saving1->XValues->Value[index])+"\t"+Saving1->YValues->Value[index]+"\t"+Saving2->YValues->Value[index]);
+	}
+	tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+
+	if (silentModeEnabled || sg1->Execute()) {
+	tsl->SaveToFile(sg1->FileName);
+	}
+	delete tsl;
 }
 //---------------------------------------------------------------------------
 
@@ -591,7 +668,7 @@ void __fastcall TForm1::bLoadingPlotsClick(TObject *Sender)
 
 // NEED'S UP TO DATE!!!!
 
-if (rbLeftPlot->Checked) // левый
+/*if (rbLeftPlot->Checked) // левый
 {
 	LoadingDataFromFile(Series1,Series2);
 }
@@ -602,39 +679,39 @@ if (rbRightPlot->Checked) // правый
 	{
 		ParamsWithNoise.Us[i]=Series3->YValues->Value[i];
 		ParamsWithNoise.Uy[i]=Series4->YValues->Value[i];
-	}   */
-}
-if (rbFilteredPlot->Checked) // фильтрованный
+	}
+}      */
+if (rbFilteredUPlot->Checked) // фильтрованный
 {
-	LoadingDataFromFile(Series7,Series8);
+	LoadingDataFromFile(gSeriesFilteredUs,gSeriesFilteredUy);
 }
 
-if (rbIdealPlot->Checked) // идеальный
+if (rbIdealUPlot->Checked) // идеальный
 {
-	LoadingDataFromFile(LineSeries3,LineSeries9);    //------------------------------!
-	int length=LineSeries3->YValues->Count;
+	LoadingDataFromFile(gSeriesIdealParamsUs,gSeriesIdealParamsUy);    //------------------------------!
+	int length=gSeriesIdealParamsUs->YValues->Count;
 	long double *x=new long double[length];
 	long double *y=new long double[length];
 
 	 for (int i=0; i < length; i++) {
-		 x[i]=LineSeries3->XValues->Value[i];
-		 y[i]=LineSeries3->YValues->Value[i];
+		 x[i]=gSeriesIdealParamsUs->XValues->Value[i];
+		 y[i]=gSeriesIdealParamsUs->YValues->Value[i];
 	 }
-	 LineSeries3->Clear();
+	 gSeriesIdealParamsUs->Clear();
 	 for (int i=0; i < length; i++) {
 	 if (x[i]>=0) {
-		 LineSeries3->AddXY(x[i],y[i],"",clRed);
+		 gSeriesIdealParamsUs->AddXY(x[i],y[i],"",clRed);
 
      }
 	 }
 	  for (int i=0; i < length; i++) {
-		 x[i]=LineSeries9->XValues->Value[i];
-		 y[i]=LineSeries9->YValues->Value[i];
+		 x[i]=gSeriesIdealParamsUy->XValues->Value[i];
+		 y[i]=gSeriesIdealParamsUy->YValues->Value[i];
 	 }
-	 LineSeries9->Clear();
+	 gSeriesIdealParamsUy->Clear();
 	 for (int i=0; i < length; i++) {
 	 if (x[i]>=0) {
-		 LineSeries9->AddXY(x[i],y[i],"",clRed);
+		 gSeriesIdealParamsUy->AddXY(x[i],y[i],"",clRed);
 
      }
 	 }
@@ -659,7 +736,7 @@ if (rbIdealPlot->Checked) // идеальный
 
 void __fastcall TForm1::Button13Click(TObject *Sender)
 {
-	SavingAllPoints(Series7,Series8);
+	SavingAllPoints(gSeriesFilteredUs,gSeriesFilteredUy);
 }
 //---------------------------------------------------------------------------
 // функция сохраняет все точки двух графиков
@@ -670,7 +747,7 @@ void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8)
 
 	if(!(Series7->YValues->Count || Series8->YValues->Count))
 	{
-	 ShowMessage("График пуст!");
+	 ShowMessage("График пуст! Первый параметр: "+ IntToStr(Series7->YValues->Count) +"второй параметр: "+ IntToStr(Series8->YValues->Count));
 	 return;
 	}
 	if(Series7->YValues->Count!=Series8->YValues->Count)
@@ -689,14 +766,14 @@ void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8)
 			for(int j=0;j<Series7->YValues->Count;j++)
 				x[j]=Series7->YValues->Value[j];
 
-			RoundM(x,Series7->YValues->Count);
+			Form1->RoundM(x,Series7->YValues->Count);
 
 			for(int j=0;j<Series7->YValues->Count;j++)
 				Series7->YValues->Value[j]=x[j];
 			for(int j=0;j<Series8->YValues->Count;j++)
 				x[j]=Series8->YValues->Value[j];
 
-			RoundM(x,Series8->YValues->Count);
+			Form1->RoundM(x,Series8->YValues->Count);
 
 			for(int j=0;j<Series8->YValues->Count;j++)
 				Series8->YValues->Value[j]=x[j];
@@ -758,10 +835,12 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 delete IdealParams;
 delete ParamsWithNoise;
 delete FilteredParams;
+delete ExtrapolatedParams;
 
 IdealParams=0;
 ParamsWithNoise=0;
 FilteredParams=0;
+ExtrapolatedParams=0;
 }
 //---------------------------------------------------------------------------
 

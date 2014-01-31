@@ -1,7 +1,9 @@
 //---------------------------------------------------------------------------
-#include <math.h>
-#pragma hdrstop
 
+#pragma hdrstop
+//#include <boost/numeric/ublas/lu.hpp>
+//#include <boost/numeric/ublas/matrix.hpp>
+//#include <boost/numeric/ublas/vector.hpp>
 #include "ExtrapolateUnit.h"
 #pragma package(smart_init)
 #pragma link "Series"
@@ -15,7 +17,7 @@ long double determinant (long double ** Arr,int size);
 // Функция вычисляет подгоночные коэффициенты.
 // Для поперечного сигнала.
 // Напрямую не вызывать, пользоваться extrapolate.
-
+// Сложноватый код получился, надо попробовать переписать под буст.
 
 
 void curveFitting5(long double * inX, long double *inY, long double * out, int length,long double *outKoef);
@@ -221,46 +223,71 @@ for (int i = 0; i < length; i++) {
 
 }
 //---------------------------------------------------------------------------
+
+/*using namespace boost::numeric::ublas;
+
+template<class T>
+void solve(matrix<T> &A, vector<T> &X, vector<T> &B)
+{
+  permutation_matrix<T> P(B.size());
+  lu_factorize(A,P);
+  X = B;
+  lu_substitute(A,P,X);
+}
+
+void curveFitting2WithBoost(long double * inX, long double *inY, long double * out, int length,long double *outKoef)
+{
+
+
+
+}   */
+
 //-----------curveFitting2----------------------------------------------------
 void curveFitting2(long double * inX, long double *inY, long double * out, int length,long double *outKoef)
 {
-const int a=3;
-// выражение f(x)=x^2*p1+x*p2+p3
 
-long double ** fullMatrix=new long double*[length];
+	// как много кода.
+	// по сути - формируем матрицу
+	// перемножаем её транпонированную на её изначальную
+	// дальше решаем систему методом Крамера (это тут), а вообще любый другим методом тоже.
 
-for (int i = 0; i < length; i++) {
-	fullMatrix[i]=new long double[a+1];
+	const int a=3;
+	// выражение f(x)=x^2*p1+x*p2+p3
 
-}
+	long double ** fullMatrix=new long double*[length];
 
-long double K[a+1][a+1]={0}; // сюда сохраним результат перемножения x'*x
-long double *K5[a];
-long double Ks[a]={0};
-
-long double **delta[a];  // матрицы для вычисления корней, один из столбцов - сободные члены.
-
-	for (int i = 0; i < a; i++) {
-		 delta[i]=new long double*[a];
-		for (int j = 0; j < a; j++) {
-			delta[i][j]=new long double[a];
-
-	}}
-/*
-формируем матрицу вида
-
-x^2 x^1 x^0 y
-*/
-for (int i = 0; i < length; i++) {
-	for (int j = 0; j < a; j++) {
-	// копируем значения в матрицу
-	// по столбцам, шестой - столбец единиц
-		fullMatrix[i][j]=((a-j-1)==0?1:pow(inX[i],a-j-1));
+	for (int i = 0; i < length; i++) {
+		fullMatrix[i]=new long double[a+1];
 
 	}
-	// седьмой формируется здесь.
-	fullMatrix[i][a]=inY[i];
-}
+
+	long double K[a+1][a+1]={0}; // сюда сохраним результат перемножения x'*x
+	long double *K5[a];
+	long double Ks[a]={0};
+
+	long double **delta[a];  // матрицы для вычисления корней, один из столбцов - сободные члены.
+
+		for (int i = 0; i < a; i++) {
+			 delta[i]=new long double*[a];
+			for (int j = 0; j < a; j++) {
+				delta[i][j]=new long double[a];
+
+		}}
+	/*
+	формируем матрицу вида
+
+	x^2 x^1 x^0 y
+	*/
+	for (int i = 0; i < length; i++) {
+		for (int j = 0; j < a; j++) {
+		// копируем значения в матрицу
+		// по столбцам, шестой - столбец единиц
+			fullMatrix[i][j]=((a-j-1)==0?1:pow(inX[i],a-j-1));
+
+		}
+		// седьмой формируется здесь.
+		fullMatrix[i][a]=inY[i];
+	}
 
 	for (int i = 0; i <= a; i++) {
 		for (int j = 0; j <= a; j++) {
@@ -324,21 +351,21 @@ for (int i = 0; i < length; i++) {
     }
 
 
-// прибираемся.
-for (int i = 0; i < a; i++) {
-	delete[] K5[i];
-}
+	// прибираемся.
+	for (int i = 0; i < a; i++) {
+		delete[] K5[i];
+	}
 
-for (int i = 0; i < length; i++) {
-	delete[] fullMatrix[i];
-}
-delete[] fullMatrix;
-for (int i = 0; i < a; i++) {
-		for (int j = 0; j < a; j++) {
-			delete[] delta[i][j];
+	for (int i = 0; i < length; i++) {
+		delete[] fullMatrix[i];
 	}
-			 delete[] delta[i];
-	}
+	delete[] fullMatrix;
+	for (int i = 0; i < a; i++) {
+			for (int j = 0; j < a; j++) {
+				delete[] delta[i][j];
+		}
+				 delete[] delta[i];
+		}
 
 }
 //---------------------------------------------------------------------------

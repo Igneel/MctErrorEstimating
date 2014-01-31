@@ -63,43 +63,61 @@ __published:	// IDE-managed Components
 	TEdit *Edit4;
 	TEdit *Edit3;
 	TChart *Chart5;
-	TLineSeries *Series5;
-	TLineSeries *Series6;
+	TLineSeries *gSeriesIdealParamsSxx;
+	TLineSeries *gSeriesParamsWithNoiseSxx;
 	TChart *Chart6;
-	TLineSeries *LineSeries1;
-	TLineSeries *LineSeries2;
+	TLineSeries *gSeriesIdealParamsS_eff;
+	TLineSeries *gSeriesParamsWithNoiseS_eff;
 	TChart *Chart7;
-	TLineSeries *LineSeries3;
-	TLineSeries *LineSeries4;
+	TLineSeries *gSeriesIdealParamsUs;
+	TLineSeries *gSeriesParamsWithNoiseUs;
 	TChart *Chart8;
-	TLineSeries *LineSeries5;
-	TLineSeries *LineSeries6;
+	TLineSeries *gSeriesIdealParamsSxy;
+	TLineSeries *gSeriesParamsWithNoiseSxy;
 	TChart *Chart9;
-	TLineSeries *LineSeries7;
-	TLineSeries *LineSeries8;
+	TLineSeries *gSeriesIdealParamsRh_eff;
+	TLineSeries *gSeriesParamsWithNoiseRh_eff;
 	TChart *Chart10;
-	TLineSeries *LineSeries9;
-	TLineSeries *LineSeries10;
+	TLineSeries *gSeriesIdealParamsUy;
+	TLineSeries *gSeriesParamsWithNoiseUy;
 	TSaveDialog *sg1;
 	TButton *tenzorCalculating;
 	TButton *bAutomaticCalculation;
 	TEdit *eStepByTemperature;
 	TLabel *Label11;
 	TButton *bFilteringPlots;
-	TLineSeries *Series7;
-	TLineSeries *Series8;
+	TLineSeries *gSeriesFilteredUs;
+	TLineSeries *gSeriesFilteredUy;
 	TButton *bSaveElevenPoints;
 	TGroupBox *gbSavingPlot;
-	TRadioButton *rbLeftPlot;
-	TRadioButton *rbRightPlot;
-	TRadioButton *rbFilteredPlot;
+	TRadioButton *rbFilteredUPlot;
 	TButton *bLoadingPlots;
 	TEdit *eFilterLength;
-	TRadioButton *rbIdealPlot;
+	TRadioButton *rbIdealUPlot;
 	TButton *bSaveFilmParams;
 	TLabel *Label12;
 	TButton *bTestingSomething;
 	TLineSeries *Series9;
+	TLineSeries *gSeriesExtrapolatedUs;
+	TLineSeries *gSeriesExtrapolatedUy;
+	TLineSeries *gSeriesFilteredParamsSxx;
+	TLineSeries *gSeriesExtrapolatedParamsSxx;
+	TLineSeries *gSeriesFilteredParamsSxy;
+	TLineSeries *gSeriesExtrapolatedParamsSxy;
+	TLineSeries *gSeriesExtrapolatedParamsS_eff;
+	TLineSeries *gSeriesFilteredParamsS_eff;
+	TLineSeries *gSeriesExtrapolatedParamsRh_eff;
+	TLineSeries *gSeriesExtrapolatedParamsUs;
+	TLineSeries *gSeriesExtrapolatedParamsUy;
+	TLineSeries *gSeriesFilteredParamsRh_eff;
+	TLineSeries *gSeriesFilteredParamsUs;
+	TLineSeries *gSeriesFilteredParamsUy;
+	TRadioButton *rbIdealTenzorPlot;
+	TRadioButton *rbFilteredTenzor;
+	TRadioButton *rbExtrapolatedU;
+	TRadioButton *rbExtrapolatedTenzor;
+	TRadioButton *rbNoisyU;
+	TRadioButton *rbNoisyTenzor;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall bCalculateCarrierParamsClick(TObject *Sender);
 	void __fastcall bGaussianNoiseGeneratorClick(TObject *Sender);
@@ -107,7 +125,6 @@ __published:	// IDE-managed Components
 	void __fastcall g_Nz_parKeyPress(TObject *Sender, wchar_t &Key);
 	void __fastcall bWhiteNoiseGeneratorClick(TObject *Sender);
 	void __fastcall BuildingPlotsClick(TObject *Sender);
-	void __fastcall tenzorCalculatingClick(TObject *Sender);
 	void __fastcall bAutomaticCalculationClick(TObject *Sender);
 	void __fastcall bFilteringPlotsClick(TObject *Sender);
 	void __fastcall bSaveElevenPointsClick(TObject *Sender);
@@ -120,13 +137,17 @@ __published:	// IDE-managed Components
 
 
 
-
 private:	// User declarations
 public:		// User declarations
+	void automaticCalculationHelper(UnicodeString SaveFileName);
+    void RoundM(long double * x,int length);
+
 	__fastcall TForm1(TComponent* Owner);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
 long double ownConcentrationOfElectrons(long double T, long double x);
+void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
+void ParamsKRT(void);
 //---------------------------------------------------------------------------
 #endif
