@@ -31,7 +31,7 @@ bool silentModeEnabled=false; // если флаг равен тру - то функции сохранения не 
 TO DO:
 
 1. Перед фильтрацией прикрутить нормальное достроение графика в отрицательную область магнитного поля.+
-2. Попробовать использовать экстраполяцию ПОСЛЕ фильтрации.
+2. Попробовать использовать экстраполяцию ПОСЛЕ фильтрации.+
 3. Подбор длины фильтра относительно величины отклонения точки (0,0) от истинного значения.
 4. Коррекция смещения точки, проходящей через начало координат.
 5. Апгрейд функций сохранения и загрузки данных.
@@ -98,7 +98,7 @@ void ParamsKRT(void)
 	Form1->g_Nz_par->Cells[2][3]=FloatToStr(IdealParams->carrierParams->getMobility(0));
 	//--------------------------Классы------------------------------------------
 
-	Form1->bCalculateCarrierParams->Enabled=true;
+	//Form1->bCalculateCarrierParams->Enabled=true;
 	Form1->BuildingPlots->Enabled=1;
 
 	//--------------------------------------------------------------------------
@@ -342,26 +342,26 @@ void __fastcall TForm1::BuildingPlotsClick(TObject *Sender)
 
 void TForm1::automaticCalculationHelper(UnicodeString SaveFileName)
 {
-/*
+	/*
 
-В SaveFileName нужно передавать _Us_Uy_vseZnachenia_k_"+IntToStr(i) и т.п.
+	В SaveFileName нужно передавать _Us_Uy_vseZnachenia_k_"+IntToStr(i) и т.п.
 
-*/
+	*/
 
-long double sko_xx=StrToFloat(Edit3->Text);
-RoundM(&sko_xx,1);
-long double sko_xy=StrToFloat(Edit4->Text);
-RoundM(&sko_xy,1);
-UnicodeString standartName; // эталонное имя файла
-standartName = sg1->FileName;     // запоминаем имя
-sg1->FileName=standartName+"T_"+eTemperature->Text+"_"+
-	SaveFileName+"_sko_p_xx"+FloatToStr(sko_xx)+ "_sko_p_xy"+FloatToStr(sko_xy)+".txt";
+	long double sko_xx=StrToFloat(Edit3->Text);
+	RoundM(&sko_xx,1);
+	long double sko_xy=StrToFloat(Edit4->Text);
+	RoundM(&sko_xy,1);
+	UnicodeString standartName; // эталонное имя файла
+	standartName = sg1->FileName;     // запоминаем имя
+	sg1->FileName=standartName+"T_"+eTemperature->Text+"_"+
+		SaveFileName+"_sko_p_xx"+FloatToStr(sko_xx)+ "_sko_p_xy"+FloatToStr(sko_xy)+".txt";
 
-bSaveAllPoints->Click();
-sg1->FileName=ReplaceStr(Form1->sg1->FileName,"vseZnachenia","11Znacheniy");
-bSaveElevenPoints->Click();
+	bSaveAllPoints->Click();
+	sg1->FileName=ReplaceStr(Form1->sg1->FileName,"vseZnachenia","11Znacheniy");
+	bSaveElevenPoints->Click();
 
-sg1->FileName=standartName;
+	sg1->FileName=standartName;
 }
 
 
@@ -493,45 +493,45 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 {
 
- //------------------Классы-----------------------------------------------------
- if(FilteredParams!=0)
- delete FilteredParams;
+	//------------------Классы-----------------------------------------------------
+	if(FilteredParams!=0)
+	delete FilteredParams;
 
- FilteredParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
- FilteredParams->modifySignals(TrForMassiveFilter,ParamsWithNoise->getSignalUs(),ParamsWithNoise->getSignalUy(),eFilterLength->Text.ToInt());
+	FilteredParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
+	FilteredParams->modifySignals(TrForMassiveFilter,ParamsWithNoise->getSignalUs(),ParamsWithNoise->getSignalUy(),eFilterLength->Text.ToInt());
 
- FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
- FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredUy,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredUy,clBlue);
 
- FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredParamsUs,clBlue);
- FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredParamsUy,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredParamsUs,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredParamsUy,clBlue);
 
- FilteredParams->constructPlotFromTwoMassive(S_EFF,gSeriesFilteredParamsS_eff,clBlue);
- FilteredParams->constructPlotFromTwoMassive(RH_EFF,gSeriesFilteredParamsRh_eff,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(S_EFF,gSeriesFilteredParamsS_eff,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(RH_EFF,gSeriesFilteredParamsRh_eff,clBlue);
 
- FilteredParams->constructPlotFromTwoMassive(SXX,gSeriesFilteredParamsSxx,clBlue);
- FilteredParams->constructPlotFromTwoMassive(SXY,gSeriesFilteredParamsSxy,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(SXX,gSeriesFilteredParamsSxx,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(SXY,gSeriesFilteredParamsSxy,clBlue);
 
- //------------------Классы-----------------------------------------------------
+	//------------------Классы-----------------------------------------------------
 
- // и экстраполируем.
- if(ExtrapolatedParams!=0)
- delete ExtrapolatedParams;
+	// и экстраполируем.
+	if(ExtrapolatedParams!=0)
+	delete ExtrapolatedParams;
 
- ExtrapolatedParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
- FilteredParams->modifySignals(EXTRAPOLATE,ExtrapolatedParams);
+	ExtrapolatedParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
+	FilteredParams->modifySignals(EXTRAPOLATE,ExtrapolatedParams);
 
- ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedUs,clGreen);
- ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedUy,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedUs,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedUy,clGreen);
 
- ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedParamsUs,clGreen);
- ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedParamsUy,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedParamsUs,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedParamsUy,clGreen);
 
- ExtrapolatedParams->constructPlotFromTwoMassive(S_EFF,gSeriesExtrapolatedParamsS_eff,clGreen);
- ExtrapolatedParams->constructPlotFromTwoMassive(RH_EFF,gSeriesExtrapolatedParamsRh_eff,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(S_EFF,gSeriesExtrapolatedParamsS_eff,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(RH_EFF,gSeriesExtrapolatedParamsRh_eff,clGreen);
 
- ExtrapolatedParams->constructPlotFromTwoMassive(SXX,gSeriesExtrapolatedParamsSxx,clGreen);
- ExtrapolatedParams->constructPlotFromTwoMassive(SXY,gSeriesExtrapolatedParamsSxy,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(SXX,gSeriesExtrapolatedParamsSxx,clGreen);
+	ExtrapolatedParams->constructPlotFromTwoMassive(SXY,gSeriesExtrapolatedParamsSxy,clGreen);
 }
 
 
@@ -539,9 +539,9 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 void __fastcall TForm1::bSaveElevenPointsClick(TObject *Sender)
 {
 
-// работает с графиками
-TLineSeries* Saving1=0;
-TLineSeries* Saving2=0;
+	// работает с графиками
+	TLineSeries* Saving1=0;
+	TLineSeries* Saving2=0;
 
 	// идеальные данные
 	if (rbIdealUPlot->Checked)
@@ -633,34 +633,34 @@ TLineSeries* Saving2=0;
 
 void LoadingDataFromFile(TLineSeries * Series1,TLineSeries * Series2)
 {
-// работает с графиками, от структур свободна.
-TStringList * tsl=new TStringList();
-if (silentModeEnabled || Form1->sg1->Execute()) {
-tsl->LoadFromFile(Form1->sg1->FileName);
-Series1->Clear();
-	  Series2->Clear();
+	// работает с графиками, от структур свободна.
+	TStringList * tsl=new TStringList();
+	if (silentModeEnabled || Form1->sg1->Execute()) {
+	tsl->LoadFromFile(Form1->sg1->FileName);
+	Series1->Clear();
+		  Series2->Clear();
 
-tsl->Text=ReplaceTextW(tsl->Text,".",","); // заменить все точки на запятые
+	tsl->Text=ReplaceTextW(tsl->Text,".",","); // заменить все точки на запятые
 
-for(int i=0;i<tsl->Count;i++) // по количеству строк
-	  {
+	for(int i=0;i<tsl->Count;i++) // по количеству строк
+		  {
 
-	  if(tsl->Strings[i].IsEmpty()) // пустые строки пропускаем
-	  continue;
-	  String s = tsl->Strings[i];
+		  if(tsl->Strings[i].IsEmpty()) // пустые строки пропускаем
+		  continue;
+		  String s = tsl->Strings[i];
 
-	  String s1=wcstok(s.c_str(),L" \t");
-	  String s2=wcstok(NULL,L" \t");
-	  String s3=wcstok(NULL,L" \t");
+		  String s1=wcstok(s.c_str(),L" \t");
+		  String s2=wcstok(NULL,L" \t");
+		  String s3=wcstok(NULL,L" \t");
 
-	  Series1->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
-	  s2.ToDouble(),"",clRed);
-	  Series2->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
-	  s3.ToDouble(),"",clRed);
+		  Series1->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
+		  s2.ToDouble(),"",clRed);
+		  Series2->AddXY(s1.ToDouble(), // первая часть до пробела это х, вторая после у
+		  s3.ToDouble(),"",clRed);
 
-	  }
-}
-delete tsl;
+		  }
+	}
+	delete tsl;
 }
 
 void __fastcall TForm1::bLoadingPlotsClick(TObject *Sender)
@@ -816,13 +816,7 @@ void __fastcall TForm1::bSaveFilmParamsClick(TObject *Sender)
 
 void __fastcall TForm1::bTestingSomethingClick(TObject *Sender)
 {
-
-
-
-extrapolate5Degree(Series2, 0, 2.5, 0.2,Series4);
-
-
-
+	extrapolate5Degree(Series2, 0, 2.5, 0.2,Series4,5);
 }
 //---------------------------------------------------------------------------
 
@@ -832,15 +826,16 @@ extrapolate5Degree(Series2, 0, 2.5, 0.2,Series4);
 
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
-delete IdealParams;
-delete ParamsWithNoise;
-delete FilteredParams;
-delete ExtrapolatedParams;
+	delete IdealParams;
+	delete ParamsWithNoise;
+	delete FilteredParams;
+	delete ExtrapolatedParams;
 
-IdealParams=0;
-ParamsWithNoise=0;
-FilteredParams=0;
-ExtrapolatedParams=0;
+	IdealParams=0;
+	ParamsWithNoise=0;
+	FilteredParams=0;
+	ExtrapolatedParams=0;
 }
 //---------------------------------------------------------------------------
+
 

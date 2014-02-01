@@ -95,14 +95,14 @@
         Caption = 'sxy:'
       end
       object Label11: TLabel
-        Left = 155
+        Left = 213
         Top = 453
-        Width = 109
+        Width = 49
         Height = 13
-        Caption = #1064#1072#1075' '#1087#1086' '#1090#1077#1084#1087#1077#1088#1072#1090#1091#1088#1077':'
+        Caption = #1064#1072#1075' '#1087#1086' T:'
       end
       object Label12: TLabel
-        Left = 155
+        Left = 213
         Top = 377
         Width = 83
         Height = 13
@@ -205,9 +205,9 @@
         OnKeyPress = g_Nz_parKeyPress
       end
       object bWhiteNoiseGenerator: TButton
-        Left = 16
-        Top = 275
-        Width = 169
+        Left = 15
+        Top = 272
+        Width = 133
         Height = 25
         Caption = #1043#1077#1085#1077#1088#1072#1090#1086#1088' '#1073#1077#1083#1086#1075#1086' '#1096#1091#1084#1072
         TabOrder = 8
@@ -216,7 +216,7 @@
       object bGaussianNoiseGenerator: TButton
         Left = 16
         Top = 242
-        Width = 169
+        Width = 132
         Height = 25
         Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1096#1091#1084' '#1074' '#1089#1080#1075#1085#1072#1083
         Enabled = False
@@ -456,8 +456,8 @@
         end
       end
       object bSaveAllPoints: TButton
-        Left = 16
-        Top = 315
+        Left = 154
+        Top = 211
         Width = 133
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1074#1089#1077' '#1090#1086#1095#1082#1080
@@ -510,60 +510,51 @@
         Height = 21
         TabOrder = 25
       end
-      object tenzorCalculating: TButton
-        Left = 88
-        Top = 211
-        Width = 97
-        Height = 25
-        Caption = #1054#1073#1088#1072#1090#1085#1099#1081' '#1088#1072#1089#1095#1077#1090
-        Enabled = False
-        TabOrder = 26
-      end
       object bAutomaticCalculation: TButton
-        Left = 154
+        Left = 206
         Top = 422
         Width = 75
         Height = 25
         Caption = #1056#1072#1089#1095#1077#1090
-        TabOrder = 27
+        TabOrder = 26
         OnClick = bAutomaticCalculationClick
       end
       object eStepByTemperature: TEdit
-        Left = 154
+        Left = 212
         Top = 472
-        Width = 121
+        Width = 75
         Height = 21
-        TabOrder = 28
+        TabOrder = 27
         Text = '10'
       end
       object bFilteringPlots: TButton
-        Left = 155
+        Left = 213
         Top = 346
         Width = 75
         Height = 25
         Caption = #1060#1080#1083#1100#1090#1088
-        TabOrder = 29
+        TabOrder = 28
         OnClick = bFilteringPlotsClick
       end
       object bSaveElevenPoints: TButton
-        Left = 16
-        Top = 346
+        Left = 154
+        Top = 242
         Width = 133
         Height = 24
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' 11 '#1090#1086#1095#1077#1082
-        TabOrder = 30
+        TabOrder = 29
         OnClick = bSaveElevenPointsClick
       end
       object gbSavingPlot: TGroupBox
-        Left = 549
-        Top = 106
-        Width = 201
-        Height = 264
+        Left = 15
+        Top = 315
+        Width = 185
+        Height = 199
         Caption = #1057#1086#1093#1088#1072#1085#1103#1077#1084#1099#1081' '#1075#1088#1072#1092#1080#1082':'
-        TabOrder = 31
+        TabOrder = 30
         object rbFilteredUPlot: TRadioButton
           Left = 16
-          Top = 71
+          Top = 109
           Width = 137
           Height = 17
           Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081' '#1089#1080#1075#1085#1072#1083
@@ -571,7 +562,7 @@
         end
         object rbIdealUPlot: TRadioButton
           Left = 16
-          Top = 94
+          Top = 22
           Width = 113
           Height = 17
           Caption = #1063#1080#1089#1090#1099#1081' '#1089#1080#1075#1085#1072#1083
@@ -579,7 +570,7 @@
         end
         object rbIdealTenzorPlot: TRadioButton
           Left = 16
-          Top = 117
+          Top = 45
           Width = 113
           Height = 17
           Caption = #1063#1080#1089#1090#1099#1081' '#1090#1077#1085#1079#1086#1088
@@ -587,7 +578,7 @@
         end
         object rbFilteredTenzor: TRadioButton
           Left = 16
-          Top = 140
+          Top = 132
           Width = 137
           Height = 17
           Caption = #1060#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1099#1081' '#1090#1077#1085#1079#1086#1088
@@ -595,7 +586,7 @@
         end
         object rbExtrapolatedU: TRadioButton
           Left = 16
-          Top = 163
+          Top = 153
           Width = 169
           Height = 17
           Caption = #1069#1082#1089#1090#1088#1072#1087#1086#1083#1080#1088#1086#1074#1072#1085#1085#1099#1081' '#1089#1080#1075#1085#1072#1083
@@ -603,7 +594,7 @@
         end
         object rbExtrapolatedTenzor: TRadioButton
           Left = 16
-          Top = 186
+          Top = 176
           Width = 169
           Height = 17
           Caption = #1069#1082#1089#1090#1088#1072#1087#1086#1083#1080#1088#1086#1074#1072#1085#1085#1099#1081' '#1090#1077#1085#1079#1086#1088
@@ -611,7 +602,7 @@
         end
         object rbNoisyU: TRadioButton
           Left = 16
-          Top = 209
+          Top = 68
           Width = 169
           Height = 17
           Caption = #1047#1072#1096#1091#1084#1083#1077#1085#1085#1099#1081' '#1089#1080#1075#1085#1072#1083
@@ -619,7 +610,7 @@
         end
         object rbNoisyTenzor: TRadioButton
           Left = 16
-          Top = 232
+          Top = 91
           Width = 169
           Height = 17
           Caption = #1047#1072#1096#1091#1084#1083#1077#1085#1085#1099#1081' '#1090#1077#1085#1079#1086#1088
@@ -627,29 +618,29 @@
         end
       end
       object bLoadingPlots: TButton
-        Left = 155
+        Left = 213
         Top = 315
         Width = 75
         Height = 25
         Caption = #1047#1072#1075#1088#1091#1079#1080#1090#1100
-        TabOrder = 32
+        TabOrder = 31
         OnClick = bLoadingPlotsClick
       end
       object eFilterLength: TEdit
-        Left = 155
+        Left = 213
         Top = 395
-        Width = 121
+        Width = 75
         Height = 21
-        TabOrder = 33
+        TabOrder = 32
         Text = '25'
       end
       object bSaveFilmParams: TButton
-        Left = 16
-        Top = 376
+        Left = 154
+        Top = 272
         Width = 133
         Height = 25
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1072#1088#1072#1084#1077#1090#1088#1099
-        TabOrder = 34
+        TabOrder = 33
         OnClick = bSaveFilmParamsClick
       end
       object bTestingSomething: TButton
@@ -658,7 +649,7 @@
         Width = 75
         Height = 25
         Caption = 'Test'
-        TabOrder = 35
+        TabOrder = 34
         OnClick = bTestingSomethingClick
       end
     end
@@ -1076,6 +1067,7 @@
     end
   end
   object sg1: TSaveDialog
+    Filter = #1058#1077#1082#1089#1090#1086#1074#1099#1081' '#1092#1072#1081#1083'|*.txt|'#1042#1089#1077' '#1092#1072#1081#1083#1099'|*.*'
     Left = 8
     Top = 728
   end

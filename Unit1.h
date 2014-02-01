@@ -81,7 +81,6 @@ __published:	// IDE-managed Components
 	TLineSeries *gSeriesIdealParamsUy;
 	TLineSeries *gSeriesParamsWithNoiseUy;
 	TSaveDialog *sg1;
-	TButton *tenzorCalculating;
 	TButton *bAutomaticCalculation;
 	TEdit *eStepByTemperature;
 	TLabel *Label11;

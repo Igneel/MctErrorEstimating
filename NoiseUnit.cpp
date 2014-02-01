@@ -11,24 +11,25 @@
 // преобразование Бокса-Мюллера
 void BoxMull(long double *z,int l)
 {
-long double x,y;
-
-int i;
-for(i=0;i<l-1;i+=2)
-{
-double s=3;
-while (s>1 || s<=0)
-{
-//int a=rand();
-x=(-1000+rand()%2000)/1000.0;
-y=(-1000+rand()%2000)/1000.0;
-// шум в пределах от -1 до 1
-s=x*x+y*y;
-}
-z[i]=x*sqrt(-2*log(s)/s);
-z[i+1]=y*sqrt(-2*log(s)/s);
-i=i;
-}
+	long double x,y;
+    long double s;
+	int i;
+	// вся эпичность этой ошибки потрясает%)
+	// это ж надо было не подумать, что
+	// если l - число нечетное, то мы вылезем за границу)
+	for(i=0;i<l;i+=2)
+	{
+		do
+		{
+			x=(-1000+rand()%2000)/1000.0;
+			y=(-1000+rand()%2000)/1000.0;
+			// шум в пределах от -1 до 1
+			s=x*x+y*y;
+		}while (s>1.0 || s<=0.0);
+		z[i]=x*sqrt(-2.0*log(s)/s);
+		if((i+1)<l)
+			z[i+1]=y*sqrt(-2.0*log(s)/s);
+	}
 }
 
 
@@ -38,11 +39,11 @@ i=i;
 
 long double Sko (const long double *x0,const long double *x,int l)
 {
-long double z=0;
-for(int i=0;i<l;i++)
-z+= pow(fabs((fabs(x[i])-fabs(x0[i]))),2);
-z/=(long double)l;
-return sqrt(z);
+	long double z=0;
+	for(int i=0;i<l;i++)
+	z+= pow(fabs((fabs(x[i])-fabs(x0[i]))),2);
+	z/=(long double)l;
+	return sqrt(z);
 }
 
 //---------------------------------------------------
@@ -51,20 +52,35 @@ return sqrt(z);
 
  long double Mo (const long double *x,int l)
  {
- long double M=0;
- for(int i=0;i<l;i++)
- M+=x[i];
- return M/l;
+	 long double M=0;
+	 for(int i=0;i<l;i++)
+	 M+=x[i];
+	 return M/l;
  }
 
 //---------------------------------------------------------------------------
 // возвращает величину математического ожидания шума.
 void ShumAdding(const long double *x,long double *out,long double *ret, long double koeff,const int l)
 {
+
+
 long double *y= new long double[l]; // шум для нашего графика
+/*for (int i = 0; i < l; i++) {
+    y[i]=0;
+}     */
+
 BoxMull(y,l);
 for(int i=0;i<l;i++)
 	out[i]=x[i]+y[i]/koeff;
+
+if(fabs(out[l-1])>10000)
+{
+long double temp1=x[l-1];
+long double temp2=out[l-1];
+long double temp3=y[l-1];
+long double temp4=koeff;
+ShowMessage("Сейчас вылезет:)");
+}
 	// амплитуда шума определяется как 1/koef
   ret[0]=Mo(y,l); // математическое ожидание
   ret[1]=Sko(x,out,l);  // СКО

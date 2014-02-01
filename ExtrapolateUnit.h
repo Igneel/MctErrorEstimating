@@ -6,10 +6,9 @@
 #include <math.h>
 #include "Chart.hpp"
 #include "Series.hpp"
-int extrapolate5Degree(TLineSeries * Series, long double minX, long double maxX, long double hX,TLineSeries *out);
+int extrapolate5Degree(TLineSeries * Series, long double minX, long double maxX, long double hX,TLineSeries *out,const int powPolinom);
 int extrapolate2Degree(TLineSeries * Series, long double minX, long double maxX, long double hX,TLineSeries *out);
 
-void curveFitting2(long double * inX, long double *inY, long double * out, int length,long double *outKoef);
-void curveFitting5(long double * inX, long double *inY, long double * out, int length,long double *outKoef);
+int curveFittingUniversal(long double * inX, long double *inY, const int length,long double *outKoef,const int powPolinom);
 //---------------------------------------------------------------------------
 #endif

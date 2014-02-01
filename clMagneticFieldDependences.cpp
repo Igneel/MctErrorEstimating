@@ -282,7 +282,8 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 	// нагло записываем положительную часть фильтрованного сигнала обратно.
 	for(int i=0;i<NumberOfPoints;i++)
 	{
-        Us[i]=tempOutSignal[i+NumberOfPoints-1];
+		Us[i]=tempOutSignal[i+NumberOfPoints-1];
+		//Us[i]=tempOutSignal[i];
     }
     // делаем то же самое с другим сигналом, хм, надо предусмотреть функцию.
 	for (int i = 0; i < NumberOfPoints; i++)
@@ -300,6 +301,21 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 		B[i]=tempOutB[i+NumberOfPoints-1];
 		Uy[i]=tempOutSignal[i+NumberOfPoints-1];
 	}
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	/*for(int i=0;i<NumberOfPoints;i++)
+	{
+		if(B[i]<0)
+		{
+			B[i]=0;
+			//Us[i]=0;
+			Uy[i]=0;
+		}
+	}  */
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 
 	// пересчитываем зависимости.
 	calculateEffectiveParamsFromSignals();
@@ -328,8 +344,12 @@ int clMagneticFieldDependences::modifySignals(ModifyType type,clMagneticFieldDep
 {
 int returnValue=1;
 const int a=6;
-long double * koef1= new long double [a];
-long double * koef2= new long double [a];
+
+const int polinomPowForUs=4;
+const int polinomPowForUy=4;
+
+long double * koefUs= new long double [polinomPowForUs+1];
+long double * koefUy= new long double [polinomPowForUy+1];
 
 long double * newB= new long double [NumberOfPoints];
 long double * newUs= new long double [NumberOfPoints];
@@ -339,21 +359,36 @@ newB[0]=0;
 	{
 		case EXTRAPOLATE:
 
-			curveFitting5(B,Us,0,NumberOfPoints,koef1);
-			curveFitting5(B,Uy,0,NumberOfPoints,koef2);
+			curveFittingUniversal(B, Us, NumberOfPoints,koefUs,polinomPowForUs);
+            curveFittingUniversal(B, Uy, NumberOfPoints,koefUy,polinomPowForUy);
 
 			for(int i=0;i<NumberOfPoints;i++)
 			{
 				if(i!=0) newB[i]=newB[i-1]+h;
 
-				newUs[i]=pow(newB[i],a-1)*koef1[0]+pow(newB[i],a-2)*koef1[1]+
-					pow(newB[i],a-3)*koef1[2]+pow(newB[i],a-4)*koef1[3]+
-					pow(newB[i],1)*koef1[4]+koef1[5];
+				newUs[i]=0;
+				for (int koef_index = 0; koef_index <= polinomPowForUs; koef_index++)
+				{
+					long double powedB=0;
+					if(polinomPowForUs-koef_index==0)
+					powedB=1;
+					else
+					powedB=powl(newB[i],polinomPowForUs-koef_index);
 
-				newUy[i]=pow(newB[i],a-1)*koef2[0]+pow(newB[i],a-2)*koef2[1]+
-					pow(newB[i],a-3)*koef2[2]+pow(newB[i],a-4)*koef2[3]+
-					pow(newB[i],1)*koef2[4]+koef2[5];
+					newUs[i]+=koefUs[koef_index]*powedB;
+				}
 
+				newUy[i]=0;
+				for (int koef_index = 0; koef_index <= polinomPowForUy; koef_index++)
+				{
+					long double powedB=0;
+					if(polinomPowForUy-koef_index==0)
+					powedB=1;
+					else
+					powedB=powl(newB[i],polinomPowForUy-koef_index);
+
+					newUy[i]+=koefUy[koef_index]*powedB;
+				}
 			}
 			extrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
 			break;
@@ -361,8 +396,8 @@ newB[0]=0;
 		returnValue=0;
 	}
 
-delete[] koef1;
-delete[] koef2;
+delete[] koefUs;
+delete[] koefUy;
 delete[] newB;
 delete[] newUs;
 delete[] newUy;
