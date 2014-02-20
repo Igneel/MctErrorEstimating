@@ -62,7 +62,6 @@ clMagneticFieldDependences *ParamsWithNoise=0;
 clMagneticFieldDependences *FilteredParams=0;
 clMagneticFieldDependences *ExtrapolatedParams=0;
 
-
 //------------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -463,17 +462,7 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 	FilteredParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
 	FilteredParams->modifySignals(TrForMassiveFilter,ParamsWithNoise->getSignalUs(),ParamsWithNoise->getSignalUy(),eFilterLength->Text.ToInt());
 
-	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
-	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredUy,clBlue);
 
-	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredParamsUs,clBlue);
-	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredParamsUy,clBlue);
-
-	FilteredParams->constructPlotFromTwoMassive(S_EFF,gSeriesFilteredParamsS_eff,clBlue);
-	FilteredParams->constructPlotFromTwoMassive(RH_EFF,gSeriesFilteredParamsRh_eff,clBlue);
-
-	FilteredParams->constructPlotFromTwoMassive(SXX,gSeriesFilteredParamsSxx,clBlue);
-	FilteredParams->constructPlotFromTwoMassive(SXY,gSeriesFilteredParamsSxy,clBlue);
 
 	//------------------Классы-----------------------------------------------------
 
@@ -503,6 +492,18 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 		return;
 	}
 	//------Конец костыля.
+
+	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredUy,clBlue);
+
+	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredParamsUs,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredParamsUy,clBlue);
+
+	FilteredParams->constructPlotFromTwoMassive(S_EFF,gSeriesFilteredParamsS_eff,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(RH_EFF,gSeriesFilteredParamsRh_eff,clBlue);
+
+	FilteredParams->constructPlotFromTwoMassive(SXX,gSeriesFilteredParamsSxx,clBlue);
+	FilteredParams->constructPlotFromTwoMassive(SXY,gSeriesFilteredParamsSxy,clBlue);
 
 	ExtrapolatedParams->constructPlotFromTwoMassive(US,gSeriesExtrapolatedUs,clGreen);
 	ExtrapolatedParams->constructPlotFromTwoMassive(UY,gSeriesExtrapolatedUy,clGreen);

@@ -355,7 +355,13 @@ long double * koefUy= new long double [polinomPowForUy+1];
 long double * newB= new long double [NumberOfPoints];
 long double * newUs= new long double [NumberOfPoints];
 long double * newUy= new long double [NumberOfPoints];
+
+long double *oldB=new long double [NumberOfPoints];
+long double *oldUs=new long double [NumberOfPoints];
+long double *oldUy=new long double [NumberOfPoints];
+
 newB[0]=0;
+int i=0;
 	switch(type)
 	{
 		case EXTRAPOLATE:
@@ -392,11 +398,49 @@ newB[0]=0;
 				}
 			}
 			extrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
+
+			//----------А вот тут прикручиваем недостающий кусочек в сигналы----
+
+
+
+			for(int i=0;i<NumberOfPoints;i++)
+			{
+				oldB[i]=B[i];
+				oldUs[i]=Us[i];
+				oldUy[i]=Uy[i];
+			}
+
+
+			while(oldB[i++]<=0 && i<NumberOfPoints);
+			i--;
+
+			for(int j=i;j<NumberOfPoints;j++)
+			{
+				B[j-i]=oldB[j];
+				Us[j-i]=oldUs[j];
+				Uy[j-i]=oldUy[j];
+			}
+
+			for(int j=NumberOfPoints-i;j<NumberOfPoints;j++)
+			{
+				B[j]=newB[j];
+				Us[j]=newUs[j];
+				Uy[j]=newUy[j];
+			}
+
+			calculateEffectiveParamsFromSignals();
+			calculateTenzorFromEffectiveParams();
+
+
+			//------------------------------------------------------------------
+
 			break;
 		default:
 		returnValue=0;
 	}
-
+delete[] oldUy;
+delete[] oldUs;
+delete[] oldB;
 delete[] koefUs;
 delete[] koefUy;
 delete[] newB;
