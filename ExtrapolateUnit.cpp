@@ -9,6 +9,8 @@
 #pragma link "Series"
 //---------------------------------------------------------------------------
 
+#define DEBUG 1
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // Модуль экстраполяции.
@@ -17,12 +19,7 @@ long double determinant (long double ** Arr,int size);
 // Функция вычисляет подгоночные коэффициенты.
 // Для поперечного сигнала.
 // Напрямую не вызывать, пользоваться extrapolate.
-// Сложноватый код получился, надо попробовать переписать под буст.
 
-
-void curveFitting5(long double * inX, long double *inY, long double * out, int length,long double *outKoef);
-void curveFitting2(long double * inX, long double *inY, long double * out, int length,long double *outKoef);
-// Экстраполяция для полинома пятой степени
 // Возвращает кол-во точек
 //Принимает указатель на входные данные, минимальное и максимальное значения по х, величину шага, указатель на выходные данные.
 int extrapolate5Degree(TLineSeries * Series, long double minX, long double maxX, long double hX,TLineSeries *out,const int powPolinom)
@@ -84,8 +81,8 @@ for (int i = 0; i < length; i++) {
 	inY[i]=Series->YValues->Value[i];
 }
 out->Clear();
-curveFitting2(inX,inY,0,length,koef);  // выполняем подгонку и получаем коэффициенты
-
+// выполняем подгонку и получаем коэффициенты
+curveFittingUniversal(inX,inY,length,koef,2);
 int a=lengthCoef;
 for (int i = 0; i <lengthOut; i++)
 {                         // вычисляем экстраполированную функцию
@@ -121,7 +118,6 @@ default:
 						det+=pow((long double)-1, (i+j))*determinant(matr, size-1)*Arr[i][size-1];
 				}
 				delete[] matr;
-
   return det;
 }
 }
@@ -165,6 +161,17 @@ int curveFittingUniversal(long double * inX, long double *inY, const int length,
 	for (int i = 0; i < a; i++)
 		K5[i]= new long double[a];
 	long double *p=new long double [a];
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+
+	/*
+	Итак, много временных переменных:
+	*/
+    long double temp1,temp2,temp3;
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	/*
 	формируем матрицу вида
 
@@ -174,17 +181,33 @@ int curveFittingUniversal(long double * inX, long double *inY, const int length,
 		for (int j = 0; j < a; j++) {
 		// копируем значения в матрицу
 		// по столбцам, шестой - столбец единиц
+		if(DEBUG)
+		{
+		temp2=inX[i];
+			temp1=((a-j-1)==0?1:pow(inX[i],a-j-1));
+		}
 			fullMatrix[i][j]=((a-j-1)==0?1:pow(inX[i],a-j-1));
 
 		}
 		// последний столбец формируется здесь из значений игрек.
+		if(DEBUG)
+		temp2= inY[i];
 		fullMatrix[i][a]=inY[i];
 	}
 
 	for (int i = 0; i <= a; i++) {
 		for (int j = 0; j <= a; j++) {
 			for (int k=0; k < length; k++) {
+			if(DEBUG)
+			{
+			temp1=fullMatrix[k][i];
+			temp2=fullMatrix[k][j];
+			temp3=K[i][j];
+			}
 				K[i][j]+=fullMatrix[k][i]*fullMatrix[k][j];
+				if(DEBUG)
+			temp3=K[i][j];
+
 	}}}
 	// перемножение работает, проверено матлабом
 	// K5 - содержит a строк и a столбцов, т.е. без свободных членов.
@@ -195,6 +218,8 @@ int curveFittingUniversal(long double * inX, long double *inY, const int length,
 
 	for (int i = 0; i < a-1; i++) {
 		for (int j = 0; j < a; j++) {
+        if(DEBUG)
+			temp3=K[i][j];
 		K5[i][j]=K[i][j]; // копируем первые 2a-1 строк
 		//blabla=K5[i][j];
 		}
@@ -202,11 +227,17 @@ int curveFittingUniversal(long double * inX, long double *inY, const int length,
 
 	// а 6ая строка - среднее арифметическое 6 и 7 строк
 	for (int i = 0; i < a; i++) {
+
 		K5[a-1][i]=(K[a-1][i]+K[a][i])/2;
+		if(DEBUG)
+			temp3=K5[a-1][i];
 	}
 
 	for (int i = 0; i < a-1; i++) {
+
 		Ks[i]=K[i][a];
+		if(DEBUG)
+			temp3=Ks[i];
 	}
 	Ks[a-1]=(K[a-1][a]+K[a][a])/2;
 
@@ -265,4 +296,7 @@ int curveFittingUniversal(long double * inX, long double *inY, const int length,
 	return a;
 }
 //---------------------------------------------------------------------------
+int curveFittingRational(long double * inX, long double *inY, const int length,long double *outKoef,const int numeratorDegree, const int denominatorDegree)
+{
 
+}

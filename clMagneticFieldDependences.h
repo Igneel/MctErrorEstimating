@@ -18,6 +18,9 @@ enum ModifyType {SHUM_ADDING, FILTERING, EXTRAPOLATE};
 class clMagneticFieldDependences {
 
 	public:
+    friend void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,clMagneticFieldDependences * FilteredParams,clMagneticFieldDependences * ExtrapolatedParams);
+
+
 	clMagneticFieldDependences(int size,long double shag,long double molarCompositionCadmium,
 	long double Temperature,long double heavyHoleConcentrerion,long double AFactor,long double KFactor,
 	long double thickness,long double cbRatio,long double currentIntensity,long double numberOfCarrierTypes);
@@ -56,6 +59,7 @@ class clMagneticFieldDependences {
 
 	private:
 
+
 	void calculateTenzorFromCarrierParams();
 	void calculateEffectiveParamsFromTenzor();
 	void calculateSignalsFromEffectiveParams();
@@ -63,7 +67,7 @@ class clMagneticFieldDependences {
 	void MemoryAllocation(); // выделение памяти.
 
 	static const long double THEALMOSTZERO;
-    static const long double electronCharge;
+	static const long double electronCharge;
 
 	long double h;
 	const int NumberOfPoints;
@@ -75,5 +79,7 @@ class clMagneticFieldDependences {
 	long double *s_eff;
 	long double *Rh_eff;
 };
+
+
 //---------------------------------------------------------------------------
 #endif

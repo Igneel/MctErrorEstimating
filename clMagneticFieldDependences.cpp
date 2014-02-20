@@ -288,7 +288,8 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
     // делаем то же самое с другим сигналом, хм, надо предусмотреть функцию.
 	for (int i = 0; i < NumberOfPoints; i++)
 	{
-		tempInSignal[i]=-idealUy[NumberOfPoints-i-1]+2*idealUy[0];
+		tempInSignal[i]=idealUy[NumberOfPoints-i-1];   // чет
+		//tempInSignal[i]=-idealUy[NumberOfPoints-i-1]+2*idealUy[0];  // нечет
 		tempInB[i]=-B[NumberOfPoints-i-1];
 		tempInSignal[i+NumberOfPoints]=idealUy[i];
 		tempInB[i+NumberOfPoints]=B[i];
@@ -304,7 +305,7 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 	//--------------------------------------------------------------------------
 	//--------------------------------------------------------------------------
 	//--------------------------------------------------------------------------
-	/*for(int i=0;i<NumberOfPoints;i++)
+	for(int i=0;i<NumberOfPoints;i++)
 	{
 		if(B[i]<0)
 		{
@@ -312,7 +313,7 @@ const long double * idealUs,const long double * idealUy,int lengthFilter)
 			//Us[i]=0;
 			Uy[i]=0;
 		}
-	}  */
+	}
 	//--------------------------------------------------------------------------
 	//--------------------------------------------------------------------------
 	//--------------------------------------------------------------------------
@@ -443,5 +444,99 @@ bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode sa
 /*
    */
 //---------------------------------------------------------------------------
+
+void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
+		clMagneticFieldDependences * FilteredParams,
+		clMagneticFieldDependences * ExtrapolatedParams)
+	{
+
+	int sizeTemp=3*NoisyParams->NumberOfPoints;
+
+	const int polinomPowForUs=3;
+	const int polinomPowForUy=4;
+
+	long double * koefUs= new long double [polinomPowForUs+1];
+	long double * koefUy= new long double [polinomPowForUy+1];
+
+	long double * newB= new long double [NoisyParams->NumberOfPoints];
+	long double * newUs= new long double [NoisyParams->NumberOfPoints];
+	long double * newUy= new long double [NoisyParams->NumberOfPoints];
+	newB[0]=0;
+
+
+
+	long double * inBforUs=new long double[sizeTemp];
+	long double * inBforUy=new long double[sizeTemp];
+	long double * inUs=new long double[sizeTemp];
+	long double * inUy=new long double[sizeTemp];
+
+	for(int i=0;i<NoisyParams->NumberOfPoints;i++)
+	{
+		inBforUs[i]=NoisyParams->B[i];
+		inBforUy[i]=NoisyParams->B[i];
+		inUs[i]=NoisyParams->Us[i];
+		inUy[i]=NoisyParams->Uy[i];
+	}
+	for(int i=NoisyParams->NumberOfPoints,j=0;j<NoisyParams->NumberOfPoints;i++,j++)
+	{
+		inBforUs[i]=FilteredParams->B[j];
+		inBforUy[i]=FilteredParams->B[j];
+		inUs[i]=FilteredParams->Us[j];
+		inUy[i]=FilteredParams->Uy[j];
+	}
+	for(int i=2*NoisyParams->NumberOfPoints,j=0;j<NoisyParams->NumberOfPoints;i++,j++)
+	{
+		inBforUs[i]=NoisyParams->B[j];
+		inBforUy[i]=NoisyParams->B[j];
+		inUs[i]=NoisyParams->Us[j];
+		inUy[i]=NoisyParams->Uy[j];
+	}
+
+
+		curveFittingUniversal(inBforUs, inUs, sizeTemp,koefUs,polinomPowForUs);
+		curveFittingUniversal(inBforUy, inUy, sizeTemp,koefUy,polinomPowForUy);
+
+		for(int i=0;i<NoisyParams->NumberOfPoints;i++)
+		{
+			if(i!=0) newB[i]=newB[i-1]+NoisyParams->h;
+
+			newUs[i]=0;
+			for (int koef_index = 0; koef_index <= polinomPowForUs; koef_index++)
+			{
+				long double powedB=0;
+				if(polinomPowForUs-koef_index==0)
+				powedB=1;
+				else
+				powedB=powl(newB[i],polinomPowForUs-koef_index);
+
+				newUs[i]+=koefUs[koef_index]*powedB;
+			}
+
+			newUy[i]=0;
+			for (int koef_index = 0; koef_index <= polinomPowForUy; koef_index++)
+			{
+				long double powedB=0;
+				if(polinomPowForUy-koef_index==0)
+				powedB=1;
+				else
+				powedB=powl(newB[i],polinomPowForUy-koef_index);
+
+				newUy[i]+=koefUy[koef_index]*powedB;
+			}
+		}
+		ExtrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
+		;
+
+	delete[] inBforUs;
+	delete[] inBforUy;
+	delete[] inUs;
+	delete[] inUy;
+
+	delete[] koefUs;
+	delete[] koefUy;
+	delete[] newB;
+	delete[] newUs;
+	delete[] newUy;
+	}
 
 #pragma package(smart_init)

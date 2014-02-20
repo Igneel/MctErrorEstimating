@@ -16,6 +16,15 @@
 #include <Dialogs.hpp>
 #include <ComCtrls.hpp>
 //---------------------------------------------------------------------------
+#include "Unit2.h"
+#include "ExtrapolateUnit.h"
+#include "FilteringUnit.h"
+#include "NoiseUnit.h"
+#include "clMagneticFieldDependences.h"
+#include <math.h>
+//---------------------------------------------------------------------------
+
+
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
@@ -128,10 +137,10 @@ __published:	// IDE-managed Components
 	void __fastcall bFilteringPlotsClick(TObject *Sender);
 	void __fastcall bSaveElevenPointsClick(TObject *Sender);
 	void __fastcall bLoadingPlotsClick(TObject *Sender);
-	void __fastcall Button13Click(TObject *Sender);
 	void __fastcall bSaveFilmParamsClick(TObject *Sender);
 	void __fastcall bTestingSomethingClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+
 
 
 
@@ -140,13 +149,13 @@ private:	// User declarations
 public:		// User declarations
 	void automaticCalculationHelper(UnicodeString SaveFileName);
     void RoundM(long double * x,int length);
-
+	void chooseAndSaveData(FileSaveMode mode);
 	__fastcall TForm1(TComponent* Owner);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
 long double ownConcentrationOfElectrons(long double T, long double x);
-void SavingAllPoints(TLineSeries* Series7,TLineSeries* Series8);
+
 void ParamsKRT(void);
 //---------------------------------------------------------------------------
 #endif

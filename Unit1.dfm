@@ -533,6 +533,7 @@
         Width = 75
         Height = 25
         Caption = #1060#1080#1083#1100#1090#1088
+        Enabled = False
         TabOrder = 28
         OnClick = bFilteringPlotsClick
       end
