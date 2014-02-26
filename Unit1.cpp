@@ -336,6 +336,7 @@ void TForm1::automaticCalculationHelper(UnicodeString SaveFileName)
 	findIndex=s.find(strToSearch,strToSearch.length());
 	s.replace(s.begin()+findIndex,s.begin()+findIndex+strToSearch.length(),strToReplaceWhich.begin(),strToReplaceWhich.end());
 
+	sg1->FileName=s.c_str();
     bSaveElevenPoints->Click();
 
 	sg1->FileName=standartName;
@@ -470,25 +471,29 @@ int countOfRepeats=0;
 long double criteria=0.01;
 void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 {
-
-	//------------------Классы-----------------------------------------------------
-	if(FilteredParams!=0)
-	delete FilteredParams;
+	if(FilteredParams!=0) // считаем по новой?
+	delete FilteredParams;// надо убрать старое.
 
 	FilteredParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
 	FilteredParams->modifySignals(TrForMassiveFilter,ParamsWithNoise->getSignalUs(),ParamsWithNoise->getSignalUy(),eFilterLength->Text.ToInt());
 
-
-
-	//------------------Классы-----------------------------------------------------
 
 	// и экстраполируем.
 	if(ExtrapolatedParams!=0)
 	delete ExtrapolatedParams;
 
 	ExtrapolatedParams=new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
-	FilteredParams->modifySignals(EXTRAPOLATE,ExtrapolatedParams);
-
+	// Два режима экстраполяции
+	// По фильтрованным данным
+	if(rbFilteredOnly->Checked)
+	{
+		FilteredParams->modifySignals(EXTRAPOLATE,ExtrapolatedParams);
+	}
+	// И по фильтрованным вместе с зашумленными, а потом по фильтрованным вместе с экстраполированными
+	if(rbFilteredNoisyExtrapolated->Checked)
+	{
+		extrapolateNoiseFiltered(ParamsWithNoise,FilteredParams,ExtrapolatedParams);
+	}
 	//------------Внимание - костыль.
 	//------Так как иногда экстраполируется весьма плохо - будем это контролить и перезапускать если что:)
 	long double distance=0;
@@ -511,7 +516,7 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 	countOfRepeats=0;
 	criteria=0.01;
 	//------Конец костыля.
-
+    // Построение графиков.
 	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
 	FilteredParams->constructPlotFromTwoMassive(UY,gSeriesFilteredUy,clBlue);
 
@@ -535,8 +540,6 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 
 	ExtrapolatedParams->constructPlotFromTwoMassive(SXX,gSeriesExtrapolatedParamsSxx,clGreen);
 	ExtrapolatedParams->constructPlotFromTwoMassive(SXY,gSeriesExtrapolatedParamsSxy,clGreen);
-
-
 }
 
 

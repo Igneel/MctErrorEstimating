@@ -129,6 +129,9 @@ __published:	// IDE-managed Components
 	TRadioButton *rbExtrapolatedTenzor;
 	TRadioButton *rbNoisyU;
 	TRadioButton *rbNoisyTenzor;
+	TGroupBox *gbExtrapolatingMode;
+	TRadioButton *rbFilteredOnly;
+	TRadioButton *rbFilteredNoisyExtrapolated;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall bCalculateCarrierParamsClick(TObject *Sender);
 	void __fastcall bGaussianNoiseGeneratorClick(TObject *Sender);

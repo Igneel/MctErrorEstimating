@@ -12,7 +12,7 @@ int extrapolate2Degree(TLineSeries * Series, long double minX, long double maxX,
 
 int curveFittingUniversal(long double * inX, long double *inY, const int length,long double *outKoef,const int powPolinom);
 int curveFittingUniversal(std::vector<long double> * inX, std::vector<long double> *inY,
-  const int length,std::vector<long double> *outKoef,const int powPolinom);
+  std::vector<long double> *outKoef,const int powPolinom);
 
 //---------------------------------------------------------------------------
 #endif

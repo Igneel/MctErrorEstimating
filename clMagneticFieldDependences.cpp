@@ -23,17 +23,6 @@ void clMagneticFieldDependences::MemoryAllocation()
 	s_eff=new long double[NumberOfPoints];
 	Rh_eff=new long double[NumberOfPoints]; */
 
-	/*for(int i=0;i<NumberOfPoints;i++)
-	{
-		sxx[i]=0;
-		sxy[i]=0;
-		B[i]=0;
-		Us[i]=0;
-		Uy[i]=0;
-		s_eff[i]=0;
-		Rh_eff[i]=0;
-	}*/
-
 }
 
 const long double clMagneticFieldDependences::THEALMOSTZERO=0.00000000001;
@@ -64,7 +53,7 @@ clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag
 Вот загрузили мы данные в плёнку, заполнили массив магнитного поля.
 */
 	h=shag;
-    carrierParams = new film(cp->getMolarCompositionCadmium(),
+	carrierParams = new film(cp->getMolarCompositionCadmium(),
 	cp->getCurrentTemperature(),cp->getConcentration(0),
 	cp->getAFactor(),cp->getKFactor(),cp->getThickness(),
 	cp->getCBRatio(),cp->getCurrentIntensity(),cp->getNumberOfCarrierTypes());
@@ -256,21 +245,14 @@ int clMagneticFieldDependences::modifySignals
 	const std::vector<long double> & idealUs,const std::vector<long double> & idealUy,
 	std::vector<long double> &returnData,long double koeff)
 {
-	std::vector<long double> returnDataUy;
-    //returnDataUy.resize(3);
 
 	ShumAdding(idealUs,Us,returnData,koeff,NumberOfPoints);
-	ShumAdding(idealUy,Uy,returnDataUy,koeff,NumberOfPoints);
-
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	for(int i=0;i<3;i++)
-	returnData.push_back(returnDataUy[i]);
+	ShumAdding(idealUy,Uy,returnData,koeff,NumberOfPoints);
 
 	calculateEffectiveParamsFromSignals();
 	calculateTenzorFromEffectiveParams();
 
-    return 6; // магическое число, обозначает количество элементов в возвращаемом массиве, надо будет пофиксить.
+	return returnData.size();
 }
 
 int clMagneticFieldDependences::modifySignals(double (*TrForMassiveFilter)(long double *inB,
@@ -375,10 +357,34 @@ void clMagneticFieldDependences::setB_Us_Uy(std::vector<long double> &newB,
 	calculateTenzorFromEffectiveParams();
 }
 
+void calculatePolinomByKoef(std::vector<long double> & inX, std::vector<long double> & koef, std::vector<long double> & outF )
+{
+	int NumberOfPoints=inX.size();
+	int NumberOfPolinomKoef=koef.size()-1;
+
+	outF.clear();
+
+	for(int i=0;i<NumberOfPoints;i++)
+	{
+		outF.push_back(0);
+		for (int koef_index = 0; koef_index <= NumberOfPolinomKoef; koef_index++)
+		{
+			long double powedB=0;
+			if(NumberOfPolinomKoef-koef_index==0)
+			powedB=1;
+			else
+			powedB=powl(inX[i],NumberOfPolinomKoef-koef_index);
+
+			outF[i]+=koef[koef_index]*powedB;
+		}
+	}
+
+}
+
+
 int clMagneticFieldDependences::modifySignals(ModifyType type,clMagneticFieldDependences * extrapolatedParams)
 {
 int returnValue=1;
-const int a=6;
 
 const int polinomPowForUs=4;
 const int polinomPowForUy=4;
@@ -390,86 +396,54 @@ std::vector<long double> newB;
 std::vector<long double> newUs;
 std::vector<long double> newUy;
 
-std::vector<long double> oldB;
-std::vector<long double> oldUs;
-std::vector<long double> oldUy;
+koefUs.resize(polinomPowForUs+1);
+koefUy.resize(polinomPowForUy+1);
 
-
-
-/*long double * koefUs= new long double [polinomPowForUs+1];
-long double * koefUy= new long double [polinomPowForUy+1];
-
-long double * newB= new long double [NumberOfPoints];
-long double * newUs= new long double [NumberOfPoints];
-long double * newUy= new long double [NumberOfPoints];
-
-long double *oldB=new long double [NumberOfPoints];
-long double *oldUs=new long double [NumberOfPoints];
-long double *oldUy=new long double [NumberOfPoints];*/
-
-newB[0]=0;
 int i=0;
 	switch(type)
 	{
 		case EXTRAPOLATE:
 
-			curveFittingUniversal(&B, &Us, NumberOfPoints,&koefUs,polinomPowForUs);
-            curveFittingUniversal(&B, &Uy, NumberOfPoints,&koefUy,polinomPowForUy);
-
-			for(int i=0;i<NumberOfPoints;i++)
+			for(int i=0;i<500;i++)
 			{
-				if(i!=0) newB[i]=newB[i-1]+h;
-
-				newUs[i]=0;
-				for (int koef_index = 0; koef_index <= polinomPowForUs; koef_index++)
-				{
-					long double powedB=0;
-					if(polinomPowForUs-koef_index==0)
-					powedB=1;
-					else
-					powedB=powl(newB[i],polinomPowForUs-koef_index);
-
-					newUs[i]+=koefUs[koef_index]*powedB;
-				}
-
-				newUy[i]=0;
-				for (int koef_index = 0; koef_index <= polinomPowForUy; koef_index++)
-				{
-					long double powedB=0;
-					if(polinomPowForUy-koef_index==0)
-					powedB=1;
-					else
-					powedB=powl(newB[i],polinomPowForUy-koef_index);
-
-					newUy[i]+=koefUy[koef_index]*powedB;
-				}
+				B.push_back(0);
+				Uy.push_back(0);
 			}
+
+			curveFittingUniversal(&B, &Us, &koefUs,polinomPowForUs);
+			curveFittingUniversal(&B, &Uy, &koefUy,polinomPowForUy);
+
+            for(int i=0;i<500;i++)
+			{
+				B.pop_back();
+				Uy.pop_back();
+			}
+
+			newB.clear();
+			newB.push_back(0);
+			for (int i = 1; i < NumberOfPoints; i++) {
+				newB.push_back(newB[i-1]+h);
+			}
+
+			calculatePolinomByKoef(newB,koefUs,newUs);
+			calculatePolinomByKoef(newB,koefUy,newUy);
+
 			extrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
 
 			//----------А вот тут прикручиваем недостающий кусочек в сигналы----
 
+			while(B[i++]<=0 && i<NumberOfPoints);
+			i-=2; // ищем где поле становится положительным.
 
-
-			for(int i=0;i<NumberOfPoints;i++)
-			{
-				oldB[i]=B[i];
-				oldUs[i]=Us[i];
-				oldUy[i]=Uy[i];
-			}
-
-
-			while(oldB[i++]<=0 && i<NumberOfPoints);
-			i--;
-
-			for(int j=i;j<NumberOfPoints;j++)
-			{
-				B[j-i]=oldB[j];
-				Us[j-i]=oldUs[j];
-				Uy[j-i]=oldUy[j];
+            for(int j=i;j<NumberOfPoints;j++)
+			{      // перемещаем эти значения в начало.
+				B[j-i]=B[j];
+				Us[j-i]=Us[j];
+				Uy[j-i]=Uy[j];
 			}
 
 			for(int j=NumberOfPoints-i;j<NumberOfPoints;j++)
-			{
+			{     // в конце дописываем экстраполированные значения.
 				B[j]=newB[j];
 				Us[j]=newUs[j];
 				Uy[j]=newUy[j];
@@ -477,22 +451,13 @@ int i=0;
 
 			calculateEffectiveParamsFromSignals();
 			calculateTenzorFromEffectiveParams();
-
-
 			//------------------------------------------------------------------
 
 			break;
 		default:
 		returnValue=0;
 	}
-/*delete[] oldUy;
-delete[] oldUs;
-delete[] oldB;
-delete[] koefUs;
-delete[] koefUy;
-delete[] newB;
-delete[] newUs;
-delete[] newUy; */
+
 return returnValue;
 
 }
@@ -513,7 +478,7 @@ bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode sa
 	{
 		tsl->Add(FloatToStr(B[i])+"\t"+FloatToStr(sxx[i])+"\t"+FloatToStr(sxy[i]));
 	}
-	//tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+	tsl->Text=ReplaceChar(tsl->Text,L',',L'.'); // заменить все запятые на точки
 
 	switch(type)
 	{
@@ -538,6 +503,8 @@ bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode sa
    */
 //---------------------------------------------------------------------------
 
+
+
 void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
 		clMagneticFieldDependences * FilteredParams,
 		clMagneticFieldDependences * ExtrapolatedParams)
@@ -548,100 +515,134 @@ void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
 	const int polinomPowForUs=4;
 	const int polinomPowForUy=4;
 
-	//std::vector<long double> inBforUs2;
+	std::vector<long double> koefUs;
+	std::vector<long double> koefUy;
 
+	koefUs.resize(polinomPowForUs+1);
+	koefUy.resize(polinomPowForUy+1);
 
+	std::vector<long double> newB;
+	std::vector<long double> newUs;
+	std::vector<long double> newUy;
 
+	newUs.resize(NoisyParams->NumberOfPoints);
+	newUy.resize(NoisyParams->NumberOfPoints);
 
-	long double * koefUs= new long double [polinomPowForUs+1];
-	long double * koefUy= new long double [polinomPowForUy+1];
+	std::vector<long double> inBforUs;
+	std::vector<long double> inBforUy;
+	std::vector<long double> inUs;
+	std::vector<long double> inUy;
 
-	long double * newB= new long double [NoisyParams->NumberOfPoints];
-	long double * newUs= new long double [NoisyParams->NumberOfPoints];
-	long double * newUy= new long double [NoisyParams->NumberOfPoints];
-	newB[0]=0;
-
-
-
-	long double * inBforUs=new long double[sizeTemp];
-	long double * inBforUy=new long double[sizeTemp];
-	long double * inUs=new long double[sizeTemp];
-	long double * inUy=new long double[sizeTemp];
 
 	for(int i=0;i<NoisyParams->NumberOfPoints;i++)
 	{
-		//inBforUs2.push_back(NoisyParams->B[i]);
+		inBforUs.push_back(NoisyParams->B[i]);
+		inBforUy.push_back(NoisyParams->B[i]);
+		inUs.push_back(NoisyParams->Us[i]);
+		inUy.push_back(NoisyParams->Uy[i]);
 
-
-		inBforUs[i]=NoisyParams->B[i];
-		inBforUy[i]=NoisyParams->B[i];
-		inUs[i]=NoisyParams->Us[i];
-		inUy[i]=NoisyParams->Uy[i];
 	}
-	for(int i=NoisyParams->NumberOfPoints,j=0;j<NoisyParams->NumberOfPoints;i++,j++)
+	for(int i=0;i<NoisyParams->NumberOfPoints;i++)
 	{
-		//inBforUs2.push_back(NoisyParams->B[j]);
+		inBforUs.push_back(FilteredParams->B[i]);
+		inBforUy.push_back(FilteredParams->B[i]);
+		inUs.push_back(FilteredParams->Us[i]);
+		inUy.push_back(FilteredParams->Uy[i]);
 
-		inBforUs[i]=FilteredParams->B[j];
-		inBforUy[i]=FilteredParams->B[j];
-		inUs[i]=FilteredParams->Us[j];
-		inUy[i]=FilteredParams->Uy[j];
 	}
-	for(int i=2*NoisyParams->NumberOfPoints,j=0;j<NoisyParams->NumberOfPoints;i++,j++)
+	for(int i=0;i<NoisyParams->NumberOfPoints;i++)
 	{
-		//inBforUs2.push_back(NoisyParams->B[j]);
 
-		inBforUs[i]=NoisyParams->B[j];
-		inBforUy[i]=NoisyParams->B[j];
-		inUs[i]=NoisyParams->Us[j];
-		inUy[i]=NoisyParams->Uy[j];
+		inBforUs.push_back(NoisyParams->B[i]);
+		inBforUy.push_back(NoisyParams->B[i]);
+		inUs.push_back(NoisyParams->Us[i]);
+		inUy.push_back(NoisyParams->Uy[i]);
 	}
-		//inBforUs2.
 
-		curveFittingUniversal(inBforUs, inUs, sizeTemp,koefUs,polinomPowForUs);
-		curveFittingUniversal(inBforUy, inUy, sizeTemp,koefUy,polinomPowForUy);
 
-		for(int i=0;i<NoisyParams->NumberOfPoints;i++)
-		{
-			if(i!=0) newB[i]=newB[i-1]+NoisyParams->h;
 
-			newUs[i]=0;
-			for (int koef_index = 0; koef_index <= polinomPowForUs; koef_index++)
-			{
-				long double powedB=0;
-				if(polinomPowForUs-koef_index==0)
-				powedB=1;
-				else
-				powedB=powl(newB[i],polinomPowForUs-koef_index);
 
-				newUs[i]+=koefUs[koef_index]*powedB;
-			}
+		curveFittingUniversal(&inBforUs, &inUs, &koefUs,polinomPowForUs);
+		curveFittingUniversal(&inBforUy, &inUy, &koefUy,polinomPowForUy);
 
-			newUy[i]=0;
-			for (int koef_index = 0; koef_index <= polinomPowForUy; koef_index++)
-			{
-				long double powedB=0;
-				if(polinomPowForUy-koef_index==0)
-				powedB=1;
-				else
-				powedB=powl(newB[i],polinomPowForUy-koef_index);
-
-				newUy[i]+=koefUy[koef_index]*powedB;
-			}
+		newB.clear();
+		newB.push_back(0);
+		for (int i = 1; i < NoisyParams->NumberOfPoints; i++) {
+			newB.push_back(newB[i-1]+NoisyParams->h);
 		}
+
+		calculatePolinomByKoef(newB,koefUs,newUs);
+		calculatePolinomByKoef(newB,koefUy,newUy);
+
 		ExtrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
-		;
 
-	delete[] inBforUs;
-	delete[] inBforUy;
-	delete[] inUs;
-	delete[] inUy;
+		//----------------------------------------------------------------------
+		inBforUs.clear();
+		inBforUy.clear();
+		inUs.clear();
+		inUy.clear();
 
-	delete[] koefUs;
-	delete[] koefUy;
-	delete[] newB;
-	delete[] newUs;
-	delete[] newUy;
+		for(int i=0;i<FilteredParams->NumberOfPoints;i++)
+		{
+			inBforUs.push_back(FilteredParams->B[i]);
+			inBforUy.push_back(FilteredParams->B[i]);
+			inUs.push_back(FilteredParams->Us[i]);
+			inUy.push_back(FilteredParams->Uy[i]);
+		}
+		for(int i=0;i<ExtrapolatedParams->NumberOfPoints;i++)
+		{
+			inBforUs.push_back(ExtrapolatedParams->B[i]);
+			inBforUy.push_back(ExtrapolatedParams->B[i]);
+			inUs.push_back(ExtrapolatedParams->Us[i]);
+			inUy.push_back(ExtrapolatedParams->Uy[i]);
+		}
+
+		for(int i=0;i<500;i++)
+		{
+			inBforUy.push_back(0);
+			inUy.push_back(0);
+		}
+
+		curveFittingUniversal(&inBforUs, &inUs, &koefUs,polinomPowForUs);
+		curveFittingUniversal(&inBforUy, &inUy, &koefUy,polinomPowForUy);
+
+		newB.clear();
+		newB.push_back(0);
+		for (int i = 1; i < NoisyParams->NumberOfPoints; i++) {
+			newB.push_back(newB[i-1]+NoisyParams->h);
+		}
+
+		calculatePolinomByKoef(newB,koefUs,newUs);
+		calculatePolinomByKoef(newB,koefUy,newUy);
+
+		ExtrapolatedParams->setB_Us_Uy(newB,newUs,newUy);
+
+		//----------------------------------------------------------------------
+		//----------А вот тут прикручиваем недостающий кусочек в фильтрованные сигналы----
+            int i=0;
+			while(FilteredParams->B[i++]<=0 && i<FilteredParams->NumberOfPoints);
+			i-=2; // ищем где поле становится положительным.
+
+			for(int j=i;j<FilteredParams->NumberOfPoints;j++)
+			{      // перемещаем эти значения в начало.
+				FilteredParams->B[j-i]=FilteredParams->B[j];
+				FilteredParams->Us[j-i]=FilteredParams->Us[j];
+				FilteredParams->Uy[j-i]=FilteredParams->Uy[j];
+			}
+
+			for(int j=FilteredParams->NumberOfPoints-i;j<FilteredParams->NumberOfPoints;j++)
+			{     // в конце дописываем экстраполированные значения.
+				FilteredParams->B[j]=newB[j];
+				FilteredParams->Us[j]=newUs[j];
+				FilteredParams->Uy[j]=newUy[j];
+			}
+
+			FilteredParams->calculateEffectiveParamsFromSignals();
+			FilteredParams->calculateTenzorFromEffectiveParams();
+			//------------------------------------------------------------------
+
 	}
+
+
 
 #pragma package(smart_init)

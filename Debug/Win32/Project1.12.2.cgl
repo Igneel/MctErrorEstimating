@@ -1,11 +1,86 @@
-Error 00001. 0x100400 (Thread 0x11A4):
-Access in invalid memory: Attempt to access 10 byte(s) at 0x00000000.
-Call Tree:
-   0x00405B97(=Project1.12.2.exe:0x01:004B97) clMagneticFieldDependences.cpp#408
-   0x004150CE(=Project1.12.2.exe:0x01:0140CE) Unit1.cpp#490
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-   0x50487A69(=vcl190.bpl:0x01:056A69)
-   0x504677D4(=vcl190.bpl:0x01:0367D4)
-
-------------------------------------------
+Functions called:
+ powl (1608 times)
+ delete[] (22 times)
+ sinl (48 times)
+ cosl (100 times)
+ ceil (2 times)
+ sqrt (406 times)
+ log (402 times)
+ time (1 times)
+ delete (5774 times)
+ memmove (11780 times)
+ exp (4 times)
+ pow (9060 times)
+ new[] (22 times)
+ realloc (1 times)
+ memcpy (1 times)
+ free (29 times)
+ new (5783 times)
+ calloc (10 times)
+ malloc (19 times)
+Resource types used:
+ object array (22 allocs, 15 max)
+ object (5783 allocs, 828 max)
+ memory block (30 allocs, 19 max)
+Modules used:
+ 00240000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
+ Studio\12.0\bin\vclimg190.bpl
+ 00400000 02/27/2014 03:56:52 K:\Дела\Институт физики
+ полупроводников\La-7\MctErrorEstimating\.\Debug\Win32\Project1.12.2.exe
+ 0CD00000 01/31/2000 05:00:00 J:\PROGRA~3\Borland\CBUILD~2\Bin\CG32.DLL
+ 32E00000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
+ Studio\12.0\bin\CC32140MT.DLL
+ 42200000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
+ Studio\12.0\bin\Tee9190.bpl
+ 50030000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
+ Studio\12.0\bin\BORLNDMM.DLL
+ 50050000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
+ Studio\12.0\bin\rtl190.bpl
+ 50430000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
+ Studio\12.0\bin\vcl190.bpl
+ 68F30000 11/21/2010 10:24:02 C:\Windows\AppPatch\AcLayers.DLL
+ 6F860000 11/21/2010 10:23:56 C:\Windows\system32\WINSTA.dll
+ 6F920000 11/21/2010 10:23:56
+ C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.
+7601.17514_none_41e6975e2bd6f2b2\comctl32.dll
+ 6FB40000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
+ 6FD50000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
+ 6FE10000 07/14/2009 08:16:14 C:\Windows\system32\profapi.dll
+ 704A0000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
+ 70720000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
+ 71880000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
+ 72110000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
+ 72240000 11/21/2010 10:24:16 C:\Windows\system32\apphelp.dll
+ 72390000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
+ 723D0000 11/21/2010 10:23:56 C:\Windows\system32\wtsapi32.dll
+ 723E0000 11/21/2010 10:24:18 C:\Windows\system32\USERENV.dll
+ 72640000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
+ 73260000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
+ Switcher\pshook.dll
+ 73730000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
+ 74610000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
+ 746E0000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
+ 746F0000 11/24/2012 21:05:50 C:\Windows\syswow64\SspiCli.dll
+ 74750000 07/14/2009 08:11:24 C:\Windows\syswow64\LPK.dll
+ 74760000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
+ 747F0000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
+ 74940000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
+ 74A20000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
+ 74D20000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
+ 74D80000 11/21/2010 10:24:16 C:\Windows\syswow64\GDI32.dll
+ 74E10000 10/04/2012 23:47:42 C:\Windows\syswow64\kernel32.dll
+ 74F20000 10/04/2012 23:47:42 C:\Windows\syswow64\KERNELBASE.dll
+ 74F70000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
+ 750D0000 11/24/2012 20:58:20 C:\Windows\syswow64\SHELL32.dll
+ 75D20000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
+ 75DB0000 11/24/2012 20:54:48 C:\Windows\syswow64\IMAGEHLP.DLL
+ 76080000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
+ 760F0000 11/21/2010 10:24:30 C:\Windows\syswow64\ADVAPI32.dll
+ 76190000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
+ 761D0000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
+ 76490000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
+ 764B0000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
+ 764C0000 11/21/2010 10:24:12 C:\Windows\syswow64\RPCRT4.dll
+ 766D0000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
+ 77010000 11/24/2012 20:54:24 C:\Windows\SysWOW64\ntdll.dll
+==========================================

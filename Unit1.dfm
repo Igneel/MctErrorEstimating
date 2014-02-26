@@ -581,7 +581,9 @@
           Width = 113
           Height = 17
           Caption = #1063#1080#1089#1090#1099#1081' '#1089#1080#1075#1085#1072#1083
+          Checked = True
           TabOrder = 1
+          TabStop = True
         end
         object rbIdealTenzorPlot: TRadioButton
           Left = 16
@@ -666,6 +668,32 @@
         Caption = 'Test'
         TabOrder = 34
         OnClick = bTestingSomethingClick
+      end
+      object gbExtrapolatingMode: TGroupBox
+        Left = 560
+        Top = 616
+        Width = 185
+        Height = 105
+        Caption = 'gbExtrapolatingMode'
+        TabOrder = 35
+        object rbFilteredOnly: TRadioButton
+          Left = 24
+          Top = 32
+          Width = 113
+          Height = 17
+          Caption = 'rbFilteredOnly'
+          Checked = True
+          TabOrder = 0
+          TabStop = True
+        end
+        object rbFilteredNoisyExtrapolated: TRadioButton
+          Left = 24
+          Top = 64
+          Width = 113
+          Height = 17
+          Caption = 'rbFilteredNoisyExtrapolated'
+          TabOrder = 1
+        end
       end
     end
     object Графики: TTabSheet

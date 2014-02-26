@@ -304,7 +304,7 @@ switch (size) {
 case 1: return Arr[0][0];
 case 2: return Arr[0][0]*Arr[1][1]-Arr[0][1]*Arr[1][0];
 default:
-  //matr=new long double*[size-1];
+	matr.resize(size-1);
 				for(i=0;i<size;++i)
 				{
 						for(j=0;j<size-1;++j)
@@ -316,16 +316,15 @@ default:
 						}
 						det+=pow((long double)-1, (i+j))*determinant(matr, size-1)*Arr[i][size-1];
 				}
-				//delete[] matr;
   return det;
 }
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //-----------curveFittingUniversal----------------------------------------------
-int curveFittingUniversal(std::vector<long double> * inX, std::vector<long double> *inY, const int length,std::vector<long double> *outKoef,const int powPolinom)
+int curveFittingUniversal(std::vector<long double> * inX, std::vector<long double> *inY, std::vector<long double> *outKoef,const int powPolinom)
 {
-
+	int lenght=(*inY).size();
 	// как много кода.
 	// по сути - формируем матрицу
 	// перемножаем её транпонированную на её изначальную
@@ -341,6 +340,29 @@ int curveFittingUniversal(std::vector<long double> * inX, std::vector<long doubl
     std::vector<std::vector<std::vector<long double> > > delta;
 	std::vector<long double> p;
 
+	fullMatrix.resize(lenght);
+	K.resize(a+1);
+
+	for(int i=0;i<=a;i++)
+		K[i].resize(a+1);
+
+	K5.resize(a);
+
+	for(int i=0;i<a;i++)
+		K5[i].resize(a);
+
+	Ks.resize(a);
+
+	delta.resize(a);
+	for(int i=0;i<a;i++)
+	{
+		delta[i].resize(a);
+		for (int j=0; j < a; j++) {
+            delta[i][j].resize(a);
+		}
+	}
+
+    p.resize(a);
 	//--------------------------------------------------------------------------
 	//--------------------------------------------------------------------------
 	//--------------------------------------------------------------------------
@@ -357,7 +379,7 @@ int curveFittingUniversal(std::vector<long double> * inX, std::vector<long doubl
 
 	x^a x^a-1 ...  x^0 y
 	*/
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < lenght; i++) {
 		for (int j = 0; j < a; j++) {
 		// копируем значения в матрицу
 		// по столбцам, шестой - столбец единиц
@@ -366,18 +388,20 @@ int curveFittingUniversal(std::vector<long double> * inX, std::vector<long doubl
 		temp2=(*inX)[i];
 			temp1=((a-j-1)==0?1:pow((*inX)[i],a-j-1));
 		}
-			fullMatrix[i][j]=((a-j-1)==0?1:pow((*inX)[i],a-j-1));
+			fullMatrix[i].push_back(((a-j-1)==0?1:pow((*inX)[i],a-j-1)));
+			//fullMatrix[i][j]=((a-j-1)==0?1:pow((*inX)[i],a-j-1));
 
 		}
 		// последний столбец формируется здесь из значений игрек.
 		if(DEBUG)
 		temp2= (*inY)[i];
-		fullMatrix[i][a]=(*inY)[i];
+		fullMatrix[i].push_back((*inY)[i]);
+		//fullMatrix[i][a]=(*inY)[i];
 	}
 
 	for (int i = 0; i <= a; i++) {
 		for (int j = 0; j <= a; j++) {
-			for (int k=0; k < length; k++) {
+			for (int k=0; k < lenght; k++) {
 			if(DEBUG)
 			{
 			temp1=fullMatrix[k][i];
