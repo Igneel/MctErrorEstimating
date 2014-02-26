@@ -117,6 +117,8 @@ default:
   return det;
 }
 }
+
+
 //---------------------------------------------------------------------------
 //-----------curveFittingUniversal----------------------------------------------
 int curveFittingUniversal(long double * inX, long double *inY, const int length,long double *outKoef,const int powPolinom)
@@ -291,8 +293,156 @@ int curveFittingUniversal(long double * inX, long double *inY, const int length,
 
 	return a;
 }
+
+
+long double determinant (std::vector<std::vector<long double> > & Arr,int size)
+{
+int i,j;
+long double det=0;
+std::vector<std::vector<long double> > matr;
+switch (size) {
+case 1: return Arr[0][0];
+case 2: return Arr[0][0]*Arr[1][1]-Arr[0][1]*Arr[1][0];
+default:
+  //matr=new long double*[size-1];
+				for(i=0;i<size;++i)
+				{
+						for(j=0;j<size-1;++j)
+						{
+								if(j<i)
+										matr[j]=Arr[j];
+								else
+										matr[j]=Arr[j+1];
+						}
+						det+=pow((long double)-1, (i+j))*determinant(matr, size-1)*Arr[i][size-1];
+				}
+				//delete[] matr;
+  return det;
+}
+}
 //---------------------------------------------------------------------------
-int curveFittingRational(long double * inX, long double *inY, const int length,long double *outKoef,const int numeratorDegree, const int denominatorDegree)
+//---------------------------------------------------------------------------
+//-----------curveFittingUniversal----------------------------------------------
+int curveFittingUniversal(std::vector<long double> * inX, std::vector<long double> *inY, const int length,std::vector<long double> *outKoef,const int powPolinom)
 {
 
+	// как много кода.
+	// по сути - формируем матрицу
+	// перемножаем её транпонированную на её изначальную
+	// дальше решаем систему методом Крамера (это тут), а вообще любый другим методом тоже.
+
+	int a=powPolinom+1;
+	// выражение f(x)=x^2*p1+x*p2+p3
+
+	std::vector<std::vector<long double> > fullMatrix;
+	std::vector<std::vector<long double> > K;
+	std::vector<std::vector<long double> > K5;
+	std::vector<long double> Ks;
+    std::vector<std::vector<std::vector<long double> > > delta;
+	std::vector<long double> p;
+
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+
+	/*
+	Итак, много временных переменных:
+	*/
+    long double temp1,temp2,temp3;
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	/*
+	формируем матрицу вида
+
+	x^a x^a-1 ...  x^0 y
+	*/
+	for (int i = 0; i < length; i++) {
+		for (int j = 0; j < a; j++) {
+		// копируем значения в матрицу
+		// по столбцам, шестой - столбец единиц
+		if(DEBUG)
+		{
+		temp2=(*inX)[i];
+			temp1=((a-j-1)==0?1:pow((*inX)[i],a-j-1));
+		}
+			fullMatrix[i][j]=((a-j-1)==0?1:pow((*inX)[i],a-j-1));
+
+		}
+		// последний столбец формируется здесь из значений игрек.
+		if(DEBUG)
+		temp2= (*inY)[i];
+		fullMatrix[i][a]=(*inY)[i];
+	}
+
+	for (int i = 0; i <= a; i++) {
+		for (int j = 0; j <= a; j++) {
+			for (int k=0; k < length; k++) {
+			if(DEBUG)
+			{
+			temp1=fullMatrix[k][i];
+			temp2=fullMatrix[k][j];
+			temp3=K[i][j];
+			}
+				K[i][j]+=fullMatrix[k][i]*fullMatrix[k][j];
+				if(DEBUG)
+			temp3=K[i][j];
+
+	}}}
+	// перемножение работает, проверено матлабом
+	// K5 - содержит a строк и a столбцов, т.е. без свободных членов.
+
+
+	// Ks - столблец из 2*a строк, свободные члены.
+
+
+	for (int i = 0; i < a-1; i++) {
+		for (int j = 0; j < a; j++) {
+        if(DEBUG)
+			temp3=K[i][j];
+		K5[i][j]=K[i][j]; // копируем первые 2a-1 строк
+		//blabla=K5[i][j];
+		}
+	}
+
+	// а 6ая строка - среднее арифметическое 6 и 7 строк
+	for (int i = 0; i < a; i++) {
+
+		K5[a-1][i]=(K[a-1][i]+K[a][i])/2;
+		if(DEBUG)
+			temp3=K5[a-1][i];
+	}
+
+	for (int i = 0; i < a-1; i++) {
+
+		Ks[i]=K[i][a];
+		if(DEBUG)
+			temp3=Ks[i];
+	}
+	Ks[a-1]=(K[a-1][a]+K[a][a])/2;
+
+	long double d0=determinant(K5,a); // детерминант правилен +
+
+	for (int i = 0; i < a; i++) {
+		for (int j = 0; j < a; j++) {
+			for (int k = 0; k < a; k++) {
+				if (k!=i)
+				{
+					// составляем матрицы по которым будем находить детерминанты для переменных.
+					 delta[i][j][k]=K5[j][k];
+				}
+				else
+				{
+					// столбец нужной переменной заменяется свободными членами.
+					delta[i][j][k]=Ks[j];
+				}
+				//blabla=delta[i][j][k];
+	}}}
+
+	for (int i = 0; i < a; i++) {
+		(*outKoef)[i]=p[i]=determinant(delta[i],a)/d0;
+	}
+
+	return a;
 }
+//---------------------------------------------------------------------------

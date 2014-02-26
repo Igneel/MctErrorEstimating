@@ -7,7 +7,8 @@
 #include "ExtrapolateUnit.h"
 #include "FilteringUnit.h"
 #include "NoiseUnit.h"
-#include <math.h>
+#include <cmath>
+#include <vector>
 
 #include <VCLTee.Series.hpp>
 
@@ -32,22 +33,26 @@ class clMagneticFieldDependences {
 
 	~clMagneticFieldDependences();
 
-	long double const * getSignalUs();
-	long double const * getSignalUy();
-	long double const * getSxx();
-	long double const * getSxy();
+	std::vector<long double> const & getSignalUs();
+	std::vector<long double> const & getSignalUy();
+	std::vector<long double> const & getSxx();
+	std::vector<long double> const & getSxy();
 
 	int modifySignals(ModifyType type,clMagneticFieldDependences * ExtrapolatedParams);
 
-	int modifySignals(void (*ShumAdding)(const long double *x,long double *out,long double *ret, long double koeff,const int l),
-	const long double * idealUs,const long double * idealUy,long double *returnData,long double koeff);
+	int modifySignals(void (*ShumAdding)(std::vector<long double> const &x,std::vector<long double> &out,
+	std::vector<long double> &ret, long double koeff,const int l),const std::vector<long double> & idealUs,
+	 const std::vector<long double> & idealUy,std::vector<long double> &returnData,long double koeff);
+
 
 	int modifySignals(double (*TrForMassiveFilter)(long double *inB,
 	long double *inY,long double* outB,long double *outY,
 	int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh),
-	const long double * idealUs,const long double * idealUy,int lengthFilter);
+	std::vector<long double> const & idealUs,std::vector<long double> const & idealUy,int lengthFilter);
 
 	void setB_Us_Uy(long double *newB, long double * newUs,long double *newUy);
+
+	void setB_Us_Uy(std::vector<long double> &newB, std::vector<long double> & newUs,std::vector<long double> &newUy);
 
 	void calculateEffectiveParamsFromSignals();
 	void calculateTenzorFromEffectiveParams();
@@ -71,13 +76,23 @@ class clMagneticFieldDependences {
 
 	long double h;
 	const int NumberOfPoints;
-	long double *sxx;
+
+	/*long double *sxx;
 	long double *sxy;
 	long double *B;
-	long double *Us; // продольный сигнал
-	long double *Uy; // поперечный сигнал
+	long double *Us;
+	long double *Uy;
 	long double *s_eff;
-	long double *Rh_eff;
+	long double *Rh_eff;*/
+
+	std::vector<long double> sxx;
+	std::vector<long double> sxy;
+	std::vector<long double> B;
+	std::vector<long double> Us; // продольный сигнал
+	std::vector<long double> Uy; // поперечный сигнал
+	std::vector<long double> s_eff;
+	std::vector<long double> Rh_eff;
+
 };
 
 

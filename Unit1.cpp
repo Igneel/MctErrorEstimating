@@ -163,7 +163,8 @@ void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 
 	srand(time(NULL));
 
-	long double vz[6]={0};  // Ã — Œ Ë — Œ ‚ %
+	std::vector<long double> vz; // Ã — Œ Ë — Œ ‚ %
+	//long double vz[6]={0};  // Ã — Œ Ë — Œ ‚ %
 	if(ParamsWithNoise!=0)
 		delete ParamsWithNoise;
 	ParamsWithNoise= new clMagneticFieldDependences(NumberOfPoints,h,IdealParams->carrierParams);
@@ -506,6 +507,9 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 
 		return;
 	}
+
+	countOfRepeats=0;
+	criteria=0.01;
 	//------ ÓÌÂˆ ÍÓÒÚ˚Îˇ.
 
 	FilteredParams->constructPlotFromTwoMassive(US,gSeriesFilteredUs,clBlue);
@@ -532,8 +536,7 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 	ExtrapolatedParams->constructPlotFromTwoMassive(SXX,gSeriesExtrapolatedParamsSxx,clGreen);
 	ExtrapolatedParams->constructPlotFromTwoMassive(SXY,gSeriesExtrapolatedParamsSxy,clGreen);
 
-	countOfRepeats=0;
-	criteria=0.01;
+
 }
 
 

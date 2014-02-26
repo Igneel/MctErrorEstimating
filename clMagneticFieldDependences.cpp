@@ -8,15 +8,22 @@
 
 void clMagneticFieldDependences::MemoryAllocation()
 {
-	sxx=new long double[NumberOfPoints];
+	sxx.resize(NumberOfPoints);
+	sxy.resize(NumberOfPoints);
+	B.resize(NumberOfPoints);
+	Us.resize(NumberOfPoints);
+	Uy.resize(NumberOfPoints);
+	s_eff.resize(NumberOfPoints);
+	Rh_eff.resize(NumberOfPoints);
+	/*sxx=new long double[NumberOfPoints];
 	sxy=new long double[NumberOfPoints];
 	B=new long double[NumberOfPoints];
 	Us=new long double[NumberOfPoints];
 	Uy=new long double[NumberOfPoints];
 	s_eff=new long double[NumberOfPoints];
-	Rh_eff=new long double[NumberOfPoints];
+	Rh_eff=new long double[NumberOfPoints]; */
 
-	for(int i=0;i<NumberOfPoints;i++)
+	/*for(int i=0;i<NumberOfPoints;i++)
 	{
 		sxx[i]=0;
 		sxy[i]=0;
@@ -25,7 +32,7 @@ void clMagneticFieldDependences::MemoryAllocation()
 		Uy[i]=0;
 		s_eff[i]=0;
 		Rh_eff[i]=0;
-	}
+	}*/
 
 }
 
@@ -69,21 +76,23 @@ clMagneticFieldDependences::clMagneticFieldDependences(int size,long double shag
 clMagneticFieldDependences::~clMagneticFieldDependences()
 {
 	delete carrierParams;
-	delete[] sxx;
+	/*delete[] sxx;
 	delete[] sxy;
 	delete[] B;
 	delete[] Us;
 	delete[] Uy;
 	delete[] s_eff;
-	delete[] Rh_eff;
+	delete[] Rh_eff; */
 }
 
 void clMagneticFieldDependences::calculateMagneticFieldPoints()
 {
+	//B.push_back(0);
 	B[0]=0;
 	for(int i=1;i<NumberOfPoints;i++)
 	{
-		B[i]=B[i-1]+h;  // это наше магнитное поле
+		//B.push_back(B[i-1]+h);// это наше магнитное поле
+		B[i]=B[i-1]+h;
 	}
 
 }
@@ -169,7 +178,8 @@ void clMagneticFieldDependences::constructPlotFromTwoMassive(SignalType type,TLi
 {
 	// строим график по х - магнитное поле, по у - нужный сигнал.
 	s->Clear();
-	long double *y=0;
+	std::vector<long double> y;
+	//long double *y=0;
 	switch(type)
 	{
 	case SXX: y=sxx;
@@ -196,7 +206,8 @@ void clMagneticFieldDependences::constructPlotFromOneMassive(SignalType type, TL
 {
 	// по х - просто номер точки.
 	s->Clear();
-	long double *y=0;
+	//long double *y=0;
+	std::vector<long double> y;
 	switch(type)
 	{
 	case SXX: y=sxx;
@@ -219,32 +230,42 @@ void clMagneticFieldDependences::constructPlotFromOneMassive(SignalType type, TL
 }
 
 
-long double const * clMagneticFieldDependences::getSignalUs()
+std::vector<long double> const & clMagneticFieldDependences::getSignalUs()
 {
     return Us;
 }
 
-long double const * clMagneticFieldDependences::getSignalUy()
+std::vector<long double> const & clMagneticFieldDependences::getSignalUy()
 {
     return Uy;
 }
 
-long double const * clMagneticFieldDependences::getSxx()
+std::vector<long double> const & clMagneticFieldDependences::getSxx()
 {
 	return sxx;
 }
 
-long double const * clMagneticFieldDependences::getSxy()
+std::vector<long double> const & clMagneticFieldDependences::getSxy()
 {
     return sxy;
 }
 
 int clMagneticFieldDependences::modifySignals
-(void (*ShumAdding)(const long double *,long double *,long double *,
-long double,const int),const long double * idealUs,const long double * idealUy,long double *returnData,long double koeff)
+(void (*ShumAdding)(std::vector<long double> const &x,std::vector<long double> &out,
+	std::vector<long double> &ret, long double koeff,const int l),
+	const std::vector<long double> & idealUs,const std::vector<long double> & idealUy,
+	std::vector<long double> &returnData,long double koeff)
 {
+	std::vector<long double> returnDataUy;
+    //returnDataUy.resize(3);
+
 	ShumAdding(idealUs,Us,returnData,koeff,NumberOfPoints);
-	ShumAdding(idealUy,Uy,(returnData+3),koeff,NumberOfPoints);
+	ShumAdding(idealUy,Uy,returnDataUy,koeff,NumberOfPoints);
+
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	for(int i=0;i<3;i++)
+	returnData.push_back(returnDataUy[i]);
 
 	calculateEffectiveParamsFromSignals();
 	calculateTenzorFromEffectiveParams();
@@ -255,7 +276,7 @@ long double,const int),const long double * idealUs,const long double * idealUy,l
 int clMagneticFieldDependences::modifySignals(double (*TrForMassiveFilter)(long double *inB,
 long double *inY,long double* outB,long double *outY,
 int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh),
-const long double * idealUs,const long double * idealUy,int lengthFilter)
+std::vector<long double> const & idealUs,std::vector<long double> const & idealUy,int lengthFilter)
 {
 
 	long double * tempInB=new long double[2*NumberOfPoints];
@@ -342,6 +363,18 @@ void clMagneticFieldDependences::setB_Us_Uy(long double *newB, long double * new
 	calculateTenzorFromEffectiveParams();
 }
 
+void clMagneticFieldDependences::setB_Us_Uy(std::vector<long double> &newB,
+	std::vector<long double> & newUs,std::vector<long double> &newUy)
+{
+	for (int i = 0; i < NumberOfPoints; i++) {
+		B[i]=newB[i];
+		Us[i]=newUs[i];
+		Uy[i]=newUy[i];
+	}
+	calculateEffectiveParamsFromSignals();
+	calculateTenzorFromEffectiveParams();
+}
+
 int clMagneticFieldDependences::modifySignals(ModifyType type,clMagneticFieldDependences * extrapolatedParams)
 {
 int returnValue=1;
@@ -350,7 +383,20 @@ const int a=6;
 const int polinomPowForUs=4;
 const int polinomPowForUy=4;
 
-long double * koefUs= new long double [polinomPowForUs+1];
+std::vector<long double> koefUs;
+std::vector<long double> koefUy;
+
+std::vector<long double> newB;
+std::vector<long double> newUs;
+std::vector<long double> newUy;
+
+std::vector<long double> oldB;
+std::vector<long double> oldUs;
+std::vector<long double> oldUy;
+
+
+
+/*long double * koefUs= new long double [polinomPowForUs+1];
 long double * koefUy= new long double [polinomPowForUy+1];
 
 long double * newB= new long double [NumberOfPoints];
@@ -359,7 +405,7 @@ long double * newUy= new long double [NumberOfPoints];
 
 long double *oldB=new long double [NumberOfPoints];
 long double *oldUs=new long double [NumberOfPoints];
-long double *oldUy=new long double [NumberOfPoints];
+long double *oldUy=new long double [NumberOfPoints];*/
 
 newB[0]=0;
 int i=0;
@@ -367,8 +413,8 @@ int i=0;
 	{
 		case EXTRAPOLATE:
 
-			curveFittingUniversal(B, Us, NumberOfPoints,koefUs,polinomPowForUs);
-            curveFittingUniversal(B, Uy, NumberOfPoints,koefUy,polinomPowForUy);
+			curveFittingUniversal(&B, &Us, NumberOfPoints,&koefUs,polinomPowForUs);
+            curveFittingUniversal(&B, &Uy, NumberOfPoints,&koefUy,polinomPowForUy);
 
 			for(int i=0;i<NumberOfPoints;i++)
 			{
@@ -439,14 +485,14 @@ int i=0;
 		default:
 		returnValue=0;
 	}
-delete[] oldUy;
+/*delete[] oldUy;
 delete[] oldUs;
 delete[] oldB;
 delete[] koefUs;
 delete[] koefUy;
 delete[] newB;
 delete[] newUs;
-delete[] newUy;
+delete[] newUy; */
 return returnValue;
 
 }
@@ -484,6 +530,8 @@ bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode sa
 	default:
 	return false;
 	}
+
+	return true;
 }
 
 /*
@@ -497,8 +545,13 @@ void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
 
 	int sizeTemp=3*NoisyParams->NumberOfPoints;
 
-	const int polinomPowForUs=3;
+	const int polinomPowForUs=4;
 	const int polinomPowForUy=4;
+
+	//std::vector<long double> inBforUs2;
+
+
+
 
 	long double * koefUs= new long double [polinomPowForUs+1];
 	long double * koefUy= new long double [polinomPowForUy+1];
@@ -517,6 +570,9 @@ void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
 
 	for(int i=0;i<NoisyParams->NumberOfPoints;i++)
 	{
+		//inBforUs2.push_back(NoisyParams->B[i]);
+
+
 		inBforUs[i]=NoisyParams->B[i];
 		inBforUy[i]=NoisyParams->B[i];
 		inUs[i]=NoisyParams->Us[i];
@@ -524,6 +580,8 @@ void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
 	}
 	for(int i=NoisyParams->NumberOfPoints,j=0;j<NoisyParams->NumberOfPoints;i++,j++)
 	{
+		//inBforUs2.push_back(NoisyParams->B[j]);
+
 		inBforUs[i]=FilteredParams->B[j];
 		inBforUy[i]=FilteredParams->B[j];
 		inUs[i]=FilteredParams->Us[j];
@@ -531,12 +589,14 @@ void extrapolateNoiseFiltered(clMagneticFieldDependences * NoisyParams,
 	}
 	for(int i=2*NoisyParams->NumberOfPoints,j=0;j<NoisyParams->NumberOfPoints;i++,j++)
 	{
+		//inBforUs2.push_back(NoisyParams->B[j]);
+
 		inBforUs[i]=NoisyParams->B[j];
 		inBforUy[i]=NoisyParams->B[j];
 		inUs[i]=NoisyParams->Us[j];
 		inUy[i]=NoisyParams->Uy[j];
 	}
-
+		//inBforUs2.
 
 		curveFittingUniversal(inBforUs, inUs, sizeTemp,koefUs,polinomPowForUs);
 		curveFittingUniversal(inBforUy, inUy, sizeTemp,koefUy,polinomPowForUy);
