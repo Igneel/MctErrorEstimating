@@ -4,8 +4,8 @@
 #define ExtrapolateUnitH
 
 #include <math.h>
-#include "Chart.hpp"
-#include "Series.hpp"
+#include <VCLTee.Chart.hpp>
+#include <VCLTee.Series.hpp>
 int extrapolate5Degree(TLineSeries * Series, long double minX, long double maxX, long double hX,TLineSeries *out,const int powPolinom);
 int extrapolate2Degree(TLineSeries * Series, long double minX, long double maxX, long double hX,TLineSeries *out);
 

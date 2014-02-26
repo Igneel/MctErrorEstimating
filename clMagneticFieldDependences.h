@@ -9,7 +9,7 @@
 #include "NoiseUnit.h"
 #include <math.h>
 
-#include <Series.hpp>
+#include <VCLTee.Series.hpp>
 
 enum SignalType {SXX,SXY,US,UY,S_EFF,RH_EFF};
 enum FileSaveMode {ALL_POINTS, SOME_POINTS}; // сейчас SOME_POINTS - это конечно 11 точек.

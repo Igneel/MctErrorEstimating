@@ -257,6 +257,7 @@ long double *inY,long double* outB,long double *outY,
 int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh),
 const long double * idealUs,const long double * idealUy,int lengthFilter)
 {
+
 	long double * tempInB=new long double[2*NumberOfPoints];
 	long double * tempInSignal=new long double[2*NumberOfPoints];
 	long double * tempOutB=new long double[2*NumberOfPoints+ceil(lengthFilter/2.0)];
@@ -466,7 +467,7 @@ bool clMagneticFieldDependences::saveDataToFile(SignalType type, FileSaveMode sa
 	{
 		tsl->Add(FloatToStr(B[i])+"\t"+FloatToStr(sxx[i])+"\t"+FloatToStr(sxy[i]));
 	}
-	tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+	//tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
 
 	switch(type)
 	{

@@ -288,14 +288,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'xx')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 15
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object Series1: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -314,14 +320,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'xy')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 16
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object Series2: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -340,14 +352,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'xy')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 17
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object Series4: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -358,10 +376,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredUy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -372,11 +388,9 @@
           YValues.Order = loNone
         end
         object Series9: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
           SeriesColor = 10708548
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -387,10 +401,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedUy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -409,14 +421,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'xx')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 18
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object Series3: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -427,10 +445,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredUs: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -441,10 +457,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedUs: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -665,14 +679,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'sxx')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 0
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object gSeriesIdealParamsSxx: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -683,10 +703,8 @@
           YValues.Order = loNone
         end
         object gSeriesParamsWithNoiseSxx: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -697,10 +715,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredParamsSxx: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -711,10 +727,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedParamsSxx: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -733,14 +747,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           's_eff')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 1
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object gSeriesIdealParamsS_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -751,10 +771,8 @@
           YValues.Order = loNone
         end
         object gSeriesParamsWithNoiseS_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -765,10 +783,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedParamsS_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -779,10 +795,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredParamsS_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -801,14 +815,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'Us')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 2
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object gSeriesIdealParamsUs: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -819,10 +839,8 @@
           YValues.Order = loNone
         end
         object gSeriesParamsWithNoiseUs: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -833,10 +851,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedParamsUs: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -847,10 +863,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredParamsUs: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -869,14 +883,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'sxy')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 3
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object gSeriesIdealParamsSxy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -887,10 +907,8 @@
           YValues.Order = loNone
         end
         object gSeriesParamsWithNoiseSxy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -901,10 +919,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredParamsSxy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -915,10 +931,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedParamsSxy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -937,14 +951,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'Rh_eff')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 4
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object gSeriesIdealParamsRh_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -955,10 +975,8 @@
           YValues.Order = loNone
         end
         object gSeriesParamsWithNoiseRh_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -969,10 +987,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedParamsRh_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -983,10 +999,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredParamsRh_eff: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -1005,14 +1019,20 @@
         Legend.Visible = False
         Title.Text.Strings = (
           'Uy')
+        BottomAxis.LabelsFormat.TextAlignment = taCenter
+        DepthAxis.LabelsFormat.TextAlignment = taCenter
+        DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+        LeftAxis.LabelsFormat.TextAlignment = taCenter
+        RightAxis.LabelsFormat.TextAlignment = taCenter
+        TopAxis.LabelsFormat.TextAlignment = taCenter
         View3D = False
+        Zoom.Pen.Mode = pmNotXor
         TabOrder = 5
+        DefaultCanvas = 'TGDIPlusCanvas'
         ColorPaletteIndex = 13
         object gSeriesIdealParamsUy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 10708548
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -1023,10 +1043,8 @@
           YValues.Order = loNone
         end
         object gSeriesParamsWithNoiseUy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 3513587
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -1037,10 +1055,8 @@
           YValues.Order = loNone
         end
         object gSeriesExtrapolatedParamsUy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 1330417
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle
@@ -1051,10 +1067,8 @@
           YValues.Order = loNone
         end
         object gSeriesFilteredParamsUy: TLineSeries
-          Marks.Arrow.Visible = True
-          Marks.Callout.Brush.Color = clBlack
-          Marks.Callout.Arrow.Visible = True
           Marks.Visible = False
+          Brush.BackColor = clDefault
           LinePen.Color = 11048782
           Pointer.InflateMargins = True
           Pointer.Style = psRectangle

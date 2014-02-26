@@ -1,12 +1,8 @@
 //---------------------------------------------------------------------------
 
 #pragma hdrstop
-//#include <boost/numeric/ublas/lu.hpp>
-//#include <boost/numeric/ublas/matrix.hpp>
-//#include <boost/numeric/ublas/vector.hpp>
+
 #include "ExtrapolateUnit.h"
-#pragma package(smart_init)
-#pragma link "Series"
 //---------------------------------------------------------------------------
 
 #define DEBUG 1

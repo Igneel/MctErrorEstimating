@@ -3,15 +3,16 @@
 #ifndef Unit2H
 #define Unit2H
 //---------------------------------------------------------------------------
-#include <Classes.hpp>
-#include <Controls.hpp>
-#include <StdCtrls.hpp>
-#include <Forms.hpp>
-#include "Chart.hpp"
-#include "Series.hpp"
-#include "TeEngine.hpp"
-#include "TeeProcs.hpp"
-#include <ExtCtrls.hpp>
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <VCLTee.Chart.hpp>
+#include <VCLTee.Series.hpp>
+#include <VCLTee.TeEngine.hpp>
+#include <VCLTee.TeeProcs.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <VclTee.TeeGDIPlus.hpp>
 //---------------------------------------------------------------------------
 class TForm2 : public TForm
 {

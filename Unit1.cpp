@@ -7,10 +7,6 @@
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-#pragma link "Chart"
-#pragma link "Series"
-#pragma link "TeEngine"
-#pragma link "TeeProcs"
 #pragma resource "*.dfm"
 TForm1 *Form1;
 //---------------------------------------------------------------------------
@@ -300,6 +296,17 @@ void __fastcall TForm1::BuildingPlotsClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void MyReplaceStr(UnicodeString * out,UnicodeString * in, UnicodeString * findStr, UnicodeString * replaceStr)
+{
+    // не хотет робить, надо думать с передачей параметров.
+	unsigned int findIndex=0;
+	std::wstring s=in->w_str();
+	std::wstring strToReplaceWhich=replaceStr->w_str(); // на что меняем
+	std::wstring strToSearch=findStr->w_str();   // что ищем
+	findIndex=s.find(strToSearch,strToSearch.length());
+	s.replace(s.begin()+findIndex,s.begin()+findIndex+strToSearch.length(),strToReplaceWhich.begin(),strToReplaceWhich.end());
+	*out=*s.c_str();
+}
 
 void TForm1::automaticCalculationHelper(UnicodeString SaveFileName)
 {
@@ -318,9 +325,17 @@ void TForm1::automaticCalculationHelper(UnicodeString SaveFileName)
 	sg1->FileName=standartName+"T_"+eTemperature->Text+"_"+
 		SaveFileName+"_sko_p_xx"+FloatToStr(sko_xx)+ "_sko_p_xy"+FloatToStr(sko_xy)+".txt";
 
+
 	bSaveAllPoints->Click();
-	sg1->FileName=ReplaceStr(Form1->sg1->FileName,"vseZnachenia","11Znacheniy");
-	bSaveElevenPoints->Click();
+
+	unsigned int findIndex=0;
+	std::wstring s=sg1->FileName.w_str();
+	std::wstring strToReplaceWhich=L"11Znacheniy"; // на что меняем
+	std::wstring strToSearch=L"vseZnachenia";   // что ищем
+	findIndex=s.find(strToSearch,strToSearch.length());
+	s.replace(s.begin()+findIndex,s.begin()+findIndex+strToSearch.length(),strToReplaceWhich.begin(),strToReplaceWhich.end());
+
+    bSaveElevenPoints->Click();
 
 	sg1->FileName=standartName;
 }
@@ -537,8 +552,7 @@ void LoadingDataFromFile(TLineSeries * Series1,TLineSeries * Series2)
 	tsl->LoadFromFile(Form1->sg1->FileName);
 	Series1->Clear();
 		  Series2->Clear();
-
-	tsl->Text=ReplaceTextW(tsl->Text,".",","); // заменить все точки на запятые
+	tsl->Text=ReplaceChar(tsl->Text,L'.',L','); // заменить все точки на запятые
 
 	for(int i=0;i<tsl->Count;i++) // по количеству строк
 		  {
@@ -613,7 +627,7 @@ if (rbIdealUPlot->Checked) // идеальный
 
      }
 	 }
-     //ShowMessage(LineSeries3->YValues->Count);
+
  /*
  for (int i=0; i <NumberOfPoints; i++) { //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	ParamsWithNoise.Us[i]=LineSeries3->YValues->Value[i];
@@ -639,7 +653,7 @@ void __fastcall TForm1::bSaveFilmParamsClick(TObject *Sender)
 	{
 		tsl->Add(g_Nz_par->Cells[1][i+1] +"\t"+g_Nz_par->Cells[2][i+1]);
 	}
-	tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+	tsl->Text=ReplaceChar(tsl->Text,L',',L'.'); // заменить все запятые на точки
 	if (silentModeEnabled || Form1->sg1->Execute())
 	{
 		tsl->SaveToFile(Form1->sg1->FileName);
@@ -806,7 +820,8 @@ void TForm1::chooseAndSaveData(FileSaveMode mode)
 		}
 	}
 
-    tsl->Text=ReplaceTextW(tsl->Text,",","."); // заменить все запятые на точки
+    tsl->Text=ReplaceChar(tsl->Text,L',',L'.'); // заменить все запятые на точки
+
 	// если включен тихий режим - имя уже должно быть известно
 	if (silentModeEnabled || Form1->sg1->Execute())
 	{
@@ -818,4 +833,5 @@ void TForm1::chooseAndSaveData(FileSaveMode mode)
 	delete [] savingY1Data;
 	delete [] savingY2Data;
 }
+
 

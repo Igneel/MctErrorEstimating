@@ -22,14 +22,20 @@ object Form2: TForm2
     Title.Text.Strings = (
       'TChart')
     Title.Visible = False
+    BottomAxis.LabelsFormat.TextAlignment = taCenter
+    DepthAxis.LabelsFormat.TextAlignment = taCenter
+    DepthTopAxis.LabelsFormat.TextAlignment = taCenter
+    LeftAxis.LabelsFormat.TextAlignment = taCenter
+    RightAxis.LabelsFormat.TextAlignment = taCenter
+    TopAxis.LabelsFormat.TextAlignment = taCenter
     View3D = False
+    Zoom.Pen.Mode = pmNotXor
     TabOrder = 0
+    DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
     object Series1: TLineSeries
-      Marks.Arrow.Visible = True
-      Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Arrow.Visible = True
       Marks.Visible = False
+      Brush.BackColor = clDefault
       LinePen.Color = 10708548
       Pointer.InflateMargins = True
       Pointer.Style = psRectangle

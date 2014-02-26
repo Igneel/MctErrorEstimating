@@ -3,25 +3,28 @@
 #ifndef Unit1H
 #define Unit1H
 //---------------------------------------------------------------------------
-#include <Classes.hpp>
-#include <Controls.hpp>
-#include <StdCtrls.hpp>
-#include <Forms.hpp>
-#include "Chart.hpp"
-#include "Series.hpp"
-#include "TeEngine.hpp"
-#include "TeeProcs.hpp"
-#include <ExtCtrls.hpp>
-#include <Grids.hpp>
-#include <Dialogs.hpp>
-#include <ComCtrls.hpp>
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Grids.hpp>
+#include <Vcl.Dialogs.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <VCLTee.Chart.hpp>
+#include <VCLTee.Series.hpp>
+#include <VclTee.TeeGDIPlus.hpp>
+#include <VCLTee.TeEngine.hpp>
+#include <VCLTee.TeeProcs.hpp>
+#include <cmath>
+#include <string>
 //---------------------------------------------------------------------------
 #include "Unit2.h"
 #include "ExtrapolateUnit.h"
 #include "FilteringUnit.h"
 #include "NoiseUnit.h"
 #include "clMagneticFieldDependences.h"
-#include <math.h>
+
 //---------------------------------------------------------------------------
 
 
@@ -140,6 +143,7 @@ __published:	// IDE-managed Components
 	void __fastcall bSaveFilmParamsClick(TObject *Sender);
 	void __fastcall bTestingSomethingClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+
 
 
 

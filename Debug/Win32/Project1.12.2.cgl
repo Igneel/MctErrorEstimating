@@ -1,0 +1,66 @@
+Error 00001. 0x120C00 (Thread 0x1204):
+Method called on destroyed auto object: Attempt to access 40 byte(s) at
+ 0x0018F110.
+Call Tree:
+   0x00410CAE(=Project1.12.2.exe:0x01:00FCAE) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1832
+   0x00020036
+
+------------------------------------------
+Error 00002. 0x120600 (Thread 0x1204):
+Access in uninitialized stack: Attempt to access 4 byte(s) at 0x0018F110+36.
+Call Tree:
+   0x00410CBB(=Project1.12.2.exe:0x01:00FCBB) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1834
+   0x00020036
+
+------------------------------------------
+Error 00003. 0x120600 (Thread 0x1204):
+Access in uninitialized stack: Attempt to access 4 byte(s) at 0x0018F110+16.
+Call Tree:
+   0x00410CCE(=Project1.12.2.exe:0x01:00FCCE) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1834
+   0x00020036
+
+------------------------------------------
+Error 00004. 0x120C00 (r) (Thread 0x1204):
+Method called on destroyed auto object: Attempt to access 40 byte(s) at
+ 0x0018F0E4.
+Call Tree:
+   0x00410CAE(=Project1.12.2.exe:0x01:00FCAE) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1832
+   0x00020036
+
+------------------------------------------
+Error 00005. 0x120600 (r) (Thread 0x1204):
+Access in uninitialized stack: Attempt to access 4 byte(s) at 0x0018F0E4+36.
+Call Tree:
+   0x00410CBB(=Project1.12.2.exe:0x01:00FCBB) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1834
+   0x00020036
+
+------------------------------------------
+Error 00006. 0x120600 (r) (Thread 0x1204):
+Access in uninitialized stack: Attempt to access 4 byte(s) at 0x0018F0E4+16.
+Call Tree:
+   0x00410CCE(=Project1.12.2.exe:0x01:00FCCE) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1834
+   0x00020036
+
+------------------------------------------
+Error 00007. 0x120C00 (r) (Thread 0x1204):
+Method called on destroyed auto object: Attempt to access 40 byte(s) at
+ 0x0018F0B8.
+Call Tree:
+   0x00410CAE(=Project1.12.2.exe:0x01:00FCAE) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1832
+   0x00020036
+
+------------------------------------------
+Error 00008. 0x120600 (r) (Thread 0x1204):
+Access in uninitialized stack: Attempt to access 4 byte(s) at 0x0018F0B8+36.
+Call Tree:
+   0x00410CBB(=Project1.12.2.exe:0x01:00FCBB) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1834
+   0x00020036
+
+------------------------------------------
+Error 00009. 0x120600 (r) (Thread 0x1204):
+Access in uninitialized stack: Attempt to access 4 byte(s) at 0x0018F0B8+16.
+Call Tree:
+   0x00410CCE(=Project1.12.2.exe:0x01:00FCCE) j:\program files (x86)\embarcadero\rad studio\12.0\include\dinkumware\xstring#1834
+   0x00020036
+
+------------------------------------------
