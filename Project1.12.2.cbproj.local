@@ -1,2 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject/>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2014.04.25 10:49:10.196,=K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\filter.dll</Transaction>
+    <Transaction>2014.04.25 11:02:14.535,K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\FilteringUnit.cpp=</Transaction>
+    <Transaction>2014.04.25 11:08:49.820,=K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\libfilter.lib</Transaction>
+    <Transaction>2014.04.25 11:08:59.376,K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\filter.dll=</Transaction>
+    <Transaction>2014.04.25 11:10:02.185,K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\libfilter.lib=</Transaction>
+    <Transaction>2014.04.25 11:31:54.560,=K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\filter.dll</Transaction>
+    <Transaction>2014.04.25 11:44:38.679,=K:\Дела\Институт физики полупроводников\La-7\MctErrorEstimating\FilteringUnit.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

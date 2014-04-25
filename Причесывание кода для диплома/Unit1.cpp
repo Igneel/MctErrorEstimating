@@ -62,28 +62,6 @@ clMagneticFieldDependences *ExtrapolatedParams=0;
 //---------------------------------------------------------------------------
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-/*
-hDLL = LoadLibraryA("K:\\Дела\\Институт физики полупроводников\\La-7\\MctErrorEstimating\\filter.dll");
-if (!hDLL) {
-  ShowMessage("Невозможно загрузить filter.dll");
-  return;
-}
-
-
-
-// пытаемся найти в таблице экспорта необходимую нам функцию
-TrForMassiveFilter = (dll_func)GetProcAddress(hDLL, "_TrForMassiveFilter");
-// обратите внимание на название функции
-
-if (!TrForMassiveFilter) {
-  ShowMessage("Невозможно найти функцию TrForMassiveFilter");
-  return;
-}
-
- */
-
-
-
 g_Nz_par->Cells[0][1]="электроны";
 g_Nz_par->Cells[0][2]="легкие дырки";
 g_Nz_par->Cells[0][3]="тяжелые дырки";
@@ -183,7 +161,6 @@ void __fastcall TForm1::bGaussianNoiseGeneratorClick(TObject *Sender)
 	Выводится на экран.
 	*/
 	//--------------------Классы----------------------------------------------------
-	Edit5->Text=FloatToStr(100.0/(long double)(1*fabs(IdealParams->getSignalUy()[NumberOfPoints-1]))); // задаем коэффициенты
 
 	srand(time(NULL));
 
@@ -399,7 +376,7 @@ void __fastcall TForm1::bAutomaticCalculationClick(TObject *Sender)
 	int endkoef=5;  // конечный коэффициент
 
 	int h_koef=4; // шаг по уровню шума
-	//eFilterLength->Text=IntToStr(150); // задаём длину фильтра, внимание - это для симметричного графика!
+	eFilterLength->Text=IntToStr(50); // задаём длину фильтра, внимание - это для симметричного графика!
 	g_hsize->Text=FloatToStr(0.01); // шаг по магнитному полю., отныне честно идем только до 2 Тл.
 
 	UnicodeString standartName; // эталонное имя файла
@@ -724,8 +701,6 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 	ParamsWithNoise=0;
 	FilteredParams=0;
 	ExtrapolatedParams=0;
-
-   //	FreeLibrary(hDLL);
 }
 //---------------------------------------------------------------------------
 

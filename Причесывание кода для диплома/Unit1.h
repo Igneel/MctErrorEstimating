@@ -25,10 +25,6 @@
 #include "NoiseUnit.h"
 #include "clMagneticFieldDependences.h"
 
-//--------------------Подключение библиотеки фильтрации.---------------------
-
-//#include "filter.h"
-
 //---------------------------------------------------------------------------
 
 
@@ -167,13 +163,6 @@ public:		// User declarations
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;
 long double ownConcentrationOfElectrons(long double T, long double x);
-
-/*HMODULE hDLL = NULL;
-// определяем тип "указатель на функцию"
-typedef double __cdecl (*dll_func)(long double *inB,long double *inY,long double* outB,long double *outY,
-int lengthMassive,int lengthFilter,double Fdisk, double Fpropysk,double Fzatyh);
-
-dll_func TrForMassiveFilter = NULL; */
 
 void ParamsKRT(void);
 //---------------------------------------------------------------------------

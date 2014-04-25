@@ -15,13 +15,6 @@ void clMagneticFieldDependences::MemoryAllocation()
 	Uy.resize(NumberOfPoints);
 	s_eff.resize(NumberOfPoints);
 	Rh_eff.resize(NumberOfPoints);
-	/*sxx=new long double[NumberOfPoints];
-	sxy=new long double[NumberOfPoints];
-	B=new long double[NumberOfPoints];
-	Us=new long double[NumberOfPoints];
-	Uy=new long double[NumberOfPoints];
-	s_eff=new long double[NumberOfPoints];
-	Rh_eff=new long double[NumberOfPoints]; */
 
 }
 
@@ -292,8 +285,8 @@ std::vector<long double> const & idealUs,std::vector<long double> const & idealU
     // делаем то же самое с другим сигналом, хм, надо предусмотреть функцию.
 	for (int i = 0; i < NumberOfPoints; i++)
 	{
-		tempInSignal[i]=idealUy[NumberOfPoints-i-1];   // чет
-		//tempInSignal[i]=-idealUy[NumberOfPoints-i-1]+2*idealUy[0];  // нечет
+		//tempInSignal[i]=idealUy[NumberOfPoints-i-1];   // чет
+		tempInSignal[i]=-idealUy[NumberOfPoints-i-1]+2*idealUy[0];  // нечет
 		tempInB[i]=-B[NumberOfPoints-i-1];
 		tempInSignal[i+NumberOfPoints]=idealUy[i];
 		tempInB[i+NumberOfPoints]=B[i];
@@ -386,8 +379,8 @@ int clMagneticFieldDependences::modifySignals(ModifyType type,clMagneticFieldDep
 {
 int returnValue=1;
 
-const int polinomPowForUs=4;
-const int polinomPowForUy=4;
+const int polinomPowForUs=6;
+const int polinomPowForUy=6;
 
 std::vector<long double> koefUs;
 std::vector<long double> koefUy;

@@ -5,6 +5,7 @@
 
 #include "film.h"
 #include "ExtrapolateUnit.h"
+#include "FilteringUnit.h"
 #include "NoiseUnit.h"
 #include <cmath>
 #include <vector>
@@ -27,7 +28,6 @@ class clMagneticFieldDependences {
 
 	clMagneticFieldDependences(int size,long double shag,film * cp);
 
-	//loadDataFromFile(ChartType * type, string )
 	bool saveDataToFile(SignalType type, FileSaveMode saveMode, String filePath);
 
 	~clMagneticFieldDependences();

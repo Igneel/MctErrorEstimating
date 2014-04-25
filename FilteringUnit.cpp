@@ -146,6 +146,84 @@ return k;
 }
 //----------------------------------------------
 //----------------------------------------------
+
+// Попытка фильтрации оптимальным методом.
+
+long double D(long double deltaP, long double deltaS)
+{
+/*
+Нужна для расчета длины фильтра.
+*/
+	long double a1=5.309E-3;
+	long double a2=7.114E-2;
+	long double a3=-4.761E-1;
+	long double a4=-2.66E-3;
+	long double a5=-5.941E-1;
+	long double a6=-4.278E-1;
+
+return log10(deltaS*(a1*log10(deltaP)*log10(deltaP)+a2*
+	log10(deltaP)+a3)+a4*log10(deltaP)*log10(deltaP)+a5*log10(deltaP)+a6);
+}
+
+long double f(long double deltaP, long double deltaS)
+{
+/*
+Нужна для расчета длины фильтра.
+*/
+
+return 11.01217+0.51244*(log10(deltaP)-log10(deltaS));
+
+}
+
+int calcutaleFilterLength(long double deltaP, long double deltaS, long double deltaF)
+{
+/*
+Рассчитывает длину фильтра для метода оптимальных коэффициентов.
+Согласно формуле из Айфичера Джервиса для фильтра нижних частот, страница 410.
+
+deltaP - неравномерность в полосе пропускания.
+
+deltaS - неравномерность в полосе подавления.
+
+deltaF - ширина полосы пропускания, нормированная на частоту дискретизации.
+
+N=D(deltaP,deltaS)/deltaF-f(deltaP,deltaS)*deltaF+1;
+
+*/
+
+return D(deltaP,deltaS)/deltaF-f(deltaP,deltaS)*deltaF+1;
+}
+
+long double fapprox(long double x)
+{
+return x*x;
+}
+
+long double OptimFilter(long double deltaP, long double deltaS, long double FPropusk, long double Fpodavl, long double FDiskr)
+{
+long double FPropuskN=FPropusk/FDiskr;
+long double FPodavlN=Fpodavl/FDiskr;
+long double deltaF=FPodavlN-FPropuskN;
+
+int filterLength=calcutaleFilterLength(deltaP,deltaS,deltaF);
+
+double weigthP = 1;
+double weigthS = deltaS/deltaP;
+
+//boost::math::tools::remez_minimax<double> *remez= new boost::math::tools::remez_minimax<double>
+ //	( NULL, 1, 2, 0.1, 0.4);
+	// функция для аппроксимации.
+	// Order of the numerator polynomial.
+	//Order of the denominator polynomial.
+	// Крайние точки диапазона оптимизации. End points of the range to optimise over.
+
+
+//remez();
+
+//filter();
+
+}
+
 //----------------------------------------------
 //----------------------------------------------
 #pragma package(smart_init)

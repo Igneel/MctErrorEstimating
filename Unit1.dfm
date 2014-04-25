@@ -525,9 +525,9 @@
         TabOrder = 25
       end
       object bAutomaticCalculation: TButton
-        Left = 206
+        Left = 213
         Top = 422
-        Width = 75
+        Width = 74
         Height = 25
         Caption = #1056#1072#1089#1095#1077#1090
         TabOrder = 26
@@ -699,6 +699,10 @@
     object Графики: TTabSheet
       Caption = #1043#1088#1072#1092#1080#1082#1080
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Chart5: TChart
         Left = 3
         Top = 3
