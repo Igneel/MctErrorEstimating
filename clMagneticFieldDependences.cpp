@@ -126,7 +126,7 @@ void clMagneticFieldDependences::calculateEffectiveParamsFromSignals()
 	for (int i = 0; i < NumberOfPoints ; i++)
 	{
 		if(fabs(Us[i])<THEALMOSTZERO)
-			s_eff[i]=0;
+			s_eff[i]=0.0;
 		else
 		{
 			s_eff[i]=carrierParams->getCBRatio()/carrierParams->getThickness()*carrierParams->getCurrentIntensity()/Us[i];
@@ -142,9 +142,9 @@ void clMagneticFieldDependences::calculateTenzorFromEffectiveParams()
 	for (int i = 0; i < NumberOfPoints ; i++)
 	{
 		sxx[i]=s_eff[i]/
-			(Rh_eff[i]*Rh_eff[i]*s_eff[i]*s_eff[i]+1);
+			(Rh_eff[i]*Rh_eff[i]*s_eff[i]*s_eff[i]+1.0);
 		sxy[i]=s_eff[i]*s_eff[i]*Rh_eff[i]/
-		   (Rh_eff[i]*Rh_eff[i]*s_eff[i]*s_eff[i]+1);
+		   (Rh_eff[i]*Rh_eff[i]*s_eff[i]*s_eff[i]+1.0);
 	}
 }
 

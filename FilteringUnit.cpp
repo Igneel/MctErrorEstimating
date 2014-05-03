@@ -31,7 +31,10 @@ for (int i=0;i<N;i++)
 if (i==0) H_id[i] = 2*M_PI*Fc;
 else H_id[i] = sinl(2*M_PI*Fc*i )/(M_PI*i);
 // весовая функция Блекмена
+if(N>1)
 W [i] = 0.42 - 0.5 * cosl((2*M_PI*i) /( N-1)) + 0.08 * cosl((4*M_PI*i) /( N-1));
+else
+W [i] = 0.42 - 0.5 * cosl(0) + 0.08 * cosl(0);
 H [i] = H_id[i] * W[i];
 }
 
@@ -50,7 +53,7 @@ for (int i=0; i<N; i++) H[i]/=SUM; //сумма коэффициентов равна 1
 for (int i=0; i<sizeIn; i++)
 {
 out[i]=0.;
-for (int j=0; j<(i>N-1?N-1:i); j++)// та самая формула фильтра
+for (int j=0; j<=(i>N-1?N-1:i); j++)// та самая формула фильтра
 out[i]+= H[j]*in[i-j];
 }
 delete [] H;
