@@ -24,18 +24,28 @@ long double H_id [N] = {0}; //Идеальная импульсная характеристика
 long double W [N] = {0}; //Весовая функция  */
 
 //Расчет импульсной характеристики фильтра
-long double Fc = (Fs + Fx) / (2 * Fd);
+long double Fc = 5.5*Fd/N;//(Fs + Fx) / (2 * Fd);
 
 for (int i=0;i<N;i++)
 {
-if (i==0) H_id[i] = 2*M_PI*Fc;
-else H_id[i] = sinl(2*M_PI*Fc*i )/(M_PI*i);
-// весовая функция Блекмена
-if(N>1)
-W [i] = 0.42 - 0.5 * cosl((2*M_PI*i) /( N-1)) + 0.08 * cosl((4*M_PI*i) /( N-1));
-else
-W [i] = 0.42 - 0.5 * cosl(0) + 0.08 * cosl(0);
-H [i] = H_id[i] * W[i];
+	/*
+	if (i==0) H_id[i] = 2*M_PI*Fc;
+	else H_id[i] = sinl(2*M_PI*Fc*i )/(M_PI*i);
+	// весовая функция Блекмена
+	if(N>1)
+	W [i] = 0.42 - 0.5 * cosl((2*M_PI*i) /( N-1)) + 0.08 * cosl((4*M_PI*i) /( N-1));
+	else
+	W[i]=1;*/
+	
+
+	if (i==0) H_id[i] = 1;
+    else H_id[i] =sinl(2*M_PI*Fc*i)/(2*M_PI*Fc*i);
+	// весовая функция Блекмена
+	if(N>1)
+		W [i] = 0.42 - 0.5 * cosl((2*M_PI*i) /( N-1)) + 0.08 * cosl((4*M_PI*i) /( N-1));
+	else
+		W[i]=1;
+	H [i] = H_id[i] * W[i];
 }
 
 //Нормировка импульсной характеристики

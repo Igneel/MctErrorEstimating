@@ -530,7 +530,7 @@ void __fastcall TForm1::bFilteringPlotsClick(TObject *Sender)
 	if(fabs(distance/2.0/NumberOfPoints) > criteria)
 	{
 		countOfRepeats++;
-    if(countOfRepeats>10) criteria*=2;
+    if(countOfRepeats>3) criteria*=2;
 		bFilteringPlots->Click();
 
 
@@ -635,28 +635,32 @@ if (rbIdealUPlot->Checked) // טהואכüםûי
 	long double *x=new long double[length];
 	long double *y=new long double[length];
 
+	long double *y1=new long double[length];
+
+
 	 for (int i=0; i < length; i++) {
 		 x[i]=gSeriesIdealParamsUs->XValues->Value[i];
 		 y[i]=gSeriesIdealParamsUs->YValues->Value[i];
 	 }
-	 gSeriesIdealParamsUs->Clear();
-	 for (int i=0; i < length; i++) {
-	 if (x[i]>=0) {
-		 gSeriesIdealParamsUs->AddXY(x[i],y[i],"",clRed);
 
-     }
-	 }
 	  for (int i=0; i < length; i++) {
-		 x[i]=gSeriesIdealParamsUy->XValues->Value[i];
-		 y[i]=gSeriesIdealParamsUy->YValues->Value[i];
+		 y1[i]=gSeriesIdealParamsUy->YValues->Value[i];
 	 }
-	 gSeriesIdealParamsUy->Clear();
-	 for (int i=0; i < length; i++) {
-	 if (x[i]>=0) {
-		 gSeriesIdealParamsUy->AddXY(x[i],y[i],"",clRed);
 
-     }
-	 }
+	 IdealParams->setB_Us_Uy(x,y,y1);
+
+	 IdealParams->constructPlotFromTwoMassive(SXX,Series1,clRed);
+	IdealParams->constructPlotFromTwoMassive(SXY,Series2,clRed);
+
+	IdealParams->constructPlotFromTwoMassive(SXX,gSeriesIdealParamsSxx,clRed);
+	IdealParams->constructPlotFromTwoMassive(SXY,gSeriesIdealParamsSxy,clRed);
+
+	IdealParams->constructPlotFromTwoMassive(S_EFF,gSeriesIdealParamsS_eff,clRed);
+	IdealParams->constructPlotFromTwoMassive(RH_EFF,gSeriesIdealParamsRh_eff,clRed);
+
+	IdealParams->constructPlotFromTwoMassive(US,gSeriesIdealParamsUs,clRed);
+	IdealParams->constructPlotFromTwoMassive(UY,gSeriesIdealParamsUy,clRed);
+
 
  /*
  for (int i=0; i <NumberOfPoints; i++) { //----------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

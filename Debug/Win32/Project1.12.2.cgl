@@ -1,199 +1,22 @@
-Error 00001. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x2CDA3E0) was never deleted
-
-The object array (0x02CDA3E0) [size: 3216 bytes] was created with new[]
+Error 00001. 0x100C00 (Thread 0x0CB0):
+Method called on invalid object: Attempt to access 248 byte(s) at 0x00000000.
 Call Tree:
-   0x00412A22(=Project1.12.2.exe:0x01:011A22) FilteringUnit.cpp#117
-   0x004050CD(=Project1.12.2.exe:0x01:0040CD) clMagneticFieldDependences.cpp#274
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-   0x50487A69(=vcl190.bpl:0x01:056A69)
-
-------------------------------------------
-Error 00002. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x2CD6620) was never deleted
-
-The object array (0x02CD6620) [size: 4020 bytes] was created with new[]
-Call Tree:
-   0x00404E66(=Project1.12.2.exe:0x01:003E66) clMagneticFieldDependences.cpp#258
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
+   0x00405648(=Project1.12.2.exe:0x01:004648) clMagneticFieldDependences.cpp#330
+   0x004192C2(=Project1.12.2.exe:0x01:0182C2) Unit1.cpp#650
    0x504630A5(=vcl190.bpl:0x01:0320A5)
    0x5046766E(=vcl190.bpl:0x01:03666E)
    0x50487A69(=vcl190.bpl:0x01:056A69)
    0x504677D4(=vcl190.bpl:0x01:0367D4)
 
 ------------------------------------------
-Error 00003. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x2CD8680) was never deleted
-
-The object array (0x02CD8680) [size: 4030 bytes] was created with new[]
+Error 00002. 0x100600 (Thread 0x0CB0):
+Access in invalid memory: Attempt to access 4 byte(s) at 0x00000000+20.
 Call Tree:
-   0x00404EF4(=Project1.12.2.exe:0x01:003EF4) clMagneticFieldDependences.cpp#260
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
+   0x00405757(=Project1.12.2.exe:0x01:004757) clMagneticFieldDependences.cpp#332
+   0x004192C2(=Project1.12.2.exe:0x01:0182C2) Unit1.cpp#650
    0x504630A5(=vcl190.bpl:0x01:0320A5)
    0x5046766E(=vcl190.bpl:0x01:03666E)
    0x50487A69(=vcl190.bpl:0x01:056A69)
    0x504677D4(=vcl190.bpl:0x01:0367D4)
 
 ------------------------------------------
-Error 00004. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x2CD55F0) was never deleted
-
-The object array (0x02CD55F0) [size: 4020 bytes] was created with new[]
-Call Tree:
-   0x00404E43(=Project1.12.2.exe:0x01:003E43) clMagneticFieldDependences.cpp#257
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-   0x50487A69(=vcl190.bpl:0x01:056A69)
-   0x504677D4(=vcl190.bpl:0x01:0367D4)
-
-------------------------------------------
-Error 00005. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x2CD7650) was never deleted
-
-The object array (0x02CD7650) [size: 4030 bytes] was created with new[]
-Call Tree:
-   0x00404EAD(=Project1.12.2.exe:0x01:003EAD) clMagneticFieldDependences.cpp#259
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-   0x50487A69(=vcl190.bpl:0x01:056A69)
-   0x504677D4(=vcl190.bpl:0x01:0367D4)
-
-------------------------------------------
-Error 00006. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x2CD96B0) was never deleted
-
-The object array (0x02CD96B0) [size: 3216 bytes] was created with new[]
-Call Tree:
-   0x004129CB(=Project1.12.2.exe:0x01:0119CB) FilteringUnit.cpp#112
-   0x004050CD(=Project1.12.2.exe:0x01:0040CD) clMagneticFieldDependences.cpp#274
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-   0x50487A69(=vcl190.bpl:0x01:056A69)
-
-------------------------------------------
-Error 00007. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x1FBFA50) was never deleted
-
-The object array (0x01FBFA50) [size: 10 bytes] was created with new[]
-Call Tree:
-   0x0041256A(=Project1.12.2.exe:0x01:01156A) FilteringUnit.cpp#19
-   0x00412A49(=Project1.12.2.exe:0x01:011A49) FilteringUnit.cpp#118
-   0x004050CD(=Project1.12.2.exe:0x01:0040CD) clMagneticFieldDependences.cpp#274
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-
-------------------------------------------
-Error 00008. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x1FBFA40) was never deleted
-
-The object array (0x01FBFA40) [size: 10 bytes] was created with new[]
-Call Tree:
-   0x00412558(=Project1.12.2.exe:0x01:011558) FilteringUnit.cpp#18
-   0x00412A49(=Project1.12.2.exe:0x01:011A49) FilteringUnit.cpp#118
-   0x004050CD(=Project1.12.2.exe:0x01:0040CD) clMagneticFieldDependences.cpp#274
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-
-------------------------------------------
-Error 00009. 0x300010 (Thread 0x0DD4):
-Resource leak: The object array (0x1FBFA80) was never deleted
-
-The object array (0x01FBFA80) [size: 10 bytes] was created with new[]
-Call Tree:
-   0x0041257C(=Project1.12.2.exe:0x01:01157C) FilteringUnit.cpp#20
-   0x00412A49(=Project1.12.2.exe:0x01:011A49) FilteringUnit.cpp#118
-   0x004050CD(=Project1.12.2.exe:0x01:0040CD) clMagneticFieldDependences.cpp#274
-   0x004181EE(=Project1.12.2.exe:0x01:0171EE) Unit1.cpp#502
-   0x504630A5(=vcl190.bpl:0x01:0320A5)
-   0x5046766E(=vcl190.bpl:0x01:03666E)
-
-------------------------------------------
-Functions called:
- powl (82008 times)
- delete[] (618 times)
- sinl (3850 times)
- cosl (7836 times)
- ceil (70 times)
- sqrt (406 times)
- log (402 times)
- time (1 times)
- delete (2160481 times)
- memmove (5088290 times)
- exp (71 times)
- pow (2337911 times)
- new[] (627 times)
- realloc (1 times)
- memcpy (1 times)
- free (29 times)
- new (2160490 times)
- calloc (10 times)
- malloc (19 times)
-Resource types used:
- object array (627 allocs, 26 max)
- object (2160490 allocs, 871 max)
- memory block (30 allocs, 19 max)
-Modules used:
- 002B0000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\12.0\bin\vclimg190.bpl
- 00400000 04/30/2014 12:11:42 K:\Дела\Институт физики
- полупроводников\La-7\MctErrorEstimating\Debug\Win32\Project1.12.2.exe
- 0CD00000 01/31/2000 05:00:00 J:\PROGRA~3\Borland\CBUILD~2\Bin\CG32.DLL
- 32E00000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\12.0\bin\CC32140MT.DLL
- 42200000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\12.0\bin\Tee9190.bpl
- 50030000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\12.0\bin\BORLNDMM.DLL
- 50050000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\12.0\bin\rtl190.bpl
- 50430000 09/10/2013 05:55:00 J:\Program Files (x86)\Embarcadero\RAD
- Studio\12.0\bin\vcl190.bpl
- 68880000 07/14/2009 08:16:16 C:\Windows\system32\SHFolder.dll
- 6EB70000 11/21/2010 10:23:56 C:\Windows\system32\wtsapi32.dll
- 6F030000 07/14/2009 08:15:14 C:\Windows\system32\dwmapi.dll
- 6F050000 07/14/2009 08:15:42 C:\Windows\system32\mpr.dll
- 6FA00000 07/14/2009 08:16:14 C:\Windows\system32\oledlg.dll
- 6FA20000 11/21/2010 10:24:10 C:\Windows\system32\winspool.drv
- 6FAB0000 11/21/2010 10:24:18 C:\Windows\system32\winmm.dll
- 6FD90000 07/14/2009 08:11:26 C:\Windows\system32\uxtheme.dll
- 70110000 11/21/2010 10:23:56
- C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.
-7601.17514_none_41e6975e2bd6f2b2\comctl32.dll
- 70AA0000 12/11/2012 16:08:04 J:\Program Files (x86)\Yandex\Punto
- Switcher\pshook.dll
- 73D40000 11/21/2010 10:23:56 C:\Windows\system32\WINSTA.dll
- 74090000 11/24/2012 20:50:46 C:\Windows\system32\oleacc.dll
- 740D0000 07/14/2009 08:16:22 C:\Windows\system32\wsock32.dll
- 74D10000 07/14/2009 08:16:18 C:\Windows\system32\version.dll
- 74DE0000 07/14/2009 08:15:08 C:\Windows\syswow64\CRYPTBASE.dll
- 74DF0000 09/25/2013 08:58:18 C:\Windows\syswow64\SspiCli.dll
- 74E50000 10/19/2013 08:37:00 C:\Windows\syswow64\IMAGEHLP.DLL
- 74E90000 07/14/2009 08:15:44 C:\Windows\syswow64\MSCTF.dll
- 74F60000 04/17/2014 00:44:42 C:\Windows\syswow64\ADVAPI32.dll
- 75000000 07/26/2013 08:56:00 C:\Windows\syswow64\SHELL32.dll
- 75F20000 11/21/2010 10:23:50 C:\Windows\syswow64\comdlg32.dll
- 75FA0000 11/21/2010 10:24:22 C:\Windows\syswow64\USER32.dll
- 760A0000 11/21/2010 10:24:18 C:\Windows\syswow64\USP10.dll
- 76140000 11/24/2012 20:55:02 C:\Windows\syswow64\msvcrt.dll
- 761F0000 11/24/2012 20:50:46 C:\Windows\syswow64\oleaut32.dll
- 762E0000 11/21/2010 10:24:02 C:\Windows\syswow64\ole32.dll
- 766A0000 03/04/2014 16:16:18 C:\Windows\syswow64\kernel32.dll
- 767B0000 07/14/2009 08:16:14 C:\Windows\SysWOW64\sechost.dll
- 76B20000 06/06/2013 11:57:02 C:\Windows\syswow64\LPK.dll
- 76B30000 11/21/2010 10:23:50 C:\Windows\syswow64\SHLWAPI.dll
- 76B90000 07/14/2009 08:16:12 C:\Windows\syswow64\NSI.dll
- 76BF0000 07/09/2013 11:52:34 C:\Windows\syswow64\RPCRT4.dll
- 76CE0000 07/14/2009 08:15:04 C:\Windows\syswow64\CLBCatQ.DLL
- 76DC0000 10/03/2013 09:00:46 C:\Windows\syswow64\GDI32.dll
- 76E50000 08/02/2013 08:50:44 C:\Windows\syswow64\KERNELBASE.dll
- 76EA0000 11/21/2010 10:23:56 C:\Windows\syswow64\WS2_32.dll
- 76EE0000 11/21/2010 10:24:26 C:\Windows\system32\IMM32.DLL
- 773D0000 04/17/2014 00:44:42 C:\Windows\SysWOW64\ntdll.dll
-==========================================
